@@ -1,2 +1,2 @@
-you:Number @ 21;
-aString:String @ mangle(you, String);
+you:number @ 21;
+aString:string @ mangle(you, string);
