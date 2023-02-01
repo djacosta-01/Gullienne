@@ -1,0 +1,3 @@
+do gluAddFunction(x, y) {
+	howItBe x + y;
+}

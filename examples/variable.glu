@@ -1,0 +1,2 @@
+overtime:joolean @ ideal;
+hoursClocked:NUMBER @ 900;
