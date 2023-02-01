@@ -60,7 +60,7 @@ W- Wait, what is that? */
 
 ```
 ~ Let's see here...
-W- Wait, what is that?
+W- Wait, what is that? ~
 ```
 
 </td> </tr> </table>
