@@ -1,18 +1,18 @@
 <p align="center">
-  <img src="docs/morphjulian4x.png" width="40%">
+  <img src="docs/morphjulian4x.png" width="70%">
 </p>
 
 # Gullienne
 
-This language is dedicated to our favorite PLang/Compilers TA.
+The language Gullienne is inspired by our favorite TA Julian and his iconic sayings (Julianisms). We chose this version of Julian’s name to avoid any legal consequences. It compiles into JavaScript(JS) and shares some characteristics from JS, Python, and Swift but definitely not Java. We chose these languages as a basis because we like them, from the argument labels of Swift to using a variation of let/const from JS. Although we have committed the forbidden crime of using semi-colons, we make up for it with our Joolean ideals and not ideals. We also came up with some new and fresh ideas like binding our variables with @ instead of the mainstream =. You may think that Gullienne would be unreadable but you would be wrong, as long as you have your overheard channel handy, the understanding will simply come to you just like a polite squid at Roski’s.
 
 ## Language Overview
 
-- Statically and Strongly Typed
-- Visually Rigid for Ease of Readability
-- Strong parallel operation support
+- Uses Static, Strong and Manifest typing
+- Object Oriented
+- A fun language inspired by "Julianisms"
 
-Below is an in-depth view of Gullienne with a comparison to equivalent code in JavaScript
+Below is an in-depth view of Gullienne with a comparison to equivalent code in JavaScript.
 
 ## Examples
 
@@ -23,16 +23,12 @@ Below is an in-depth view of Gullienne with a comparison to equivalent code in J
 <tr>
 <td>
 
-```
-console.log(“You’re farming overheards again!”)
-```
+`console.log(“You’re farming overheards again!”)`
 
 </td>
 <td>
 
-```
-overheard(`You’re farming overheards again!`);
-```
+`` overheard(\`You’re farming overheards again!`); ``
 
 </td> </tr> </table>
 
@@ -114,7 +110,6 @@ let aString = String(you)
 ```
 you:number @ 21;
 aString:string @ mangle(you, string);
-
 ```
 
 </td> </tr> </table>
@@ -147,7 +142,8 @@ noCap(i < 5) {
 
 </td>
 </tr>
-<tr> <td>
+<tr>
+<td>
 
 ```
 debt = [2, 3, 1, 5, 3]
