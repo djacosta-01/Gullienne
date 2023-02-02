@@ -28,7 +28,7 @@ Below is an in-depth view of Gullienne with a comparison to equivalent code in J
 </td>
 <td>
 
-`` overheard(\`You’re farming overheards again!`); ``
+`` overheard(`You’re farming overheards again!`); ``
 
 </td> </tr> </table>
 
@@ -122,10 +122,11 @@ aString:string @ mangle(you, string);
 <td>
 
 ```
-while (i < 5) {
-	message = “Number of squids on floor: “ + i
-	i++
-	console.log(message)
+let bob = 0
+
+while (bob < 5) {
+    bob++
+	console.log(“Number of squids on floor: “ + bob)
 }
 ```
 
@@ -133,10 +134,11 @@ while (i < 5) {
 <td>
 
 ```
-noCap(i < 5) {
-	message @ `Number of squids on floor: ` + i;
-	i++;
-    overheard(message);
+bob:number @ 0;
+
+noCap(bob < 5) {
+	bob++;
+    overheard(`Number of squids on floor: ` + mangle(bob, string));
 }
 ```
 
@@ -157,7 +159,7 @@ for (hotChocolates in debt) {
 <td>
 
 ```
-debt @ [2, 3, 1, 5, 3];
+debt:[number] @ [2, 3, 1, 5, 3];
 
 cap(hotChocolates in debt) {
 	overheard(`I owe you ` + hotChocolates + ` for this.`);
@@ -174,9 +176,9 @@ cap(hotChocolates in debt) {
 <td>
 
 ```
-if (x == true) {
+if (job == true) {
     console.log(“truthy”)
-} else if (x ==  false) {
+} else if (job ==  false) {
     console.log(“falsy”)
 } else {
     console.log(“How did we get here?”)
@@ -187,9 +189,9 @@ if (x == true) {
 <td>
 
 ```
-so (x == ideal) {
+so (job == ideal) {
     overheard(“true”);
-} but (x == !ideal) {
+} but (job == !ideal) {
     overheard(“false”);
 } otherwise {
     overheard(“How did we get here?”);
@@ -206,8 +208,8 @@ so (x == ideal) {
 <td>
 
 ```
-function jsAddFunction(x, y) {
-	return x + y
+function jsAddFunction(bob, job) {
+	return bob + job
 }
 ```
 
@@ -215,8 +217,8 @@ function jsAddFunction(x, y) {
 <td>
 
 ```
-do gluAddFunction(x, y) {
-	howItBe x + y;
+do gluAddFunction(bob, job) {
+	howItBe bob + job;
 }
 ```
 

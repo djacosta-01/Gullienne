@@ -1,10 +1,11 @@
-noCap(i < 5) {
-	message @ `Number of squids on floor: ` + i;
-	i++;
-	overheard(message);
+bob:number @ 0;
+
+noCap(bob < 5) {
+	bob++;
+    overheard(`Number of squids on floor: ` + mangle(bob, string));
 }
 
-debt @ [2, 3, 1, 5, 3];
+debt:[number] @ [2, 3, 1, 5, 3];
 
 cap(hotChocolates in debt) {
 	overheard(`I owe you ` + hotChocolates + ` for this.`);
