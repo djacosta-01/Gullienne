@@ -1,0 +1,37 @@
+Pigeon {
+  Program   = Statement+
+  Statement = PrintStmt
+            | VarDec
+            | AssignStmt
+            | IfStmt
+            
+  PrintStmt  = sqwak "(" Exp ")" "🐦"
+  VarDec     = coo Var "=" Exp "🐦"
+  AssignStmt = id "=" Exp "🐦"
+  IfStmt     = maybe Exp yep Statement+ nope Statement+ fine
+  
+  id        = ~keyword idchar+
+  idchar    = letter | "🌽" | "🪶" | "_"
+  
+  keyword   = coo | sqwak | maybe | yep | nope | fine
+  
+  Var       = id
+ 
+  Exp       = Exp "+" Term   --add
+            | Exp "-" Term   --sub
+            | Term
+  
+  Term      = numeral 
+            | strlit
+            | Var
+
+  coo       = "coo" ~idchar
+  sqwak     = "sqwak" ~idchar
+  maybe     = "maybe" ~idchar
+  yep       = "yep" ~idchar
+  nope      = "nope" ~idchar
+  fine      = "fine" ~idchar
+
+  numeral   = digit+ ("." digit+)?
+  strlit    = "\"" (~"\"" any)* "\""
+}

@@ -14,24 +14,6 @@ The language Gullienne is inspired by our favorite TA Julian and his iconic sayi
 
 Below is an in-depth view of Gullienne with a comparison to equivalent code in JavaScript.
 
-## Examples
-
-### Hello World
-
-<table>
-<tr> <th>JavaScript</th><th>Gullienne</th> </tr>
-<tr>
-<td>
-
-`console.log(“You’re farming overheards again!”)`
-
-</td>
-<td>
-
-`` overheard(`You’re farming overheards again!`); ``
-
-</td> </tr> </table>
-
 ### Comments
 
 <table>
@@ -62,6 +44,64 @@ W- Wait, what is that? */
 ~ Let's see here...
 W- Wait, what is that? ~
 ```
+
+</td> </tr> </table>
+
+### Data Types
+|Type|Values|JavaScript|
+|----|------|----------|
+|Joolean `joolean`|`ideal`, `!ideal`|Boolean `true` `false`|
+|Number `number`|`3.97385`, `7895.2734`|Number `99465.213`|
+|String `string`|`` `carrot` ``, `` `bob` ``|String `"phrase"`|
+
+### Data Structures
+|Structure|Syntax|JavaScript|
+|---|---|---|
+|Lists| `[ a, b, c ]` | `[ a , b , c ]` |
+|Maps| `{ a : x , b : y }` | `{ a : x , b : y }` |
+|Set| `< a, b, c >` | `{ a : x , b : y }` |
+
+### Operators and Precedence 
+|Operator|Symbol|Operational Types|Precedence|Associativity|
+|--------|------|-----------------|:------:|:----:|
+|Attributor|`Undetermined`|Object|1|L to R|
+|List Indexer|`[]`|List|1| ^ |
+|Map Indexer|`{}`|Map|1| ^ |
+|Set Indexer|`<>`|Set|1| ^ |
+|Call|`()`|Functions|1| ^ |
+|Negation|`!`|Joolean|2|R to L|
+|Negation|`-`|Numbers|2| ^ |
+|Exponentiation|`^`|Numbers|3| ^ |
+|Multiplication|`*`|Numbers|4| L to R |
+|Division|`/`|Numbers|4| ^ |
+|Remainder|`%`|Numbers|4| ^ |
+|Addition|`+`|Numbers|5| ^ |
+|Subtraction|`-`|Numbers|5| ^ |
+|Less Than|`<`|Numbers|6|None|
+|Less Than or equal|`<=`|Numbers|6| ^ |
+|Greater Than|`>`|Numbers|6| ^ |
+|Greater Than or equal|`>=`|Numbers|6| ^ |
+|Equality|`==`|Joolean, Numbers|7| ^ |
+|Inequality|`!=`|Joolean, Numbers|7| ^ |
+|Logical AND|`&`|Joolean|8| ^ |
+|Logical OR|`\|`|Joolean|9| ^ |
+|Assignment|`@`|Joolean, Numbers, String, List, Map, Set, Object|10|R to L|
+
+## Examples
+
+### Hello World
+
+<table>
+<tr> <th>JavaScript</th><th>Gullienne</th> </tr>
+<tr>
+<td>
+
+`console.log(“You’re farming overheards again!”)`
+
+</td>
+<td>
+
+`` overheard(`You’re farming overheards again!`); ``
 
 </td> </tr> </table>
 
