@@ -257,7 +257,7 @@ function jsAddFunction(bob, job) {
 <td>
 
 ```
-do gluAddFunction(bob, job) {
+do:number gluAddFunction(bob:number, job:number) {
 	howItBe bob + job;
 }
 ```

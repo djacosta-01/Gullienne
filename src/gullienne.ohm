@@ -1,19 +1,26 @@
-Pigeon {
+Gullienne {
   Program   = Statement+
-  Statement = PrintStmt
-            | VarDec
-            | AssignStmt
-            | IfStmt
+  Statement = VarDec
+  			| FunctDec
+            | ClassDec
+            | Reassign
+  			| Conditional
+            | ForLoop
+            | WhileLoop
+            | Break
+            | Continue
+            | Return
             
-  PrintStmt  = sqwak "(" Exp ")" "🐦"
-  VarDec     = coo Var "=" Exp "🐦"
-  AssignStmt = id "=" Exp "🐦"
-  IfStmt     = maybe Exp yep Statement+ nope Statement+ fine
+  VarDec     = Var ":" id ("@" Exp)?
+  AssignStmt = 
+  IfStmt     = so "(" Exp ")" "{" Statement+ "}" 
+  				(but "(" Exp ")" "{" Statement+ "}")*
+                (otherwise "{" Statement+ "}")?
   
   id        = ~keyword idchar+
   idchar    = letter | "🌽" | "🪶" | "_"
   
-  keyword   = coo | sqwak | maybe | yep | nope | fine
+  keyword   = do | so | but | otherwise | cap | noCap
   
   Var       = id
  
