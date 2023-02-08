@@ -28,5 +28,10 @@
   },
   "dependencies": {
     "ohm-js": "^16.6.0"
+  },
+  "directories": {
+    "doc": "docs",
+    "example": "examples",
+    "test": "test"
   }
 }
