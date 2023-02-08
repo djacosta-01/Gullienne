@@ -1,0 +1,17 @@
+object objectName {
+    name1:type;
+    name2:type;
+
+    ~optional constructor ????~
+    constructor(x,y,z){ 
+
+    }
+
+    ~methods~
+    method(......) {
+        .....
+    }
+}
+
+objectname(name1:x, name2:y)
+objectname(a, b, c) -> 

@@ -11,7 +11,6 @@ Gullienne {
             | Break
             | Continue
             | Return
-            | ReturnVal
             
   VarDec    = Var ":" id ("@" Exp)? ";"
   ClassDec	= id
@@ -25,8 +24,7 @@ Gullienne {
   WhileLoop = id
   Break		= frogOut ";"
   Continue	= frogIn ";"
-  Return	= howItBe Exp* ";"
-  ReturnVal	= howItBe Exp ";"
+  Return	= howItBe Exp? ";"
   
   id        = ~keyword idchar+
   idchar    = letter | "_"
