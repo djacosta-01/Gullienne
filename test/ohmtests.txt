@@ -1,0 +1,3 @@
+x : [ number | joolean | number | number | number ] @ 12 ;
+
+x : << number|string :: joolean>> @ 12 ;

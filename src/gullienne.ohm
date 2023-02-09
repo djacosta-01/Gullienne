@@ -1,20 +1,61 @@
 Gullienne {
-	Program = Statement+
-    Statement = VarDec
-    VarDec = id ":"       Type "@" Exp ";"
-    Exp = Exp "+" Term   --add
-            | Exp "-" Term   --sub
-            | Term
-  Term = numeral
-            | strlit
-            | id
-  id = letter (alnum|"_")*
-  Type = Type "|" Type --sumType
-  		   | "[" Type "]" -- listType
-           | "<" Type ">" --setType
-           | "<<" Type "::" Type ">>" --mapType
-  		   | "number" | "joolean" | "string"
-  numeral   = digit+ 
-  strlit    = "\"" (~"\"" any)* "\""
+	Program 	= Statement+
+    Statement 	= VarDec
+    			| Condition
+    
+    VarDec 		= id ":" Type ("@" ExpFull)? ";"
+    Condition	= so "(" ExpFull ")" "{" Statement+ "}" 
+  				(but "(" ExpFull ")" "{" Statement+ "}")*
+                (otherwise "{" Statement+ "}")?
+                
+    ExpFull		= Exp8 "|" Exp8 --joolOr
+    			| Exp8
+    Exp8		= Exp7 "&" Exp7 --joolAnd
+    			| Exp7
+    Exp7		= Exp6 ("=" | "!=") Exp6 --eqNeq
+    			| Exp6
+    Exp6		= Exp5 ("<" | "<=" | ">" | ">=") Exp5 --glte
+    			| Exp5
+    Exp5		= Exp5 ("+" | "-") Exp4 --addsub
+    			| Exp4
+    Exp4		= Exp4 ("*" | "/" | "%") Exp3 --mulDivRem
+    			| Exp3
+    Exp3		= Exp2 "^" Exp3 --expo
+    			| Exp2
+                | ("!" | "-") Exp2 --neg
+    Exp2		= Exp2 "[" ExpFull "]" --listInd
+    			| Exp2 "<<" ExpFull ">>" --mapInd
+                | Exp2 "<" ExpFull ">" --setInd
+                | Exp2 "(" ListOf<ExpFull, ","> ")" --functCall
+                | Exp1
+    Exp1		= numeral | strlit | joolean | id
+    			| "(" ExpFull ")" --expr
+    
+    Term 		= numeral
+    			| strlit
+        		| id
+        
+  	id 			= letter (alnum|"_")*
+  	Type 		= Type "|" Type --sumType
+    			| "[" Type "]" -- listType
+        		| "<" Type ">" --setType
+        		| "<<" Type "::" Type ">>" --mapType
+        		| "number" | "joolean" | "string"
+                | "NUMBER" | "JOOLEAN" | "STRING"
+                | letter (alnum|"_")* --custom
+        
+  	do       	= "do" ~id
+  	so       	= "so" ~id
+  	but       	= "but" ~id
+  	otherwise 	= "otherwise" ~id
+  	cap      	= "cap" ~id
+  	noCap     	= "noCap" ~id
+  	frogOut   	= "frogOut" ~id
+  	frogIn    	= "frogIn" ~id
+  	howItBe   	= "howItBe" ~id
+  	ideal		= "ideal" ~id
+    
+  	numeral   	= digit+ ("." digit+)?
+  	strlit    	= "\"" (~"\"" any)* "\""
+  	joolean		= ideal
 }
-

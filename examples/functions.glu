@@ -1,5 +1,7 @@
-do gluAddFunction(bob:number, job:number) -> number {
-	howItBe bob + job;
+do gluStringTogether(bob:string, /, job:number, yob:number) -> string {
+    bobble = job + yob;
+	howItBe bob + mangle(bobble, string);
 }
 
-gluAddFunction(bob:3, job:2)
+gluStringTogether("No", job:4, yob:3);
+
