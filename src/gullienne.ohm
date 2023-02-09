@@ -1,56 +1,19 @@
 Gullienne {
-  Program   = Statement+
-  Statement = VarDec
-            | ClassDec
-            | FunctDec
-            | FunctCall
-            | Reassign
-  			| Condition
-            | ForLoop
-            | WhileLoop
-            | Break
-            | Continue
-            | Return
-            
-  VarDec    = Var ":" id ("@" Exp)? ";"
-  ClassDec	= id
-  FunctDec	= do ":" id Var "(" (Var ":" id)* ")" "{" Statement+ "}"
-  FunctCall = id
-  Reassign	= id
-  Condition	= so "(" Exp ")" "{" Statement+ "}" 
-  				(but "(" Exp ")" "{" Statement+ "}")*
-                (otherwise "{" Statement+ "}")?
-  ForLoop	= id
-  WhileLoop = id
-  Break		= frogOut ";"
-  Continue	= frogIn ";"
-  Return	= howItBe Exp? ";"
-  
-  id        = ~keyword idchar+
-  idchar    = letter | "_"
-  
-  keyword   = do | so | but | otherwise | cap | noCap | frogOut | frogIn | howItBe
-  
-  Var       = id
- 
-  Exp       = Exp "+" Term   --add
+	Program = Statement+
+    Statement = VarDec
+    VarDec = id ":"       Type "@" Exp ";"
+    Exp = Exp "+" Term   --add
             | Exp "-" Term   --sub
             | Term
-  
-  Term      = numeral 
+  Term = numeral
             | strlit
-            | Var
-
-  do       	= "do" ~idchar
-  so       	= "so" ~idchar
-  but       = "but" ~idchar
-  otherwise = "otherwise" ~idchar
-  cap      	= "cap" ~idchar
-  noCap     = "noCap" ~idchar
-  frogOut   = "frogOut" ~idchar
-  frogIn    = "frogIn" ~idchar
-  howItBe   = "howItBe" ~idchar
-
-  numeral   = digit+ ("." digit+)?
+            | id
+  id = letter (alnum|"_")*
+  Type = Type "|" Type --sumType
+  		   | "[" Type "]" -- listType
+           | "<" Type ">" --setType
+           | "<<" Type "::" Type ">>" --mapType
+  		   | "number" | "joolean" | "string"
+  numeral   = digit+ 
   strlit    = "\"" (~"\"" any)* "\""
 }
