@@ -24,7 +24,10 @@ Gullienne {
     
     Block		= "{" Statement* "}"
     Inst		= id ":" Type
-    ListLit		= "[" ListOf<Term, ","> "]"
+    ListLit		= "[" ListOf<ExpFull, ","> "]"
+    SetLit		= "<" ListOf<ExpFull, ","> ">"
+    MapLit		= "<<" ListOf<KeyValue, ","> ">>"
+    KeyValue	= ExpFull "::" ExpFull
                 
     ExpFull		= Exp8 "|" Exp8 --joolOr
     			| Exp8
@@ -46,7 +49,8 @@ Gullienne {
                 | Exp2 "<" ExpFull ">" --setInd
                 | Exp2 "(" ListOf<ExpFull, ","> ")" --functCall
                 | Exp1
-    Exp1		= numeral | strlit | joolean | id | ListLit
+    Exp1		= numeral | strlit | joolean | id
+    			| ListLit | SetLit | MapLit
     			| "(" ExpFull ")" --expr
     
     Term 		= numeral
