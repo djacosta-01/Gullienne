@@ -19,9 +19,6 @@ object Julian (hat:string, jacket:string) {
 ~Object instantiating with "make"~
 winterJulian:Julian @ make Julian (hat:"red and blue", jacket:"black and orange");
 
-
-~All methods are public by default, but if you add # into the method name it makes them private, same with vars.~
-~Variables static by default to save memory.~
 ~To access the fields of an Object, and fields are mutable after intitial creation.~
 winterJulian.jacket;
 winterJulian.hat;
