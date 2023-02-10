@@ -1,3 +1,53 @@
+~Supposed to pass~
+
 x : [ number | joolean | number | number | number ] @ 12 ;
 
 x : << number|string :: joolean>> @ 12 ;
+
+hotChocolate:string @ `debt`;
+
+so (julian = `cool guy`) {
+  howItBe ideal;
+}
+
+cap (chocolate in pulp) {
+  chocolate++;
+}
+
+overheard(`You’re farming overheards again!`);
+
+noCap(bob < 5) {
+	bob++;
+  overheard(`Number of squids on floor: ` + mangle(bob, string));
+}
+
+noCap (bob = !0) {
+  so (bob = 3) {
+    frogOut;
+  }
+  frogIn;
+}
+
+cats:list @ [`shadow`, `cookie`, `tiny`, `wobble`];
+
+debt:[number] @ [2, 3, 1, 5, 3];
+
+cap(hotChocolates in debt) {
+	overheard(`I owe you ` + hotChocolates + ` for this.`);
+}
+
+aString:string @ mangle(you, string);
+
+~Not supposed to pass~
+
+so (julian @ `cool guy`) {
+  howItBe ideal;
+}
+
+name:string = `julian`
+
+aJulian @ `hat`
+
+alex:number @ 21
+
+pigeon:joolean @ !!ideal;
