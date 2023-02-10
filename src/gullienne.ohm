@@ -2,11 +2,29 @@ Gullienne {
 	Program 	= Statement+
     Statement 	= VarDec
     			| Condition
+                | FunctDec
+                | ForLoop
+                | WhileLoop
+                | Break
+                | Continue
+                | Return
+                | Exp2 ";" --standalone
+                | id ("++" | "--") ";" --incDec
     
     VarDec 		= id ":" Type ("@" ExpFull)? ";"
-    Condition	= so "(" ExpFull ")" "{" Statement+ "}" 
-  				(but "(" ExpFull ")" "{" Statement+ "}")*
-                (otherwise "{" Statement+ "}")?
+    FunctDec	= do id "(" ListOf<Inst, ","> ")" "->" Type Block
+    Condition	= so "(" ExpFull ")" Block
+  				(but "(" ExpFull ")" Block)*
+                (otherwise Block)?
+    ForLoop		= cap "(" id "in" id ")" Block
+    WhileLoop	= noCap "(" ExpFull ")" Block
+    Return		= howItBe (ExpFull)? ";"
+    Break		= frogOut ";"
+    Continue	= frogIn ";"
+    
+    Block		= "{" Statement* "}"
+    Inst		= id ":" Type
+    ListLit		= "[" ListOf<Term, ","> "]"
                 
     ExpFull		= Exp8 "|" Exp8 --joolOr
     			| Exp8
@@ -28,7 +46,7 @@ Gullienne {
                 | Exp2 "<" ExpFull ">" --setInd
                 | Exp2 "(" ListOf<ExpFull, ","> ")" --functCall
                 | Exp1
-    Exp1		= numeral | strlit | joolean | id
+    Exp1		= numeral | strlit | joolean | id | ListLit
     			| "(" ExpFull ")" --expr
     
     Term 		= numeral
@@ -56,6 +74,6 @@ Gullienne {
   	ideal		= "ideal" ~id
     
   	numeral   	= digit+ ("." digit+)?
-  	strlit    	= "\"" (~"\"" any)* "\""
+  	strlit    	= "`" (~"`" any)* "`"
   	joolean		= ideal
 }

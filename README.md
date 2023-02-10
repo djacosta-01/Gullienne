@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/morphjulian4x.png" width="70%">
+  <img src="docs/GullienneLogo.png" width="50%">
 </p>
 
 # Gullienne
