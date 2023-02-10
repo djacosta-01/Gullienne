@@ -53,3 +53,15 @@ aJulian @ `hat`
 alex:number @ 21
 
 pigeon:joolean @ !!ideal;
+
+so (so (so (ideal))) {
+    overhear(`ideal`);
+}
+
+noCap (noCap( ideal)) {
+    ideal;
+}
+
+noCap () {
+    ideal;
+}
