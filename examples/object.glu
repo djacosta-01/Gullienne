@@ -8,7 +8,7 @@ object Julian (hat:string, jacket:string) {
 
     ~methods~
     do tutor (subject:string) -> joolean {
-        so (subject = “plang”) {
+        so (subject = `plang`) {
             howItBe ideal;
         } otherwise {
             howItBe !ideal;

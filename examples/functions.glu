@@ -3,5 +3,5 @@ do gluStringTogether(bob:string, /, job:number, yob:number) -> string {
 	howItBe bob + mangle(bobble, string);
 }
 
-gluStringTogether("No", job:4, yob:3);
+gluStringTogether(`No`, job:4, yob:3);
 
