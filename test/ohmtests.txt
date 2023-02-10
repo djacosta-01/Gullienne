@@ -38,6 +38,8 @@ cap(hotChocolates in debt) {
 
 aString:string @ mangle(you, string);
 
+x: <<num|string::jool|number>> @ <<1::true, `2`::1>>;
+
 ~Not supposed to pass~
 
 so (julian @ `cool guy`) {
