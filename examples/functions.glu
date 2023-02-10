@@ -1,5 +1,5 @@
 do gluStringTogether(bob:string, /, job:number, yob:number) -> string {
-    bobble = job + yob;
+    bobble:number @ job + yob;
 	howItBe bob + mangle(bobble, string);
 }
 

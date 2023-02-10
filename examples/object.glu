@@ -1,13 +1,13 @@
 object Julian (hat:string, jacket:string) {
     
     ~optional constructor - ask Julian how~
-    constructor (self, hat, jacket) {
-        hat = self.hat;
-        jacket = self.jacket;
+    constructor (self, hat:string, jacket:string) {
+        hat:string @ self.hat;
+        jacket:string @ self.jacket;
     }
 
     ~methods~
-    do tutor (subject:string)  -> joolean {
+    do tutor (subject:string) -> joolean {
         so (subject = “plang”) {
             howItBe ideal;
         } otherwise {
