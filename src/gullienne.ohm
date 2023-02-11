@@ -12,7 +12,7 @@ Gullienne {
                 | id ("++" | "--") ";" --incDec
     
     VarDec 		= id ":" Type ("@" ExpFull)? ";"
-    FunctDec	= do id "(" ListOf<Inst, ","> ")" "->" Type Block
+    FunctDec	= do id "(" ListOf<DecParam, ","> ")" "->" Type Block
     Condition	= so "(" ExpFull ")" Block
   				(but "(" ExpFull ")" Block)*
                 (otherwise Block)?
@@ -23,7 +23,10 @@ Gullienne {
     Continue	= frogIn ";"
     
     Block		= "{" Statement* "}"
-    Inst		= id ":" Type
+    DecParam	= id ":" Type --realParam
+    			| "/"
+    CallParam	= id ":" ExpFull --kwarg
+    			| ExpFull
     ListLit		= "[" ListOf<ExpFull, ","> "]"
     SetLit		= "<" ListOf<ExpFull, ","> ">"
     MapLit		= "<<" ListOf<KeyValue, ","> ">>"
@@ -47,7 +50,7 @@ Gullienne {
     Exp2		= Exp2 "[" ExpFull "]" --listInd
     			| Exp2 "<<" ExpFull ">>" --mapInd
                 | Exp2 "<" ExpFull ">" --setInd
-                | Exp2 "(" ListOf<ExpFull, ","> ")" --functCall
+                | Exp2 "(" ListOf<CallParam, ","> ")" --functCall
                 | Exp1
     Exp1		= numeral | strlit | joolean | id
     			| ListLit | SetLit | MapLit
@@ -57,7 +60,7 @@ Gullienne {
     			| strlit
         		| id
         
-  	id 			= letter (alnum|"_")*
+  	id 			= ~keyword letter (alnum|"_")*
   	Type 		= Type "|" Type --sumType
     			| "[" Type "]" -- listType
         		| "<" Type ">" --setType
@@ -65,6 +68,10 @@ Gullienne {
         		| "number" | "joolean" | "string"
                 | "NUMBER" | "JOOLEAN" | "STRING"
                 | letter (alnum|"_")* --custom
+                
+    keyword		= do | so | but | otherwise | cap | noCap
+    			| frogOut | frogIn | howItBe | ideal
+                | object | default
         
   	do       	= "do" ~id
   	so       	= "so" ~id
@@ -76,6 +83,8 @@ Gullienne {
   	frogIn    	= "frogIn" ~id
   	howItBe   	= "howItBe" ~id
   	ideal		= "ideal" ~id
+    object		= "object" ~id
+    default		= "default" ~id
     
   	numeral   	= digit+ ("." digit+)?
   	strlit    	= "`" (~"`" any)* "`"

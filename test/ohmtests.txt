@@ -17,8 +17,8 @@ cap (chocolate in pulp) {
 overheard(`You’re farming overheards again!`);
 
 noCap(bob < 5) {
-	bob++;
-  overheard(`Number of squids on floor: ` + mangle(bob, string));
+    bob++;
+    overheard(`Number of squids on floor: ` + mangle(bob, string));
 }
 
 noCap (bob = !0) {
@@ -33,12 +33,19 @@ cats:list @ [`shadow`, `cookie`, `tiny`, `wobble`];
 debt:[number] @ [2, 3, 1, 5, 3];
 
 cap(hotChocolates in debt) {
-	overheard(`I owe you ` + hotChocolates + ` for this.`);
+    overheard(`I owe you ` + hotChocolates + ` for this.`);
 }
 
 aString:string @ mangle(you, string);
 
 x: <<num|string::jool|number>> @ <<1::true, `2`::1>>;
+
+do gluStringTogether(bob:string, /, job:number, yob:number) -> string {
+    bobble:number @ job + yob;
+	howItBe bob + mangle(bobble, string);
+}
+
+gluStringTogether(`No`, job:4, yob:3);
 
 ~Not supposed to pass~
 
@@ -65,3 +72,4 @@ noCap (noCap( ideal)) {
 noCap () {
     ideal;
 }
+
