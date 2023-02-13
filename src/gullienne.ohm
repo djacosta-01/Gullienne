@@ -22,11 +22,14 @@ Gullienne {
     Break		= frogOut ";"
     Continue	= frogIn ";"
     
+    ObjectHead	= object id "(" ListOf<DecParam, ","> ")" ObjectBlock
+    ObjectBlock = "{" "}"
+    
     Block		= "{" Statement* "}"
     DecParam	= id ":" Type --realParam
     			| "/"
     CallParam	= id ":" ExpFull --kwarg
-    			| ExpFull
+    			| ExpFull --parg
     ListLit		= "[" ListOf<ExpFull, ","> "]"
     SetLit		= "<" ListOf<ExpFull, ","> ">"
     MapLit		= "<<" ListOf<KeyValue, ","> ">>"

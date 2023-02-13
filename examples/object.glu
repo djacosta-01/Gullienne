@@ -1,4 +1,7 @@
 object Julian (hat:string, jacket:string) {
+    ~ Object default (bayesline) values, if "empty" versions are unacceptable ~
+    bayes hat @ `the classic Julian LMU cap`;
+    bayes jacket @ `the classic Julian black and orange`;
     
     ~optional constructor - ask Julian how~
     constructor (self, hat:string, jacket:string) {
@@ -14,11 +17,16 @@ object Julian (hat:string, jacket:string) {
             howItBe !ideal;
         }
     }
+
+    do #stopOnTime() -> joolean {
+        howItBe !ideal;
+    }
 }
 
 ~Object instantiating with "make"~
 winterJulian:Julian @ make Julian (hat:"red and blue", jacket:"black and orange");
 
-~To access the fields of an Object, and fields are mutable after intitial creation.~
+~Object fields are read-only outside the Object.
+    Object methods are public unless marked by #.~
 winterJulian.jacket;
 winterJulian.hat;
