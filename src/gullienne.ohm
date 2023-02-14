@@ -1,5 +1,5 @@
 Gullienne {
-	Program 	= Statement+
+	Program 	= (Statement | comment)+
     Statement 	= VarDec
     			| Condition
                 | FunctDec
@@ -8,28 +8,36 @@ Gullienne {
                 | Break
                 | Continue
                 | Return
+                | ObjectHead
                 | Exp2 ";" --standalone
                 | id ("++" | "--") ";" --incDec
     
     VarDec 		= id ":" Type ("@" ExpFull)? ";"
-    FunctDec	= do id "(" ListOf<DecParam, ","> ")" "->" Type Block
-    Condition	= so "(" ExpFull ")" Block
-  				(but "(" ExpFull ")" Block)*
-                (otherwise Block)?
-    ForLoop		= cap "(" id "in" id ")" Block
-    WhileLoop	= noCap "(" ExpFull ")" Block
+    FunctDec	= do id "(" ListOf<DecParam, ","> ")" "->" Type FuncBlock
+    FuncBlock	= "{" Default* Statement* "}"
+    Condition	= so "(" ExpFull ")" GenBlock
+  				(but "(" ExpFull ")" GenBlock)*
+                (otherwise GenBlock)?
+    ForLoop		= cap "(" id "in" id ")" GenBlock
+    WhileLoop	= noCap "(" ExpFull ")" GenBlock
     Return		= howItBe (ExpFull)? ";"
     Break		= frogOut ";"
     Continue	= frogIn ";"
     
     ObjectHead	= object id "(" ListOf<DecParam, ","> ")" ObjectBlock
-    ObjectBlock = "{" "}"
+    ConstDec	= const "(" ListOf<RealParam, ","> ")" GenBlock
+    ObjectBlock = "{" (Default | comment)* (ConstDec | comment)* (MethodDec | comment)* "}"
+    MethodDec	= do "#"?id "(" ListOf<DecParam, ","> ")" "->" Type FuncBlock
     
-    Block		= "{" Statement* "}"
-    DecParam	= id ":" Type --realParam
+    Default		= bayes id "@" ExpFull ";"
+    GenBlock	= "{" Statement* "}"
+    
+    RealParam	= id ":" Type
+    DecParam	= RealParam
     			| "/"
     CallParam	= id ":" ExpFull --kwarg
     			| ExpFull --parg
+                
     ListLit		= "[" ListOf<ExpFull, ","> "]"
     SetLit		= "<" ListOf<ExpFull, ","> ">"
     MapLit		= "<<" ListOf<KeyValue, ","> ">>"
@@ -54,6 +62,8 @@ Gullienne {
     			| Exp2 "<<" ExpFull ">>" --mapInd
                 | Exp2 "<" ExpFull ">" --setInd
                 | Exp2 "(" ListOf<CallParam, ","> ")" --functCall
+                | Exp2 "." Exp1 --objAccess
+                | make Type "(" ListOf<CallParam, ","> ")" --objMake
                 | Exp1
     Exp1		= numeral | strlit | joolean | id
     			| ListLit | SetLit | MapLit
@@ -74,7 +84,7 @@ Gullienne {
                 
     keyword		= do | so | but | otherwise | cap | noCap
     			| frogOut | frogIn | howItBe | ideal
-                | object | default
+                | object | bayes | const | make
         
   	do       	= "do" ~id
   	so       	= "so" ~id
@@ -87,8 +97,11 @@ Gullienne {
   	howItBe   	= "howItBe" ~id
   	ideal		= "ideal" ~id
     object		= "object" ~id
-    default		= "default" ~id
+    bayes		= "bayes" ~id
+    const	 	= "constructor" ~id
+    make		= "make" ~id
     
+    comment		= "~" (~"~" any)* "~"
   	numeral   	= digit+ ("." digit+)?
   	strlit    	= "`" (~"`" any)* "`"
   	joolean		= ideal

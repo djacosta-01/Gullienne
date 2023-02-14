@@ -4,7 +4,7 @@ object Julian (hat:string, jacket:string) {
     bayes jacket @ `the classic Julian black and orange`;
     
     ~optional constructor - ask Julian how~
-    constructor (self, hat:string, jacket:string) {
+    constructor (hat:string, jacket:string) {
         hat:string @ self.hat;
         jacket:string @ self.jacket;
     }
@@ -24,7 +24,7 @@ object Julian (hat:string, jacket:string) {
 }
 
 ~Object instantiating with "make"~
-winterJulian:Julian @ make Julian (hat:"red and blue", jacket:"black and orange");
+winterJulian:Julian @ make Julian (hat:`red and blue`, jacket:`black and orange`);
 
 ~Object fields are read-only outside the Object.
     Object methods are public unless marked by #.~

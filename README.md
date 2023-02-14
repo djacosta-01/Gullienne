@@ -64,7 +64,7 @@ W- Wait, what is that? ~
 ### Operators and Precedence 
 |Operator|Symbol|Operational Types|Precedence|Associativity|
 |--------|------|-----------------|:------:|:----:|
-|Attributor|`Undetermined`|Object|1|L to R|
+|Attributor|`.`|Object|1|L to R|
 |List Indexer|`[]`|List|1| ^ |
 |Map Indexer|`{}`|Map|1| ^ |
 |Set Indexer|`<>`|Set|1| ^ |
