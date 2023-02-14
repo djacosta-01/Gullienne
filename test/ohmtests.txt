@@ -47,7 +47,26 @@ do gluStringTogether(bob:string, /, job:number, yob:number) -> string {
 
 gluStringTogether(`No`, job:4, yob:3);
 
+so (x = 1) {
+    so (x < 1) {
+    	so (x <= 1) {
+            so (x > 1) {
+            	so (x >= 1) {
+                    so (x != 1) {
+                    	overheard(`We compared a lot!`);
+                    }
+                }
+            }
+        }
+    }
+}
+               
+        
+        
+
 ~Not supposed to pass~
+
+wrong:string @ "use the tick mark!";
 
 so (julian @ `cool guy`) {
   howItBe ideal;
