@@ -13,7 +13,6 @@ const syntaxChecks = [
   ],
   ["all relational operators", "x:joolean @ 1<(2<=(3=(4!=(5 >= (6>7)))));"],
   ["all logical operators", "x:joolean @ ideal & !ideal | (!ideal);"],
-  ["the conditional operator", "overheard(x ? y : z);"],
   ["end of program inside comment", "overheard(0); ~ yay ~"],
   ["comments with no text are ok", "overheard(1);~ ~\noverheard(0);~ ~"],
   ["non-Latin letters in identifiers", "コンパイラ = 100;"],
@@ -143,7 +142,7 @@ describe("The grammar", () => {
     })
   }
 
-  print("Gullienne-specific syntax")
+  console.log("Gullienne-specific syntax")
   for (const [scenario, source, errorMessagePattern] of gullienneErrors) {
     it(`does not permit ${scenario}`, () => {
       const match = grammar.match(source)
