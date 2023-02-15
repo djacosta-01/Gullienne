@@ -15,7 +15,7 @@ const syntaxChecks = [
   ["all logical operators", "x:joolean @ ideal & !ideal | (!ideal);"],
   ["end of program inside comment", "overheard(0); ~ yay ~"],
   ["comments with no text are ok", "overheard(1);~ ~\noverheard(0);~ ~"],
-  ["non-Latin letters in identifiers", "コンパイラ = 100;"],
+  ["non-Latin letters in identifiers", "コンパイラ:number @ 100;"],
   [
     "multitype data structures",
     "x : [ number | joolean | number | number | number ] @ 12; x : << number|string :: joolean>> @ 12 ;",
