@@ -49,7 +49,7 @@ Gullienne {
     			| Exp7
     Exp7		= Exp6 ("=" | "!=") Exp6 --eqNeq
     			| Exp6
-    Exp6		= Exp5 ("<" | "<=" | ">" | ">=") Exp5 --glte
+    Exp6		= Exp5 ("<=" | ">=" | "<" | ">") Exp5 --glte
     			| Exp5
     Exp5		= Exp5 ("+" | "-") Exp4 --addsub
     			| Exp4
