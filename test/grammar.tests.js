@@ -1,4 +1,4 @@
-import assert from "assert/strict"
+import assert from "assert"
 import fs from "fs"
 import ohm from "ohm-js"
 
@@ -16,6 +16,22 @@ const syntaxChecks = [
   ["end of program inside comment", "overheard(0); ~ yay ~"],
   ["comments with no text are ok", "overheard(1);~ ~\noverheard(0);~ ~"],
   ["non-Latin letters in identifiers", "コンパイラ:number @ 100;"],
+]
+
+const syntaxErrors = [
+  ["non-letter in an identifier", "ab😭c:number @ 2;", /Line 1, col 3/],
+  ["malformed number", "x:number @ 2.;", /Line 1, col 14/],
+  ["missing semicolon", "x:number @ 3 y:number @ 1", /Line 1, col 14/],
+  ["a missing right operand", "overheard(5 -", /Line 1, col 14/],
+  ["a non-operator", "overheard(7 * ((2 _ 3)))", /Line 1, col 19/],
+  ["an expression starting with a )", "x:number @ );", /Line 1, col 12/],
+  ["a statement starting with expression", "x * 5;", /Line 1, col 3/],
+  ["an illegal statement on line 2", "overheard(5);\nx * 5;", /Line 2, col 3/],
+  ["a statement starting with a )", "overheard(5);\n) * 5", /Line 2, col 1/],
+  ["an expression starting with a *", "x:number @ * 71;", /Line 1, col 12/],
+]
+
+const gullienneChecks = [
   [
     "multitype data structures",
     "x : [ number | joolean | number | number | number ] @ 12; x : << number|string :: joolean>> @ 12 ;",
@@ -75,19 +91,6 @@ const syntaxChecks = [
   ],
 ]
 
-const syntaxErrors = [
-  ["non-letter in an identifier", "ab😭c = 2", /Line 1, col 3/],
-  ["malformed number", "x= 2.", /Line 1, col 6/],
-  ["missing semicolon", "x = 3 y = 1", /Line 1, col 7/],
-  ["a missing right operand", "overheard(5 -", /Line 1, col 10/],
-  ["a non-operator", "overheard(7 * ((2 _ 3)))", /Line 1, col 15/],
-  ["an expression starting with a )", "x = );", /Line 1, col 5/],
-  ["a statement starting with expression", "x * 5;", /Line 1, col 3/],
-  ["an illegal statement on line 2", "overheard(5);\nx * 5;", /Line 2, col 3/],
-  ["a statement starting with a )", "overheard(5);\n) * 5", /Line 2, col 1/],
-  ["an expression starting with a *", "x = * 71;", /Line 1, col 5/],
-]
-
 const gullienneErrors = [
   [
     "Incorrect string syntax",
@@ -109,7 +112,7 @@ const gullienneErrors = [
   [
     "unreasonable nested negation",
     `------------------------------------------------------------3------------------------------------------------------------2==5;`,
-    /Line 1, col 2/,
+    /Line 1, col 1/,
   ],
   [
     "statement conditions",
@@ -127,8 +130,9 @@ const gullienneErrors = [
   ],
 ]
 
-describe("The grammar", () => {
-  const grammar = ohm.grammar(fs.readFileSync("src/gullienne.ohm"))
+const grammar = ohm.grammar(fs.readFileSync("src/gullienne.ohm"))
+
+describe("Base Grammar", () => {
   for (const [scenario, source] of syntaxChecks) {
     it(`properly specifies ${scenario}`, () => {
       assert(grammar.match(source).succeeded())
@@ -141,8 +145,14 @@ describe("The grammar", () => {
       assert(new RegExp(errorMessagePattern).test(match.message))
     })
   }
+})
 
-  console.log("Gullienne-specific syntax")
+describe("Gullienne-specific syntax", () => {
+  for (const [scenario, source] of gullienneChecks) {
+    it(`properly specifies ${scenario}`, () => {
+      assert(grammar.match(source).succeeded())
+    })
+  }
   for (const [scenario, source, errorMessagePattern] of gullienneErrors) {
     it(`does not permit ${scenario}`, () => {
       const match = grammar.match(source)

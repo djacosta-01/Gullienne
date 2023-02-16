@@ -1,7 +1,8 @@
 Gullienne {
-	Program 	= (Statement | comment)+
-    Statement 	= VarDec
-    			| Condition
+    Program     = (Statement | comment)+
+    Statement   = VarDec
+                | Reassign
+                | Condition
                 | FunctDec
                 | ForLoop
                 | WhileLoop
@@ -9,100 +10,102 @@ Gullienne {
                 | Continue
                 | Return
                 | ObjectHead
-                | Exp2 ";" --standalone
+                | (Exp2_functCall | Exp2_objMethod) ";" --standalone
                 | id ("++" | "--") ";" --incDec
     
-    VarDec 		= id ":" Type ("@" ExpFull)? ";"
-    FunctDec	= do id "(" ListOf<DecParam, ","> ")" "->" Type FuncBlock
-    FuncBlock	= "{" Default* Statement* "}"
-    Condition	= so "(" ExpFull ")" GenBlock
-  				(but "(" ExpFull ")" GenBlock)*
+    VarDec      = id ":" Type ("@" ExpFull)? ";"
+    Reassign    = id "@" ExpFull ";"
+    FunctDec    = do id "(" ListOf<DecParam, ","> ")" "->" Type FuncBlock
+    FuncBlock   = "{" Default* Statement* "}"
+    Condition   = so "(" ExpFull ")" GenBlock
+                (but "(" ExpFull ")" GenBlock)*
                 (otherwise GenBlock)?
-    ForLoop		= cap "(" id "in" id ")" GenBlock
-    WhileLoop	= noCap "(" ExpFull ")" GenBlock
-    Return		= howItBe (ExpFull)? ";"
-    Break		= frogOut ";"
-    Continue	= frogIn ";"
+    ForLoop     = cap "(" id "in" id ")" GenBlock
+    WhileLoop   = noCap "(" ExpFull ")" GenBlock
+    Return      = howItBe (ExpFull)? ";"
+    Break       = frogOut ";"
+    Continue    = frogIn ";"
     
-    ObjectHead	= object id "(" ListOf<DecParam, ","> ")" ObjectBlock
-    ConstDec	= const "(" ListOf<RealParam, ","> ")" GenBlock
+    ObjectHead  = object id "(" ListOf<DecParam, ","> ")" ObjectBlock
+    ConstDec    = const "(" ListOf<RealParam, ","> ")" GenBlock
     ObjectBlock = "{" (Default | comment)* (ConstDec | comment)* (MethodDec | comment)* "}"
-    MethodDec	= do "#"?id "(" ListOf<DecParam, ","> ")" "->" Type FuncBlock
+    MethodDec   = do "#"?id "(" ListOf<DecParam, ","> ")" "->" Type FuncBlock
     
-    Default		= bayes id "@" ExpFull ";"
-    GenBlock	= "{" Statement* "}"
+    Default     = bayes id "@" ExpFull ";"
+    GenBlock    = "{" Statement* "}"
     
-    RealParam	= id ":" Type
-    DecParam	= RealParam
-    			| "/"
-    CallParam	= id ":" ExpFull --kwarg
-    			| ExpFull --parg
+    RealParam   = id ":" Type
+    DecParam    = RealParam
+                | "/"
+    CallArg     = id ":" ExpFull --kwarg
+                | ExpFull --parg
                 
-    ListLit		= "[" ListOf<ExpFull, ","> "]"
-    SetLit		= "<" ListOf<ExpFull, ","> ">"
-    MapLit		= "<<" ListOf<KeyValue, ","> ">>"
-    KeyValue	= ExpFull "::" ExpFull
+    ListLit     = "[" ListOf<ExpFull, ","> "]"
+    SetLit      = "<" ListOf<ExpFull, ","> ">"
+    MapLit      = "<<" ListOf<KeyValue, ","> ">>"
+    KeyValue    = ExpFull "::" ExpFull
                 
-    ExpFull		= Exp8 "|" Exp8 --joolOr
-    			| Exp8
-    Exp8		= Exp7 "&" Exp7 --joolAnd
-    			| Exp7
-    Exp7		= Exp6 ("=" | "!=") Exp6 --eqNeq
-    			| Exp6
-    Exp6		= Exp5 ("<=" | ">=" | "<" | ">") Exp5 --glte
-    			| Exp5
-    Exp5		= Exp5 ("+" | "-") Exp4 --addsub
-    			| Exp4
-    Exp4		= Exp4 ("*" | "/" | "%") Exp3 --mulDivRem
-    			| Exp3
-    Exp3		= Exp2 "^" Exp3 --expo
-    			| Exp2
-                | ("!" | "-") Exp2 --neg
-    Exp2		= Exp2 "[" ExpFull "]" --listInd
-    			| Exp2 "<<" ExpFull ">>" --mapInd
+    ExpFull     = Exp8 "|" Exp8 --joolOr
+                | Exp8
+    Exp8        = Exp7 "&" Exp7 --joolAnd
+                | Exp7
+    Exp7        = Exp6 ("=" | "!=") Exp6 --eqNeq
+                | Exp6
+    Exp6        = Exp5 ("<=" | ">=" | "<" | ">") Exp5 --glte
+                | Exp5
+    Exp5        = Exp5 ("+" | "-") Exp4 --addsub
+                | Exp4
+    Exp4        = Exp4 ("*" | "/" | "%") Exp3 --mulDivRem
+                | Exp3
+    Exp3        = Exp2 "^" Exp3 --expo
+                | ("!" | "-") Exp3 --neg
+                | Exp2
+    Exp2        = Exp2 "[" ExpFull "]" --listInd
+                | Exp2 "<<" ExpFull ">>" --mapInd
                 | Exp2 "<" ExpFull ">" --setInd
-                | Exp2 "(" ListOf<CallParam, ","> ")" --functCall
-                | Exp2 "." Exp1 --objAccess
-                | make Type "(" ListOf<CallParam, ","> ")" --objMake
+                | Exp2 "(" ListOf<CallArg, ","> ")" --functCall
+                | ~digit Exp2 "." id --objField
+                | ~digit Exp2 "." id "(" ListOf<CallArg, ","> ")" --objMethod
+                | make Type "(" ListOf<CallArg, ","> ")" --objMake
                 | Exp1
-    Exp1		= numeral | strlit | joolean | id
-    			| ListLit | SetLit | MapLit
-    			| "(" ExpFull ")" --expr
+    Exp1        = numeral | strlit | joolean | id
+                | ListLit | SetLit | MapLit
+                | "(" ExpFull ")" --expr
     
-    Term 		= numeral
-    			| strlit
-        		| id
+    Term        = numeral
+                | strlit
+                | id
         
-  	id 			= ~keyword letter (alnum|"_")*
-  	Type 		= Type "|" Type --sumType
-    			| "[" Type "]" -- listType
-        		| "<" Type ">" --setType
-        		| "<<" Type "::" Type ">>" --mapType
-        		| "number" | "joolean" | "string"
+    id          = ~keyword letter (alnum|"_")*
+    Type        = Type "|" Type --sumType
+                | "[" Type "]" -- listType
+                | "<" Type ">" --setType
+                | "<<" Type "::" Type ">>" --mapType
+                | "number" | "joolean" | "string"
                 | "NUMBER" | "JOOLEAN" | "STRING"
                 | letter (alnum|"_")* --custom
                 
-    keyword		= do | so | but | otherwise | cap | noCap
-    			| frogOut | frogIn | howItBe | ideal
+    keyword     = do | so | but | otherwise | cap | noCap
+                | frogOut | frogIn | howItBe | ideal
                 | object | bayes | const | make
         
-  	do       	= "do" ~id
-  	so       	= "so" ~id
-  	but       	= "but" ~id
-  	otherwise 	= "otherwise" ~id
-  	cap      	= "cap" ~id
-  	noCap     	= "noCap" ~id
-  	frogOut   	= "frogOut" ~id
-  	frogIn    	= "frogIn" ~id
-  	howItBe   	= "howItBe" ~id
-  	ideal		= "ideal" ~id
-    object		= "object" ~id
-    bayes		= "bayes" ~id
-    const	 	= "constructor" ~id
-    make		= "make" ~id
+    do          = "do" ~id
+    so          = "so" ~id
+    but         = "but" ~id
+    otherwise   = "otherwise" ~id
+    cap         = "cap" ~id
+    noCap       = "noCap" ~id
+    frogOut     = "frogOut" ~id
+    frogIn      = "frogIn" ~id
+    howItBe     = "howItBe" ~id
+    ideal       = "ideal" ~id
+    object      = "object" ~id
+    bayes       = "bayes" ~id
+    const       = "constructor" ~id
+    make        = "make" ~id
     
-    comment		= "~" (~"~" any)* "~"
-  	numeral   	= digit+ ("." digit+)?
-  	strlit    	= "`" (~"`" any)* "`"
-  	joolean		= ideal
+    comment     = "~" (~"~" any)* "~"
+    numeral     = digit+ ("." digit+)?
+    strlit      = "`" (~"`" any)* "`"
+    joolean     = ideal
 }
