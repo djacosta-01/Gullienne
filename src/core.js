@@ -90,6 +90,30 @@ export class Base {
   }
 }
 
+export class GeneralBlock {
+  constructor(statements) {
+    Object.assign(this, { statements })
+  }
+}
+
+export class RealParameter {
+  constructor(id, type) {
+    Object.assign(this, { id, type })
+  }
+}
+
+export class DeclarationParameter {
+  constructor(params) {
+    Object.assign(this, { params })
+  }
+}
+
+export class CallArgument {
+  constructor(id, expression) {
+    Object.assign(this, { id, expression })
+  }
+}
+
 //Leave for last
 export class Condition {
   constructor(test, consequent, alternate) {

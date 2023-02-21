@@ -68,7 +68,26 @@ export default function analyze(sourceCode) {
     Base(_bayes, id, _at, expression, _semi) {
       return new.core.Base(id.rep(), expression.rep())
     },
-    
+    GenBlock(_lc, statements, _rc) {
+      return new.core.GeneralBlock(statements.rep())
+    },
+    RealParam(id, _colon, type) {
+      return new.core.RealParameter(id.rep(), type.rep())
+    },
+    DecParam(params) {
+      if (params == "/") {
+        return "/"
+      } else {
+        return new.core.DeclarationParameter(params.rep())
+      }
+    },
+    CallArg_kwarg(id, _colon, expression) {
+      return new.core.CallArgument(id.rep(), expression.rep())
+    },
+    CallArg_parg(expression) {
+      return new.core.CallArgument(null, expression.rep())
+    },
+
     // continue here
     IfStmt(_maybe, test, _yep, consequent, _nope, alternate, _fine) {
       return new core.IfStatement(test.rep(), consequent.rep(), alternate.rep())
