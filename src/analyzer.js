@@ -24,9 +24,22 @@ export default function analyze(sourceCode) {
         initializer.rep()
       )
     },
-    AssignStmt(target, _eq, source, _bird) {
-      return new core.AssignmentStatement(target.rep(), source.rep())
+    Reassign(id, _at, source, _semi) {
+      return new core.AssignmentStatement(id.rep(), source.rep())
     },
+    FunctDec(_do, id, _lp, params, _comma, _rp, _arrow, returnType, funcBlock) {
+      return new core.FunctionDeclaration(
+        id.rep(),
+        params.rep(),
+        returnType.rep(),
+        funcBlock.rep()
+      )
+    },
+    FuncBlock(_lc, defaults, statements, _rc) {
+      return new core.FunctionBlock(defaults.rep(), statements.rep())
+    },
+
+    // continue here
     IfStmt(_maybe, test, _yep, consequent, _nope, alternate, _fine) {
       return new core.IfStatement(test.rep(), consequent.rep(), alternate.rep())
     },

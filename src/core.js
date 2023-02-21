@@ -12,12 +12,25 @@ export class VariableDeclaration {
   }
 }
 
-export class AssignmentStatement {
-  constructor(target, source) {
-    Object.assign(this, { target, source })
+export class ReassignmentStatement {
+  constructor(id, source) {
+    Object.assign(this, { id, source })
   }
 }
 
+export class FunctionDeclaration {
+  constructor(id, params, returnType, funcBlock) {
+    Object.assign(this, { id, params, returnType, funcBlock })
+  }
+}
+
+export class FunctionBlock {
+  constructor(defaults, statements) {
+    Object.assign(this, { defaults, statements })
+  }
+}
+
+//Leave for last
 export class Condition {
   constructor(test, consequent, alternate) {
     Object.assign(this, { test, consequent, alternate })
