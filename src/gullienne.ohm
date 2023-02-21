@@ -1,5 +1,5 @@
 Gullienne {
-    Program     = (Statement | comment)+
+    Program     = Statement+
     Statement   = VarDec
                 | Reassign
                 | Condition
@@ -28,7 +28,7 @@ Gullienne {
     
     ObjectHead  = object id "(" ListOf<DecParam, ","> ")" ObjectBlock
     ConstDec    = const "(" ListOf<RealParam, ","> ")" GenBlock
-    ObjectBlock = "{" (Default | comment)* (ConstDec | comment)* (MethodDec | comment)* "}"
+    ObjectBlock = "{" Default* ConstDec* MethodDec* "}"
     MethodDec   = do "#"?id "(" ListOf<DecParam, ","> ")" "->" Type FuncBlock
     
     Default     = bayes id "@" ExpFull ";"
@@ -108,4 +108,6 @@ Gullienne {
     numeral     = digit+ ("." digit+)?
     strlit      = "`" (~"`" any)* "`"
     joolean     = ideal
+
+    space      += comment
 }

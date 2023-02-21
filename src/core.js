@@ -6,15 +6,9 @@ export class Program {
   }
 }
 
-export class PrintStatement {
-  constructor(argument) {
-    this.argument = argument
-  }
-}
-
 export class VariableDeclaration {
-  constructor(variable, initializer) {
-    Object.assign(this, { variable, initializer })
+  constructor(id, type, initializer) {
+    Object.assign(this, { id, type, initializer })
   }
 }
 
@@ -24,7 +18,7 @@ export class AssignmentStatement {
   }
 }
 
-export class IfStatement {
+export class Condition {
   constructor(test, consequent, alternate) {
     Object.assign(this, { test, consequent, alternate })
   }

@@ -17,11 +17,12 @@ export default function analyze(sourceCode) {
     Program(body) {
       return new core.Program(body.rep())
     },
-    PrintStmt(_sqwak, _left, argument, _right, _bird) {
-      return new core.PrintStatement(argument.rep())
-    },
-    VarDec(_coo, variable, _eq, initializer, _bird) {
-      return new core.VariableDeclaration(variable.rep(), initializer.rep())
+    VarDec(id, _colon, type, _at, initializer, _semi) {
+      return new core.VariableDeclaration(
+        id.rep(),
+        type.rep(),
+        initializer.rep()
+      )
     },
     AssignStmt(target, _eq, source, _bird) {
       return new core.AssignmentStatement(target.rep(), source.rep())
