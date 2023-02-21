@@ -10,7 +10,7 @@ Gullienne {
                 | Continue
                 | Return
                 | ObjectHead
-                | (Exp2_functCall | Exp2_objMethod) ";" --standalone
+                | (Exp2_objMethod | Exp2_functCall) ";" --standalone
                 | id ("++" | "--") ";" --incDec
     
     VarDec      = id ":" Type ("@" ExpFull)? ";"

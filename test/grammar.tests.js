@@ -89,6 +89,42 @@ const gullienneChecks = [
     `tripleNeg:number @ -(-(-3));
     doubleNot:joolean @ !!ideal;`,
   ],
+  [
+    "object stuff",
+    `object Julian (hat:string, jacket:string) {
+        ~ Object default (bayesline) values, if "empty" versions are unacceptable ~
+        bayes hat @ \`the classic Julian LMU cap\`;
+        bayes jacket @ \`the classic Julian black and orange\`;
+        
+        ~optional constructor - ask Julian how~
+        constructor (hat:string, jacket:string) {
+            hat:string @ self.hat;
+            jacket:string @ self.jacket;
+        }
+        
+        ~methods~
+        do tutor (subject:string) -> joolean {
+            so (subject = \`plang\`) {
+                howItBe ideal;
+            } otherwise {
+                howItBe !ideal;
+            }
+        }
+        
+        do #stopOnTime() -> joolean {
+            howItBe !ideal;
+        }
+    }
+    
+    ~Object instantiating with "make"~
+    winterJulian:Julian @ make Julian (hat:\`red and blue\`, jacket:\`black and orange\`);
+    
+    ~Object fields are read-only outside the Object.
+    Object methods are public unless marked by #.~
+    overheard(winterJulian.jacket);
+    overheard(winterJulian.hat);`,
+  ],
+  ["Reassignment operator", `x @ 20;`],
 ]
 
 const gullienneErrors = [
