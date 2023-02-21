@@ -1,12 +1,4 @@
-import ohm from "ohm-js"
-
-console.log("They waterboarded the coconut")
-
-export function add(x, y) {
-  return x + y
-}
-
-/*#! /usr/bin/env node
+#! /usr/bin/env node
 
 import fs from "fs/promises"
 import process from "process"
@@ -35,4 +27,3 @@ if (process.argv.length !== 4) {
 } else {
   compileFromFile(process.argv[2], process.argv[3])
 }
-*/
