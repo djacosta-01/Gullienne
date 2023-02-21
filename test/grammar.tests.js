@@ -125,6 +125,15 @@ const gullienneChecks = [
     overheard(winterJulian.hat);`,
   ],
   ["Reassignment operator", `x @ 20;`],
+  [
+    "Mathematical set operations on data structures",
+    `overheard(3 * [4,5,6] union [1,2,3]);
+    overheard(<1,2,3,ideal> intersect <10,11,12>);
+    overheard(<<a::x, b::<1,2,3>, c::ideal>> union <<>>);
+    overheard([a,b,c] + <d, e, i> + <<a::x, b::y>>);
+    overheard(<1,2,3> + <4,5,6> union [a,b,c] intersect [7,8,9]);
+    overheard(<1,2,3> + <4,5,6> union ([a,b,c] intersect [7,8,9]));`,
+  ],
 ]
 
 const gullienneErrors = [

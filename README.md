@@ -58,8 +58,8 @@ W- Wait, what is that? ~
 |Structure|Syntax|JavaScript|
 |---|---|---|
 |Lists| `[ a, b, c ]` | `[ a , b , c ]` |
-|Maps| `{ a : x , b : y }` | `{ a : x , b : y }` |
-|Set| `< a, b, c >` | `{ a : x , b : y }` |
+|Maps| `<< a :: x , b : y >>` | `{ a : x , b : y }` |
+|Set| `< a, b, c >` | `Set()` |
 
 ### Operators and Precedence 
 |Operator|Symbol|Operational Types|Precedence|Associativity|
@@ -72,10 +72,12 @@ W- Wait, what is that? ~
 |Negation|`!`|Joolean|2|R to L|
 |Negation|`-`|Numbers|2| ^ |
 |Exponentiation|`^`|Numbers|3| ^ |
-|Multiplication|`*`|Numbers|4| L to R |
+|Multiplication|`*`|Numbers, List|4| L to R |
 |Division|`/`|Numbers|4| ^ |
 |Remainder|`%`|Numbers|4| ^ |
-|Addition|`+`|Numbers|5| ^ |
+|Union|`union`|List, Set, Map|5| ^ |
+|Intersection|`intersect`|List, Set, Map|5| ^ |
+|Addition|`+`|Numbers, List, Set, Map|5| ^ |
 |Subtraction|`-`|Numbers|5| ^ |
 |Less Than|`<`|Numbers|6|None|
 |Less Than or equal|`<=`|Numbers|6| ^ |
