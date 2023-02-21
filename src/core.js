@@ -25,8 +25,68 @@ export class FunctionDeclaration {
 }
 
 export class FunctionBlock {
-  constructor(defaults, statements) {
-    Object.assign(this, { defaults, statements })
+  constructor(base, statements) {
+    Object.assign(this, { base, statements })
+  }
+}
+
+export class ForLoop {
+  constructor(id, expression, genBlock) {
+    Object.assign(this, { id, expression, genBlock })
+  }
+}
+
+export class WhileLoop {
+  constructor(expression, genBlock) {
+    Object.assign(this, { expression, genBlock })
+  }
+}
+
+export class ReturnStatement {
+  constructor(expression) {
+    Object.assign(this, { expression })
+  }
+}
+
+export class BreakStatement {
+  constructor() {
+    Object.assign(this, { })
+  }
+}
+
+export class ContinueStatement {
+  constructor() {
+    Object.assign(this, { })
+  }
+}
+
+export class ObjectHeader {
+  constructor(id, params, objectBlock) {
+    Object.assign(this, { id, params, objectBlock })
+  }
+}
+
+export class ConstructDeclaration {
+  constructor(params, genBlock) {
+    Object.assign(this, { params, genBlock })
+  }
+}
+
+export class ObjectBlock {
+  constructor(base, constDec, methodDec) {
+    Object.assign(this, { base, constDec, methodDec })
+  }
+}
+
+export class MethodDeclaration {
+  constructor(id, params, returnType, funcBlock) {
+    Object.assign(this, { id, params, returnType, funcBlock })
+  }
+}
+
+export class Base {
+  constructor(id, expression) {
+    Object.assign(this, { id, expression })
   }
 }
 

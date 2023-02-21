@@ -16,7 +16,7 @@ Gullienne {
     VarDec      = id ":" Type ("@" ExpFull)? ";"
     Reassign    = id "@" ExpFull ";"
     FunctDec    = do id "(" ListOf<DecParam, ","> ")" "->" Type FuncBlock
-    FuncBlock   = "{" Default* Statement* "}"
+    FuncBlock   = "{" Base* Statement* "}"
     Condition   = so "(" ExpFull ")" GenBlock
                 (but "(" ExpFull ")" GenBlock)*
                 (otherwise GenBlock)?
@@ -27,11 +27,11 @@ Gullienne {
     Continue    = frogIn ";"
     
     ObjectHead  = object id "(" ListOf<DecParam, ","> ")" ObjectBlock
-    ConstDec    = const "(" ListOf<RealParam, ","> ")" GenBlock
-    ObjectBlock = "{" Default* ConstDec* MethodDec* "}"
+    ConstrucDec = construct "(" ListOf<RealParam, ","> ")" GenBlock
+    ObjectBlock = "{" Base* ConstDec* MethodDec* "}"
     MethodDec   = do "#"?id "(" ListOf<DecParam, ","> ")" "->" Type FuncBlock
     
-    Default     = bayes id "@" ExpFull ";"
+    Base        = bayes id "@" ExpFull ";"
     GenBlock    = "{" Statement* "}"
     
     RealParam   = id ":" Type
@@ -102,7 +102,7 @@ Gullienne {
     ideal       = "ideal" ~id
     object      = "object" ~id
     bayes       = "bayes" ~id
-    const       = "constructor" ~id
+    construct   = "constructor" ~id
     make        = "make" ~id
     union       = "union" ~id
     intersect   = "intersect" ~id
