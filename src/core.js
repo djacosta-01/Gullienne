@@ -6,6 +6,12 @@ export class Program {
   }
 }
 
+export class Statement {
+  constructor(expression) {
+    Object.assign(this, { expression })
+  }
+}
+
 export class VariableDeclaration {
   constructor(id, type, initializer) {
     Object.assign(this, { id, type, initializer })
@@ -178,12 +184,11 @@ export class MakeExpression {
   constructor(type, argument) {
     Object.assign(this, { type, argument })
   }
-} 
+}
 
-//Leave for last
-export class Condition {
-  constructor(test, consequent, alternate) {
-    Object.assign(this, { test, consequent, alternate })
+export class Expression {
+  constructor(expression) {
+    Object.assign(this, { expression })
   }
 }
 
@@ -192,6 +197,13 @@ export class StringLiteral {
     this.contents = contents
   }
 }
+//Leave for last
+export class Condition {
+  constructor(test, consequent, alternate) {
+    Object.assign(this, { test, consequent, alternate })
+  }
+}
+
 
 // Return a compact and pretty string representation of the node graph,
 // taking care of cycles. Written here from scratch because the built-in

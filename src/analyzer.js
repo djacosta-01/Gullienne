@@ -17,6 +17,14 @@ export default function analyze(sourceCode) {
     Program(body) {
       return new core.Program(body.rep())
     },
+    //whaaaaattttttttt.....
+    Statement_standalone(expression, _semi) {
+      return new.core.Statement(expression.rep())
+    },
+    //what...
+    Statement_incDec() {
+
+    },
     VarDec(id, _colon, type, _at, initializer, _semi) {
       return new core.VariableDeclaration(
         id.rep(),
@@ -179,25 +187,16 @@ export default function analyze(sourceCode) {
     Exp2_objMake(_make, type, _lp, argument, _comma, _rp) {
       return new.core.MakeExpression(type.rep(), argument.rep())
     },
-
-    // continue here
-    IfStmt(_maybe, test, _yep, consequent, _nope, alternate, _fine) {
-      return new core.IfStatement(test.rep(), consequent.rep(), alternate.rep())
+    Exp1_expr(expression) {
+      return new.core.Expression(expression.rep())
     },
+    
+    //Check w Julian
     id(chars) {
       return this.sourceString
     },
     Var(id) {
       return id.rep()
-    },
-    Exp_add(left, _plus, right) {
-      return new core.BinaryExpression("+", left.rep(), right.rep())
-    },
-    Exp_sub(left, _plus, right) {
-      return new core.BinaryExpression("-", left.rep(), right.rep())
-    },
-    Term_parens(_open, expression, _close) {
-      return expression.rep()
     },
     numeral(_leading, _dot, _fractional) {
       return Number(this.sourceString)
@@ -207,6 +206,11 @@ export default function analyze(sourceCode) {
     },
     _iter(...children) {
       return children.map((child) => child.rep())
+    },
+
+    // do this last
+    IfStmt(_maybe, test, _yep, consequent, _nope, alternate, _fine) {
+      return new core.IfStatement(test.rep(), consequent.rep(), alternate.rep())
     },
   })
 
