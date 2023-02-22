@@ -87,6 +87,98 @@ export default function analyze(sourceCode) {
     CallArg_parg(expression) {
       return new.core.CallArgument(null, expression.rep())
     },
+    ListLit(_lbrac, expression, _comma, _rbrac) {
+      return new.core.ListLiteral(expression.rep())
+    },
+    SetLit(_lab, expression, _comma, _rab) {
+      return new.core.SetLiteral(expression.rep())
+    },
+    MapLit(_ldab, keyValue, _comma, _rdab) {
+      return new.core.SetLiteral(keyValue.rep())
+    },
+    KeyValue(expression1, _dcolon, expression2) {
+      return new.core.KeyValue(expression1.rep(), expression2.rep())
+    },
+    ExpFull_joolOr(left, _op, right) {
+      return new.core.BinaryExpression(left.rep(), "|", right.rep())
+    },
+    Exp8_joolAnd(left, _op, right) {
+      return new.core.BinaryExpression(left.rep(), "&", right.rep())
+    },
+    Exp7_eqNeq(left, _op, right) {
+      if (_op == "=") {
+        return new.core.BinaryExpression(left.rep(), "=", right.rep())
+      } else {
+        return new.core.BinaryExpression(left.rep(), "!=", right.rep())
+      }
+    },
+    Exp6_glte(left, _op, right) {
+      if (_op == "<=") {
+        return new.core.BinaryExpression(left.rep(), "<=", right.rep())
+      }
+      else if (_op == ">=") {
+        return new.core.BinaryExpression(left.rep(), ">=", right.rep())
+      }
+      else if (_op == "<") {
+        return new.core.BinaryExpression(left.rep(), "<", right.rep())
+      } else {
+        return new.core.BinaryExpression(left.rep(), ">", right.rep())
+      }
+    },
+    Exp5_addDubUnionInter(left, _op, right) {
+      if (_op == "+") {
+        return new.core.BinaryExpression(left.rep(), "+", right.rep())
+      }
+      else if (_op == "-") {
+        return new.core.BinaryExpression(left.rep(), "-", right.rep())
+      }
+      else if (_op == "union") {
+        return new.core.BinaryExpression(left.rep(), "union", right.rep())
+      } else {
+        return new.core.BinaryExpression(left.rep(), "intersect", right.rep())
+      }
+    },
+    Exp4_mulDivRem(left, _op, right) {
+      if (_op == "*") {
+        return new.core.BinaryExpression(left.rep(), "*", right.rep())
+      }
+      else if (_op == "/") {
+        return new.core.BinaryExpression(left.rep(), "/", right.rep())
+      } else {
+        return new.core.BinaryExpression(left.rep(), "%", right.rep())
+      }
+    },
+    Exp3_expo(left, _op, right) {
+      return new.core.BinaryExpression(left.rep(), "^", right.rep())
+    },
+    Exp3_neg(_op, right) {
+      if (_op == "-") {
+        return new.core.UnaryExpression("-", right.rep())
+      } else {
+        return new.core.UnaryExpression("!", right.rep())
+      }
+    },
+    Exp2_listInd(subscriptee, _lbrac, argument, _rbrac) {
+      return new.core.SubscriptExpression(subscriptee.rep(), argument.rep())
+    },
+    Exp2_mapInd(subscriptee, _ldab, argument, _rdab) {
+      return new.core.SubscriptExpression(subscriptee.rep(), argument.rep())
+    },
+    Exp2_setInd(subscriptee, _lab, argument, _rab) {
+      return new.core.SubscriptExpression(subscriptee.rep(), argument.rep())
+    },
+    Exp2_functCall(expression, _lp, argument, _comma, _rp) {
+      return new.core.Call(expression.rep(), argument.rep())
+    },
+    Exp2_objField(expression, _dot, id) {
+      return new.core.FieldExpression(expression.rep(), id.rep())
+    },
+    Exp2_objMethod(expression, _dot, id, _lp, argument, _comma, _rp) {
+      return new.core.MethodExpression(expression.rep(), id.rep(), argument.rep())
+    },
+    Exp2_objMake(_make, type, _lp, argument, _comma, _rp) {
+      return new.core.MakeExpression(type.rep(), argument.rep())
+    },
 
     // continue here
     IfStmt(_maybe, test, _yep, consequent, _nope, alternate, _fine) {

@@ -114,16 +114,76 @@ export class CallArgument {
   }
 }
 
-//Leave for last
-export class Condition {
-  constructor(test, consequent, alternate) {
-    Object.assign(this, { test, consequent, alternate })
+export class ListLiteral {
+  constructor(expression) {
+    Object.assign(this, { expression })
+  }
+}
+
+export class SetLiteral {
+  constructor(expression) {
+    Object.assign(this, { expression })
+  }
+}
+
+export class MapLiteral {
+  constructor(keyValue) {
+    Object.assign(this, { keyValue })
+  }
+}
+
+export class KeyValue {
+  constructor(expression1, expression2) {
+    Object.assign(this, { expression1, expression2 })
   }
 }
 
 export class BinaryExpression {
-  constructor(op, left, right) {
-    Object.assign(this, { op, left, right })
+  constructor(left, op, right) {
+    Object.assign(this, { left, op, right })
+  }
+}
+
+export class UnaryExpression {
+  constructor(op, right) {
+    Object.assign(this, { op, right })
+  }
+}
+
+export class SubscriptExpression {
+  constructor(subscriptee, argument) {
+    Object.assign(this, { subscriptee, argument })
+  }
+}
+
+export class Call {
+  constructor(expression, argument) {
+    Object.assign(this, { expression, argument })
+  }
+}
+
+export class FieldExpression {
+  constructor(expression, id) {
+    Object.assign(this, { expression, id })
+  }
+}
+
+export class MethodExpression {
+  constructor(expression, id, argument) {
+    Object.assign(this, { expression, id, argument })
+  }
+}
+
+export class MakeExpression {
+  constructor(type, argument) {
+    Object.assign(this, { type, argument })
+  }
+} 
+
+//Leave for last
+export class Condition {
+  constructor(test, consequent, alternate) {
+    Object.assign(this, { test, consequent, alternate })
   }
 }
 
