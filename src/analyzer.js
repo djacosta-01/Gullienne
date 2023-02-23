@@ -33,7 +33,7 @@ export default function analyze(sourceCode) {
     Reassign(id, _at, source, _semi) {
       return new core.ReassignmentStatement(id.rep(), source.rep())
     },
-    FunctDec(_do, id, _lp, params, _comma, _rp, _arrow, returnType, funcBlock) {
+    FunctDec(_do, id, _lp, params, _rp, _arrow, returnType, funcBlock) {
       return new core.FunctionDeclaration(
         id.rep(),
         params.rep(),
@@ -73,10 +73,10 @@ export default function analyze(sourceCode) {
     Continue(_frogIn, _semi) {
       return new core.ContinueStatement()
     },
-    ObjectHead(_object, id, _lp, params, _comma, _rp, objectBlock) {
+    ObjectHead(_object, id, _lp, params, _rp, objectBlock) {
       return new core.ObjectHeader(id.rep(), params.rep(), objectBlock.rep())
     },
-    ConstructDec(_const, _lp, params, _comma, _rp, genBlock) {
+    ConstrucDec(_const, _lp, params, _rp, genBlock) {
       return new core.ConstructDeclaration(params.rep(), genBlock.rep())
     },
     ObjectBlock(_lc, base, construcDec, methodDec, _rc) {
@@ -86,18 +86,7 @@ export default function analyze(sourceCode) {
         methodDec.rep()
       )
     },
-    MethodDec(
-      _do,
-      _hash,
-      id,
-      _lp,
-      params,
-      _comma,
-      _rp,
-      _arrow,
-      returnType,
-      funcBlock
-    ) {
+    MethodDec(_do, _hash, id, _lp, params, _rp, _arrow, returnType, funcBlock) {
       return new core.MethodDeclaration(
         id.rep(),
         params.rep(),
@@ -127,13 +116,13 @@ export default function analyze(sourceCode) {
     CallArg_parg(expression) {
       return new core.CallArgument(null, expression.rep())
     },
-    ListLit(_lbrac, expression, _comma, _rbrac) {
+    ListLit(_lbrac, expression, _rbrac) {
       return new core.ListLiteral(expression.rep())
     },
-    SetLit(_lab, expression, _comma, _rab) {
+    SetLit(_lab, expression, _rab) {
       return new core.SetLiteral(expression.rep())
     },
-    MapLit(_ldab, keyValue, _comma, _rdab) {
+    MapLit(_ldab, keyValue, _rdab) {
       return new core.SetLiteral(keyValue.rep())
     },
     KeyValue(expression1, _dcolon, expression2) {
@@ -202,26 +191,26 @@ export default function analyze(sourceCode) {
     Exp2_setInd(subscriptee, _lab, argument, _rab) {
       return new core.SubscriptExpression(subscriptee.rep(), argument.rep())
     },
-    Exp2_functCall(expression, _lp, argument, _comma, _rp) {
+    Exp2_functCall(expression, _lp, argument, _rp) {
       return new core.Call(expression.rep(), argument.rep())
     },
     Exp2_objField(expression, _dot, id) {
       return new core.FieldExpression(expression.rep(), id.rep())
     },
-    Exp2_objMethod(expression, _dot, id, _lp, argument, _comma, _rp) {
+    Exp2_objMethod(expression, _dot, id, _lp, argument, _rp) {
       return new core.MethodExpression(
         expression.rep(),
         id.rep(),
         argument.rep()
       )
     },
-    Exp2_objMake(_make, type, _lp, argument, _comma, _rp) {
+    Exp2_objMake(_make, type, _lp, argument, _rp) {
       return new core.MakeExpression(type.rep(), argument.rep())
     },
-    Exp1_expr(expression) {
+    Exp1_expr(_lp, expression, _rp) {
       return new core.Expression(expression.rep())
     },
-    id(chars) {
+    id(letter, rest) {
       return this.sourceString
     },
     numeral(_leading, _dot, _fractional) {
@@ -232,6 +221,27 @@ export default function analyze(sourceCode) {
     },
     joolean(_ideal) {
       return true
+    },
+    Type(type) {
+      return new core.Type(type.rep())
+    },
+    Type_sumType(type1, _or, type2) {
+      return new core.TypeSum(type1.rep(), type2.rep())
+    },
+    Type_listType(_lb, type, _rb) {
+      return new core.TypeList(type.rep())
+    },
+    Type_setType(_lab, type, _rab) {
+      return new core.TypeSet(type.rep())
+    },
+    Type_mapType(_ldab, keyType, _dc, valueType, _rdab) {
+      return new core.TypeMap(keyType.rep(), valueType.rep())
+    },
+    Type_custom(letter, rest) {
+      return this.sourceString
+    },
+    _terminal() {
+      return this.sourceString
     },
     _iter(...children) {
       return children.map((child) => child.rep())

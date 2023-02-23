@@ -216,6 +216,36 @@ export class ConditionElse {
   }
 }
 
+export class Type {
+  constructor(type) {
+    Object.assign(this, { type })
+  }
+}
+
+export class TypeSum {
+  constructor(type1, type2) {
+    Object.assign(this, { type1, type2 })
+  }
+}
+
+export class TypeList {
+  constructor(type) {
+    Object.assign(this, { type })
+  }
+}
+
+export class TypeSet {
+  constructor(type) {
+    Object.assign(this, { type })
+  }
+}
+
+export class TypeMap {
+  constructor(keyType, valueType) {
+    Object.assign(this, { keyType, valueType })
+  }
+}
+
 // Return a compact and pretty string representation of the node graph,
 // taking care of cycles. Written here from scratch because the built-in
 // inspect function, while nice, isn't nice enough. Defined properly in
