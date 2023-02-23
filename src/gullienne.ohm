@@ -17,9 +17,9 @@ Gullienne {
     Reassign    = id "@" ExpFull ";"
     FunctDec    = do id "(" ListOf<DecParam, ","> ")" "->" Type FuncBlock
     FuncBlock   = "{" Base* Statement* "}"
-    Condition   = so "(" ExpFull ")" GenBlock
-                (but "(" ExpFull ")" GenBlock)*
-                (otherwise GenBlock)?
+    If          = so "(" ExpFull ")" GenBlock ElseIf* Else?
+    ElseIf      = but "(" ExpFull ")" GenBlock
+    Else        = otherwise GenBlock
     ForLoop     = cap "(" id "in" (id | ExpFull) ")" GenBlock
     WhileLoop   = noCap "(" ExpFull ")" GenBlock
     Return      = howItBe (ExpFull)? ";"
@@ -28,7 +28,7 @@ Gullienne {
     
     ObjectHead  = object id "(" ListOf<DecParam, ","> ")" ObjectBlock
     ConstrucDec = construct "(" ListOf<RealParam, ","> ")" GenBlock
-    ObjectBlock = "{" Base* ConstDec* MethodDec* "}"
+    ObjectBlock = "{" Base* ConstrucDec* MethodDec* "}"
     MethodDec   = do "#"?id "(" ListOf<DecParam, ","> ")" "->" Type FuncBlock
     
     Base        = bayes id "@" ExpFull ";"
@@ -87,7 +87,7 @@ Gullienne {
                 
     keyword     = do | so | but | otherwise | cap | noCap
                 | frogOut | frogIn | howItBe | ideal
-                | object | bayes | const | make
+                | object | bayes | construct | make
                 | union | intersect
         
     do          = "do" ~id

@@ -12,6 +12,12 @@ export class Statement {
   }
 }
 
+export class IncDecStatement {
+  constructor(id, operator) {
+    Object.assign(this, { id, operator })
+  }
+}
+
 export class VariableDeclaration {
   constructor(id, type, initializer) {
     Object.assign(this, { id, type, initializer })
@@ -56,13 +62,13 @@ export class ReturnStatement {
 
 export class BreakStatement {
   constructor() {
-    Object.assign(this, { })
+    Object.assign(this, {})
   }
 }
 
 export class ContinueStatement {
   constructor() {
-    Object.assign(this, { })
+    Object.assign(this, {})
   }
 }
 
@@ -79,8 +85,8 @@ export class ConstructDeclaration {
 }
 
 export class ObjectBlock {
-  constructor(base, constDec, methodDec) {
-    Object.assign(this, { base, constDec, methodDec })
+  constructor(base, construcDec, methodDec) {
+    Object.assign(this, { base, construcDec, methodDec })
   }
 }
 
@@ -192,18 +198,23 @@ export class Expression {
   }
 }
 
-export class StringLiteral {
-  constructor(contents) {
-    this.contents = contents
-  }
-}
-//Leave for last
-export class Condition {
-  constructor(test, consequent, alternate) {
-    Object.assign(this, { test, consequent, alternate })
+export class ConditionIf {
+  constructor(testExp, genBlock, listOfButs, otherwise) {
+    Object.assign(this, { testExp, genBlock, listOfButs, otherwise })
   }
 }
 
+export class ConditionElseIf {
+  constructor(testExp, genBlock) {
+    Object.assign(this, { testExp, genBlock })
+  }
+}
+
+export class ConditionElse {
+  constructor(genBlock) {
+    Object.assign(this, { genBlock })
+  }
+}
 
 // Return a compact and pretty string representation of the node graph,
 // taking care of cycles. Written here from scratch because the built-in

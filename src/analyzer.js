@@ -17,12 +17,12 @@ export default function analyze(sourceCode) {
     Program(body) {
       return new core.Program(body.rep())
     },
-    //whaaaaattttttttt.....
     Statement_standalone(expression, _semi) {
       return new core.Statement(expression.rep())
     },
-    //what...
-    Statement_incDec() {},
+    Statement_incDec(id, operator, _semi) {
+      return new core.IncDecStatement(id.rep(), operator.sourceString)
+    },
     VarDec(id, _colon, type, _at, initializer, _semi) {
       return new core.VariableDeclaration(
         id.rep(),
@@ -43,6 +43,20 @@ export default function analyze(sourceCode) {
     },
     FuncBlock(_lc, base, statements, _rc) {
       return new core.FunctionBlock(base.rep(), statements.rep())
+    },
+    If(_so, _lp, testExp, _rp, genBlock, listOfButs, otherwise) {
+      return new core.ConditionIf(
+        testExp.rep(),
+        genBlock.rep(),
+        listOfButs.rep(),
+        otherwise.rep()
+      )
+    },
+    ElseIf(_but, _lp, testExp, _rp, genBlock) {
+      return new core.ConditionElseIf(testExp.rep(), genBlock.rep())
+    },
+    Else(_otherwise, genBlock) {
+      return new core.ConditionElse(genBlock.rep())
     },
     ForLoop(_cap, _lp, id, _in, expression, _rp, genBlock) {
       return new core.ForLoop(id.rep(), expression.rep(), genBlock.rep())
@@ -65,8 +79,12 @@ export default function analyze(sourceCode) {
     ConstructDec(_const, _lp, params, _comma, _rp, genBlock) {
       return new core.ConstructDeclaration(params.rep(), genBlock.rep())
     },
-    ObjectBlock(_lc, base, constDec, methodDec, _rc) {
-      return new core.ObjectBlock(base.rep(), constDec.rep(), methodDec.rep())
+    ObjectBlock(_lc, base, construcDec, methodDec, _rc) {
+      return new core.ObjectBlock(
+        base.rep(),
+        construcDec.rep(),
+        methodDec.rep()
+      )
     },
     MethodDec(
       _do,
@@ -203,27 +221,20 @@ export default function analyze(sourceCode) {
     Exp1_expr(expression) {
       return new core.Expression(expression.rep())
     },
-
-    //Check w Julian
     id(chars) {
       return this.sourceString
-    },
-    Var(id) {
-      return id.rep()
     },
     numeral(_leading, _dot, _fractional) {
       return Number(this.sourceString)
     },
-    strlit(_open, chars, _close) {
-      return new core.StringLiteral(chars.sourceString)
+    strlit(_lbt, chars, _rbt) {
+      return this.sourceString
+    },
+    joolean(_ideal) {
+      return true
     },
     _iter(...children) {
       return children.map((child) => child.rep())
-    },
-
-    // do this last
-    IfStmt(_maybe, test, _yep, consequent, _nope, alternate, _fine) {
-      return new core.IfStatement(test.rep(), consequent.rep(), alternate.rep())
     },
   })
 
