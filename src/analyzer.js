@@ -17,6 +17,9 @@ export default function analyze(sourceCode) {
     Program(body) {
       return new core.Program(body.rep())
     },
+    Statement(statement) {
+      return statement.rep()
+    },
     Statement_standalone(expression, _semi) {
       return new core.Statement(expression.rep())
     },
@@ -33,10 +36,13 @@ export default function analyze(sourceCode) {
     Reassign(id, _at, source, _semi) {
       return new core.ReassignmentStatement(id.rep(), source.rep())
     },
+    ReassignMy(_my, _dot, id, _at, source, _semi) {
+      return new core.ReassignmentMyStatement(id.rep(), source.rep())
+    },
     FunctDec(_do, id, _lp, params, _rp, _arrow, returnType, funcBlock) {
       return new core.FunctionDeclaration(
         id.rep(),
-        params.rep(),
+        params.asIteration().rep(),
         returnType.rep(),
         funcBlock.rep()
       )
@@ -74,10 +80,17 @@ export default function analyze(sourceCode) {
       return new core.ContinueStatement()
     },
     ObjectHead(_object, id, _lp, params, _rp, objectBlock) {
-      return new core.ObjectHeader(id.rep(), params.rep(), objectBlock.rep())
+      return new core.ObjectHeader(
+        id.rep(),
+        params.asIteration().children.map((child) => child.rep()),
+        objectBlock.rep()
+      )
     },
     ConstrucDec(_const, _lp, params, _rp, genBlock) {
-      return new core.ConstructDeclaration(params.rep(), genBlock.rep())
+      return new core.ConstructDeclaration(
+        params.asIteration().rep(),
+        genBlock.rep()
+      )
     },
     ObjectBlock(_lc, base, construcDec, methodDec, _rc) {
       return new core.ObjectBlock(
@@ -89,7 +102,7 @@ export default function analyze(sourceCode) {
     MethodDec(_do, _hash, id, _lp, params, _rp, _arrow, returnType, funcBlock) {
       return new core.MethodDeclaration(
         id.rep(),
-        params.rep(),
+        params.asIteration().rep(),
         returnType.rep(),
         funcBlock.rep()
       )
@@ -104,7 +117,7 @@ export default function analyze(sourceCode) {
       return new core.RealParameter(id.rep(), type.rep())
     },
     DecParam(params) {
-      if (params == "/") {
+      if (params.sourceString == "/") {
         return "/"
       } else {
         return new core.DeclarationParameter(params.rep())
@@ -134,39 +147,39 @@ export default function analyze(sourceCode) {
     Exp8_joolAnd(left, _op, right) {
       return new core.BinaryExpression(left.rep(), "&", right.rep())
     },
-    Exp7_eqNeq(left, _op, right) {
-      if (_op == "=") {
+    Exp7_eqNeq(left, op, right) {
+      if (op.sourceString == "=") {
         return new core.BinaryExpression(left.rep(), "=", right.rep())
       } else {
         return new core.BinaryExpression(left.rep(), "!=", right.rep())
       }
     },
-    Exp6_glte(left, _op, right) {
-      if (_op == "<=") {
+    Exp6_glte(left, op, right) {
+      if (op.sourceString == "<=") {
         return new core.BinaryExpression(left.rep(), "<=", right.rep())
-      } else if (_op == ">=") {
+      } else if (op.sourceString == ">=") {
         return new core.BinaryExpression(left.rep(), ">=", right.rep())
-      } else if (_op == "<") {
+      } else if (op.sourceString == "<") {
         return new core.BinaryExpression(left.rep(), "<", right.rep())
       } else {
         return new core.BinaryExpression(left.rep(), ">", right.rep())
       }
     },
-    Exp5_addDubUnionInter(left, _op, right) {
-      if (_op == "+") {
+    Exp5_addDubUnionInter(left, op, right) {
+      if (op.sourceString == "+") {
         return new core.BinaryExpression(left.rep(), "+", right.rep())
-      } else if (_op == "-") {
+      } else if (op.sourceString == "-") {
         return new core.BinaryExpression(left.rep(), "-", right.rep())
-      } else if (_op == "union") {
+      } else if (op.sourceString == "union") {
         return new core.BinaryExpression(left.rep(), "union", right.rep())
       } else {
         return new core.BinaryExpression(left.rep(), "intersect", right.rep())
       }
     },
-    Exp4_mulDivRem(left, _op, right) {
-      if (_op == "*") {
+    Exp4_mulDivRem(left, op, right) {
+      if (op.sourceString == "*") {
         return new core.BinaryExpression(left.rep(), "*", right.rep())
-      } else if (_op == "/") {
+      } else if (op.sourceString == "/") {
         return new core.BinaryExpression(left.rep(), "/", right.rep())
       } else {
         return new core.BinaryExpression(left.rep(), "%", right.rep())
@@ -175,8 +188,8 @@ export default function analyze(sourceCode) {
     Exp3_expo(left, _op, right) {
       return new core.BinaryExpression(left.rep(), "^", right.rep())
     },
-    Exp3_neg(_op, right) {
-      if (_op == "-") {
+    Exp3_neg(op, right) {
+      if (op.sourceString == "-") {
         return new core.UnaryExpression("-", right.rep())
       } else {
         return new core.UnaryExpression("!", right.rep())
@@ -192,7 +205,7 @@ export default function analyze(sourceCode) {
       return new core.SubscriptExpression(subscriptee.rep(), argument.rep())
     },
     Exp2_functCall(expression, _lp, argument, _rp) {
-      return new core.Call(expression.rep(), argument.rep())
+      return new core.Call(expression.rep(), argument.asIteration().rep())
     },
     Exp2_objField(expression, _dot, id) {
       return new core.FieldExpression(expression.rep(), id.rep())
@@ -205,7 +218,7 @@ export default function analyze(sourceCode) {
       )
     },
     Exp2_objMake(_make, type, _lp, argument, _rp) {
-      return new core.MakeExpression(type.rep(), argument.rep())
+      return new core.MakeExpression(type.rep(), argument.asIteration().rep())
     },
     Exp1_expr(_lp, expression, _rp) {
       return new core.Expression(expression.rep())
