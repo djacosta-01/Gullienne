@@ -66,12 +66,12 @@ Gullienne {
                 | Exp2 "<<" ExpFull ">>" --mapInd
                 | Exp2 "<" ExpFull ">" --setInd
                 | Exp2 "(" ListOf<CallArg, ","> ")" --functCall
-                | ~digit Exp2 "." id --objField
                 | ~digit Exp2 "." id "(" ListOf<CallArg, ","> ")" --objMethod
+                | ~digit Exp2 "." id --objField
                 | make Type "(" ListOf<CallArg, ","> ")" --objMake
                 | Exp1
     Exp1        = numeral | strlit | joolean | id
-                | ListLit | SetLit | MapLit | my
+                | ListLit | MapLit | SetLit | my
                 | "(" ExpFull ")" --expr
         
     id          = ~keyword letter (alnum|"_")*
