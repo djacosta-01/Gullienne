@@ -71,23 +71,23 @@ W- Wait, what is that? ~
 |Call|`()`|Functions|1| ^ |
 |Negation|`!`|Joolean|2|R to L|
 |Negation|`-`|Numbers|2| ^ |
-|Exponentiation|`^`|Numbers|3| ^ |
-|Multiplication|`*`|Numbers, List|4| L to R |
-|Division|`/`|Numbers|4| ^ |
-|Remainder|`%`|Numbers|4| ^ |
-|Union|`union`|List, Set, Map|5| ^ |
-|Intersection|`intersect`|List, Set, Map|5| ^ |
-|Addition|`+`|Numbers, List, Set, Map|5| ^ |
-|Subtraction|`-`|Numbers|5| ^ |
-|Less Than|`<`|Numbers|6|None|
-|Less Than or equal|`<=`|Numbers|6| ^ |
-|Greater Than|`>`|Numbers|6| ^ |
-|Greater Than or equal|`>=`|Numbers|6| ^ |
-|Equality|`==`|Joolean, Numbers|7| ^ |
-|Inequality|`!=`|Joolean, Numbers|7| ^ |
-|Logical AND|`&`|Joolean|8| ^ |
-|Logical OR|`\|`|Joolean|9| ^ |
-|Assignment|`@`|Joolean, Numbers, String, List, Map, Set, Object|10|R to L|
+|Exponentiation|`^`|Numbers|2| ^ |
+|Multiplication|`*`|Numbers, List|3| L to R |
+|Division|`/`|Numbers|3| ^ |
+|Remainder|`%`|Numbers|3| ^ |
+|Union|`union`|List, Set, Map|4| ^ |
+|Intersection|`intersect`|List, Set, Map|4| ^ |
+|Addition|`+`|Numbers, List, Set, Map|4| ^ |
+|Subtraction|`-`|Numbers|4| ^ |
+|Less Than|`<`|Numbers|5|None|
+|Less Than or equal|`<=`|Numbers|5| ^ |
+|Greater Than|`>`|Numbers|5| ^ |
+|Greater Than or equal|`>=`|Numbers|5| ^ |
+|Equality|`==`|Joolean, Numbers|6| ^ |
+|Inequality|`!=`|Joolean, Numbers|6| ^ |
+|Logical AND|`&`|Joolean|7| ^ |
+|Logical OR|`\|`|Joolean|8| ^ |
+|Assignment|`@`|Joolean, Numbers, String, List, Map, Set, Object|9|R to L|
 
 ## Examples
 
@@ -231,12 +231,12 @@ if (job == true) {
 <td>
 
 ```
-so (job == ideal) {
-    overheard(“true”);
-} but (job == !ideal) {
-    overheard(“false”);
+so (job = ideal) {
+    overheard(`true`);
+} but (job = !ideal) {
+    overheard(`false`);
 } otherwise {
-    overheard(“How did we get here?”);
+    overheard(`How did we get here?`);
 }
 ```
 
