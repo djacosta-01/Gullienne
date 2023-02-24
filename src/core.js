@@ -30,6 +30,12 @@ export class ReassignmentStatement {
   }
 }
 
+export class ReassignmentMyStatement {
+  constructor(fieldId, source) {
+    Object.assign(this, { fieldId, source })
+  }
+}
+
 export class FunctionDeclaration {
   constructor(id, params, returnType, funcBlock) {
     Object.assign(this, { id, params, returnType, funcBlock })
