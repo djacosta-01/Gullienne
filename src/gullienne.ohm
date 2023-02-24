@@ -2,6 +2,7 @@ Gullienne {
     Program     = Statement+
     Statement   = VarDec
                 | Reassign
+                | ReassignMy
                 | If
                 | FunctDec
                 | ForLoop
@@ -15,6 +16,7 @@ Gullienne {
     
     VarDec      = id ":" Type ("@" ExpFull)? ";"
     Reassign    = id "@" ExpFull ";"
+    ReassignMy  = my "." id "@" ExpFull ";"
     FunctDec    = do id "(" ListOf<DecParam, ","> ")" "->" Type FuncBlock
     FuncBlock   = "{" Base* Statement* "}"
     If          = so "(" ExpFull ")" GenBlock ElseIf* Else?
@@ -26,7 +28,7 @@ Gullienne {
     Break       = frogOut ";"
     Continue    = frogIn ";"
     
-    ObjectHead  = object id "(" ListOf<DecParam, ","> ")" ObjectBlock
+    ObjectHead  = object id "(" ListOf<RealParam, ","> ")" ObjectBlock
     ConstrucDec = construct "(" ListOf<RealParam, ","> ")" GenBlock
     ObjectBlock = "{" Base* ConstrucDec* MethodDec* "}"
     MethodDec   = do "#"?id "(" ListOf<DecParam, ","> ")" "->" Type FuncBlock
@@ -69,16 +71,12 @@ Gullienne {
                 | make Type "(" ListOf<CallArg, ","> ")" --objMake
                 | Exp1
     Exp1        = numeral | strlit | joolean | id
-                | ListLit | SetLit | MapLit
+                | ListLit | SetLit | MapLit | my
                 | "(" ExpFull ")" --expr
-    
-    Term        = numeral
-                | strlit
-                | id
         
     id          = ~keyword letter (alnum|"_")*
     Type        = Type "|" Type --sumType
-                | "[" Type "]" -- listType
+                | "[" Type "]" --listType
                 | "<" Type ">" --setType
                 | "<<" Type "::" Type ">>" --mapType
                 | "number" | "joolean" | "string"
@@ -87,7 +85,7 @@ Gullienne {
                 
     keyword     = do | so | but | otherwise | cap | noCap
                 | frogOut | frogIn | howItBe | ideal
-                | object | bayes | construct | make
+                | object | bayes | construct | make | my
                 | union | intersect
         
     do          = "do" ~id
@@ -104,6 +102,7 @@ Gullienne {
     bayes       = "bayes" ~id
     construct   = "constructor" ~id
     make        = "make" ~id
+    my          = "my" ~id
     union       = "union" ~id
     intersect   = "intersect" ~id
     
