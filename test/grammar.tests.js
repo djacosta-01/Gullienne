@@ -98,8 +98,8 @@ const gullienneChecks = [
         
         ~optional constructor - ask Julian how~
         constructor (hat:string, jacket:string) {
-            hat:string @ self.hat;
-            jacket:string @ self.jacket;
+            my.hat @ hat;
+            my.jacket @ jacket;
         }
         
         ~methods~
