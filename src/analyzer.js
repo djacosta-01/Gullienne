@@ -3,10 +3,7 @@ import ohm from "ohm-js"
 import * as core from "./core.js"
 
 //Throw an error message
-function error(message, node) {
-  if (node) {
-    throw new Error(`${node.source.getLineAndColumnMessage()}${message}`)
-  }
+function error(message) {
   throw new Error(message)
 }
 
@@ -130,13 +127,13 @@ export default function analyze(sourceCode) {
       return new core.CallArgument(null, expression.rep())
     },
     ListLit(_lbrac, expression, _rbrac) {
-      return new core.ListLiteral(expression.rep())
+      return new core.ListLiteral(expression.asIteration().rep())
     },
     SetLit(_lab, expression, _rab) {
-      return new core.SetLiteral(expression.rep())
+      return new core.SetLiteral(expression.asIteration().rep())
     },
     MapLit(_ldab, keyValue, _rdab) {
-      return new core.SetLiteral(keyValue.rep())
+      return new core.MapLiteral(keyValue.asIteration().rep())
     },
     KeyValue(expression1, _dcolon, expression2) {
       return new core.KeyValue(expression1.rep(), expression2.rep())
@@ -214,7 +211,7 @@ export default function analyze(sourceCode) {
       return new core.MethodExpression(
         expression.rep(),
         id.rep(),
-        argument.rep()
+        argument.asIteration().rep()
       )
     },
     Exp2_objMake(_make, type, _lp, argument, _rp) {
