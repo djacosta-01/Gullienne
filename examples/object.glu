@@ -1,9 +1,9 @@
 object Julian (hat:string, jacket:string) {
     ~ Object default (bayesline) values, if "empty" versions are unacceptable ~
-    bayes hat @ \`the classic Julian LMU cap\`;
-    bayes jacket @ \`the classic Julian black and orange\`;
+    bayes hat @ `the classic Julian LMU cap`;
+    bayes jacket @ `the classic Julian black and orange`;
     
-    ~optional constructor - ask Julian how~
+    ~optional constructor~
     constructor (hat:string, jacket:string) {
         my.hat @ hat;
         my.jacket @ jacket;
@@ -11,7 +11,7 @@ object Julian (hat:string, jacket:string) {
 
     ~methods~
     do tutor (subject:string) -> joolean {
-        so (subject = \`plang\`) {
+        so (subject = `plang`) {
             howItBe ideal;
         } otherwise {
             howItBe !ideal;
@@ -24,7 +24,7 @@ object Julian (hat:string, jacket:string) {
 }
 
 ~Object instantiating with "make"~
-winterJulian:Julian @ make Julian (hat:\`red and blue\`, jacket:\`black and orange\`);
+winterJulian:Julian @ make Julian (hat:`red and blue`, jacket:`black and orange`);
 
 ~Object fields are read-only outside the Object.
     Object methods are public unless marked by #.~
