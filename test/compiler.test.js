@@ -1,6 +1,6 @@
 import assert from "assert"
 import util from "util"
-import analyze from "../src/analyzer.js"
+import ast from "../src/ast.js"
 
 const semanticChecks = [
   [
@@ -133,15 +133,15 @@ const semanticErrors = [
 ]
 
 describe("The AST generator", () => {
-  console.log(analyze(semanticChecks[0][1]))
+  console.log(ast(semanticChecks[0][1]))
   for (const [scenario, source] of semanticChecks) {
     it(`recognizes ${scenario}`, () => {
-      assert.ok(analyze(source))
+      assert.ok(ast(source))
     })
   }
   for (const [scenario, source, errorMessagePattern] of semanticErrors) {
     it(`throws on ${scenario}`, () => {
-      assert.throws(() => analyze(source), errorMessagePattern)
+      assert.throws(() => ast(source), errorMessagePattern)
     })
   }
 })
