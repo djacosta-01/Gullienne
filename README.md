@@ -58,7 +58,7 @@ W- Wait, what is that? ~
 |Structure|Syntax|JavaScript|
 |---|---|---|
 |Lists| `[ a, b, c ]` | `[ a , b , c ]` |
-|Maps| `<< a :: x , b : y >>` | `{ a : x , b : y }` |
+|Maps| `<< a :: x , b :: y >>` | `{ a : x , b : y }` |
 |Set| `< a, b, c >` | `Set()` |
 
 ### Operators and Precedence 
