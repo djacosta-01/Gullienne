@@ -68,7 +68,7 @@ Gullienne {
                 | Exp2 "(" ListOf<CallArg, ","> ")" --functCall
                 | ~digit Exp2 "." id "(" ListOf<CallArg, ","> ")" --objMethod
                 | ~digit Exp2 "." id --objField
-                | make Type "(" ListOf<CallArg, ","> ")" --objMake
+                | imagine Type "(" ListOf<CallArg, ","> ")" --objMake
                 | Exp1
     Exp1        = numeral | strlit | joolean | id
                 | ListLit | MapLit | SetLit | my
@@ -85,7 +85,7 @@ Gullienne {
                 
     keyword     = do | so | but | otherwise | cap | noCap
                 | frogOut | frogIn | howItBe | ideal
-                | object | bayes | construct | make | my
+                | object | bayes | construct | imagine | my
                 | union | intersect
         
     do          = "do" ~id
@@ -101,7 +101,7 @@ Gullienne {
     object      = "object" ~id
     bayes       = "bayes" ~id
     construct   = "constructor" ~id
-    make        = "make" ~id
+    imagine        = "imagine" ~id
     my          = "my" ~id
     union       = "union" ~id
     intersect   = "intersect" ~id

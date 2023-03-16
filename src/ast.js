@@ -9,7 +9,7 @@ function error(message) {
 
 const gullienneGrammar = ohm.grammar(fs.readFileSync("src/gullienne.ohm"))
 
-const astBuilder =gullienneGrammar.createSemantics().addOperation("ast", {
+const astBuilder = gullienneGrammar.createSemantics().addOperation("ast", {
   Program(body) {
     return new core.Program(body.ast())
   },
@@ -17,17 +17,13 @@ const astBuilder =gullienneGrammar.createSemantics().addOperation("ast", {
     return statement.ast()
   },
   Statement_standalone(expression, _semi) {
-    return new core.Statement(expression.ast())
+    return new core.ExpressionStatement(expression.ast())
   },
   Statement_incDec(id, operator, _semi) {
     return new core.IncDecStatement(id.ast(), operator.sourceString)
   },
   VarDec(id, _colon, type, _at, initializer, _semi) {
-    return new core.VariableDeclaration(
-      id.ast(),
-      type.ast(),
-      initializer.ast()
-    )
+    return new core.VariableDeclaration(id.ast(), type.ast(), initializer.ast())
   },
   Reassign(id, _at, source, _semi) {
     return new core.ReassignmentStatement(id.ast(), source.ast())
@@ -78,7 +74,7 @@ const astBuilder =gullienneGrammar.createSemantics().addOperation("ast", {
   ObjectHead(_object, id, _lp, params, _rp, objectBlock) {
     return new core.ObjectHeader(
       id.ast(),
-      params.asIteration().children.map((child) => child.ast()),
+      params.asIteration().ast(),
       objectBlock.ast()
     )
   },
@@ -89,11 +85,7 @@ const astBuilder =gullienneGrammar.createSemantics().addOperation("ast", {
     )
   },
   ObjectBlock(_lc, base, construcDec, methodDec, _rc) {
-    return new core.ObjectBlock(
-      base.ast(),
-      construcDec.ast(),
-      methodDec.ast()
-    )
+    return new core.ObjectBlock(base.ast(), construcDec.ast(), methodDec.ast())
   },
   MethodDec(_do, _hash, id, _lp, params, _rp, _arrow, returnType, funcBlock) {
     return new core.MethodDeclaration(
@@ -213,7 +205,7 @@ const astBuilder =gullienneGrammar.createSemantics().addOperation("ast", {
       argument.asIteration().ast()
     )
   },
-  Exp2_objMake(_make, type, _lp, argument, _rp) {
+  Exp2_objMake(_imagine, type, _lp, argument, _rp) {
     return new core.MakeExpression(type.ast(), argument.asIteration().ast())
   },
   Exp1_expr(_lp, expression, _rp) {

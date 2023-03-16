@@ -30,8 +30,8 @@ const semanticChecks = [
     }
 }
 
-~Object instantiating with "make"~
-winterJulian:Julian @ make Julian (hat:\`red and blue\`, jacket:\`black and orange\`);
+~Object instantiating with "imagine"~
+winterJulian:Julian @ imagine Julian (hat:\`red and blue\`, jacket:\`black and orange\`);
 j: joolean @ winterJulian.tutor(\`compilers\`);
 
 ~Object fields are read-only outside the Object.

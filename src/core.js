@@ -6,38 +6,31 @@ export class Program {
   }
 }
 
-export class VariableDeclaration {
-  constructor(id, type, initializer) {
-    Object.assign(this, { id, type, initializer })
-  }
-}
+// export class TypeDeclaration {
+//   // Example: struct S {x: int?, y: [double]}
+//   // change!!
+//   constructor(type) {
+//     this.type = type
+//   }
+// }
+// export class Type {
+//   // Type of all basic type int, float, string, etc. and superclass of others
+//   // change!!
+//   static BOOLEAN = new Type("boolean")
+//   static INT = new Type("int")
+//   static FLOAT = new Type("float")
+//   static STRING = new Type("string")
+//   static VOID = new Type("void")
+//   static ANY = new Type("any")
+//   constructor(description) {
+//     // The description is a convenient way to view the type. For basic
+//     // types or structs, it will just be the names. For arrays, you will
+//     // see "[T]". For optionals, "T?". For functions "(T1,...Tn)->T0".
+//     Object.assign(this, { description })
+//   }
+// }
 
-export class TypeDeclaration {
-  // Example: struct S {x: int?, y: [double]}
-  // change!!
-  constructor(type) {
-    this.type = type
-  }
-}
-export class Type {
-  // Type of all basic type int, float, string, etc. and superclass of others
-  // change!!
-  static BOOLEAN = new Type("boolean")
-  static INT = new Type("int")
-  static FLOAT = new Type("float")
-  static STRING = new Type("string")
-  static VOID = new Type("void")
-  static ANY = new Type("any")
-  constructor(description) {
-    // The description is a convenient way to view the type. For basic
-    // types or structs, it will just be the names. For arrays, you will
-    // see "[T]". For optionals, "T?". For functions "(T1,...Tn)->T0".
-    Object.assign(this, { description })
-  }
-}
-
-
-export class Statement {
+export class ExpressionStatement {
   constructor(expression) {
     Object.assign(this, { expression })
   }
@@ -46,6 +39,12 @@ export class Statement {
 export class IncDecStatement {
   constructor(id, operator) {
     Object.assign(this, { id, operator })
+  }
+}
+
+export class VariableDeclaration {
+  constructor(id, type, initializer) {
+    Object.assign(this, { id, type, initializer })
   }
 }
 
@@ -70,6 +69,24 @@ export class FunctionDeclaration {
 export class FunctionBlock {
   constructor(base, statements) {
     Object.assign(this, { base, statements })
+  }
+}
+
+export class ConditionIf {
+  constructor(testExp, genBlock, listOfButs, otherwise) {
+    Object.assign(this, { testExp, genBlock, listOfButs, otherwise })
+  }
+}
+
+export class ConditionElseIf {
+  constructor(testExp, genBlock) {
+    Object.assign(this, { testExp, genBlock })
+  }
+}
+
+export class ConditionElse {
+  constructor(genBlock) {
+    Object.assign(this, { genBlock })
   }
 }
 
@@ -229,24 +246,6 @@ export class Expression {
   }
 }
 
-export class ConditionIf {
-  constructor(testExp, genBlock, listOfButs, otherwise) {
-    Object.assign(this, { testExp, genBlock, listOfButs, otherwise })
-  }
-}
-
-export class ConditionElseIf {
-  constructor(testExp, genBlock) {
-    Object.assign(this, { testExp, genBlock })
-  }
-}
-
-export class ConditionElse {
-  constructor(genBlock) {
-    Object.assign(this, { genBlock })
-  }
-}
-
 export class Type {
   constructor(type) {
     Object.assign(this, { type })
@@ -275,6 +274,13 @@ export class TypeMap {
   constructor(keyType, valueType) {
     Object.assign(this, { keyType, valueType })
   }
+}
+
+export function error(message, entity) {
+  if (entity) {
+    throw new Error(`${entity.source.getLineAndColumnMessage()}${message}`)
+  }
+  throw new Error(message)
 }
 
 // Return a compact and pretty string representation of the node graph,
