@@ -12,3 +12,24 @@ const STRING = core.Type.STRING
 const BOOLEAN = core.Type.BOOLEAN
 const ANY = core.Type.ANY
 const VOID = core.Type.VOID
+
+class Context {
+  constructor({
+    parent = null,
+    localVars = new Map(),
+    isLoop = false,
+    isFunction = false,
+    isObj = false,
+  }) {
+    Object.assign(this, {
+      parent,
+      localVars,
+      isLoop,
+      isFunction,
+      isObj,
+    })
+  }
+  checkExistence(id) {
+    return
+  }
+}
