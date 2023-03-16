@@ -2,11 +2,6 @@ import fs from "fs"
 import ohm from "ohm-js"
 import * as core from "./core.js"
 
-//Throw an error message
-function error(message) {
-  throw new Error(message)
-}
-
 const gullienneGrammar = ohm.grammar(fs.readFileSync("src/gullienne.ohm"))
 
 const astBuilder = gullienneGrammar.createSemantics().addOperation("ast", {
@@ -252,7 +247,7 @@ const astBuilder = gullienneGrammar.createSemantics().addOperation("ast", {
 export default function ast(sourceCode) {
   const match = gullienneGrammar.match(sourceCode)
   if (!match.succeeded()) {
-    throw new error(match.message)
+    core.error(match.message)
   }
   return astBuilder(match).ast()
 }

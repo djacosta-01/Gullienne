@@ -1,6 +1,7 @@
 import assert from "assert"
 import util from "util"
 import ast from "../src/ast.js"
+import { error } from "../src/core.js"
 
 const semanticChecks = [
   [
@@ -144,4 +145,8 @@ describe("The AST generator", () => {
       assert.throws(() => ast(source), errorMessagePattern)
     })
   }
+})
+describe("The core error function", () => {
+  it(`Error throws with entity`, () =>
+    assert.throws(() => error(`has entity`, 1)))
 })
