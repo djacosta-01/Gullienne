@@ -81,7 +81,7 @@ Gullienne {
                 | "<<" Type "::" Type ">>" --mapType
                 | "number" | "joolean" | "string"
                 | "NUMBER" | "JOOLEAN" | "STRING"
-                | letter (alnum|"_")* --custom
+                | letter+ --custom
                 
     keyword     = do | so | but | otherwise | cap | noCap
                 | frogOut | frogIn | howItBe | ideal

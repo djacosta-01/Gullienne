@@ -48,6 +48,12 @@ export class VariableDeclaration {
   }
 }
 
+export class VariableObj {
+  constructor(id, type) {
+    Object.assign(this, { id, type })
+  }
+}
+
 export class ReassignmentStatement {
   constructor(id, source) {
     Object.assign(this, { id, source })
@@ -243,6 +249,20 @@ export class MakeExpression {
 export class Expression {
   constructor(expression) {
     Object.assign(this, { expression })
+  }
+}
+
+//Supertype
+export class GodRay {
+  static joolean = new GodRay("joolean", false)
+  static JOOLEAN = new GodRay("joolean", true)
+  static string = new GodRay("string", false)
+  static STRING = new GodRay("STRING", true)
+  static number = new GodRay("number", false)
+  static NUMBER = new GodRay("NUMBER", true)
+
+  constructor(type, readOnly) {
+    Object.assign(this, { type, readOnly })
   }
 }
 

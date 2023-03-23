@@ -5,6 +5,10 @@ import { error } from "../src/core.js"
 
 const semanticChecks = [
   [
+    "test",
+    `x : number | string | joolean | [number | string | joolean] | <number | string | joolean> | <<number | string | joolean::number | string | joolean>>;`,
+  ],
+  [
     "objects",
     `object Julian (hat:string, jacket:string) {
     ~ Object default (bayesline) values, if "empty" versions are unacceptable ~

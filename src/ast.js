@@ -233,7 +233,7 @@ const astBuilder = gullienneGrammar.createSemantics().addOperation("ast", {
   Type_mapType(_ldab, keyType, _dc, valueType, _rdab) {
     return new core.TypeMap(keyType.ast(), valueType.ast())
   },
-  Type_custom(letter, rest) {
+  Type_custom(letters) {
     return this.sourceString
   },
   _terminal() {

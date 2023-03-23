@@ -31,6 +31,19 @@ function checkIsDeclared(context, id, notDeclared) {
   )
 }
 
+//
+
+// function typeWalker(leftType, rightType) {
+//     if (true) { //right type not found
+//         return false
+//     }
+//     if (typeOf leftType.type) {
+
+//     }
+
+//     return typeWalker(leftType, rightType)
+// }
+
 // // change
 // const INT = core.Type.INT
 // const FLOAT = core.Type.FLOAT
@@ -102,11 +115,14 @@ class Context {
   }
 
   VariableDeclaration(v) {
+    if (v.initializer) this.analyze(v.initializer)
+
     //types
     checkIsDeclared(this, v.id, true) //Checking if the id is NOT declared
     this.analyze(v.id)
+    // isReadOnly = /^[A-Z]+$/.test(v.type)
     this.analyze(v.type)
-    this.analyze(v.initializer)
+    v.variable = new core.VariableObj(v.id, v.type)
   }
 
   ReassignmentStatement(r) {
@@ -132,12 +148,11 @@ class Context {
   FunctionBlock(f) {
     this.analyze(f.base)
     //Analyzed in newContext in FunctionDeclaration:
-    //Does analyzing these put them into localvars?
+    //It does not put them in LocalVars
     this.analyze(f.statements)
   }
 
   ConditionIf(c) {
-    //Should we add isConditional?
     this.analyze(c.testExp)
     //Check if testExp is bool
     let newContext = this.makeChildContext()
@@ -227,7 +242,7 @@ class Context {
   }
 
   DeclarationParameter(d) {
-    //! check for string here (kwarg/parg delimiter?)
+    // kwarg/parg delimiter?
     this.analyze(d.params)
   }
 
@@ -297,6 +312,9 @@ class Context {
   }
 
   Type(t) {
+    if (typeof t.type == "string") {
+      t.type = this.getVar(t.type)
+    }
     this.analyze(t.type)
   }
 
@@ -320,4 +338,13 @@ class Context {
   Array(a) {
     a.forEach((item) => this.analyze(item))
   }
+}
+
+export default function analyze(node) {
+  const initialContext = new Context({})
+  for (const [name, type] of Object.entries(stdlib.contents)) {
+    initialContext.addToScope(name, type)
+  }
+  initialContext.analyze(node)
+  return node
 }
