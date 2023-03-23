@@ -31,18 +31,14 @@ function checkIsDeclared(context, id, notDeclared) {
   )
 }
 
-//
+function typeChecker(leftType, rightType) {
+  if (typeof leftType.type === "string") {
+    //right type not found
+    return leftType.type === rightType.type
+  }
 
-// function typeWalker(leftType, rightType) {
-//     if (true) { //right type not found
-//         return false
-//     }
-//     if (typeOf leftType.type) {
-
-//     }
-
-//     return typeWalker(leftType, rightType)
-// }
+  return typeWalker(leftType, rightType)
+}
 
 // // change
 // const INT = core.Type.INT
@@ -128,6 +124,8 @@ class Context {
   ReassignmentStatement(r) {
     //deals with types
     checkIsDeclared(this, r.id, false)
+
+    //if type not isReadOnly
     this.analyze(r.id)
     this.analyze(r.source)
   }
@@ -135,6 +133,7 @@ class Context {
   ReassignmentMyStatement(r) {
     //deals with types
     this.analyze(r.id)
+    //if type not isReadOnly
     this.analyze(r.source)
   }
 
@@ -270,13 +269,11 @@ class Context {
   }
 
   BinaryExpression(b) {
-    //operator?
     this.analyze(b.left)
     this.analyze(b.right)
   }
 
   UnaryExpression(u) {
-    //operator?
     this.analyze(u.right)
   }
 
@@ -312,7 +309,7 @@ class Context {
   }
 
   Type(t) {
-    if (typeof t.type == "string") {
+    if (typeof t.type === "string") {
       t.type = this.getVar(t.type)
     }
     this.analyze(t.type)
@@ -324,6 +321,7 @@ class Context {
   }
 
   TypeList(t) {
+    //Mark this as a list of
     this.analyze(t.type)
   }
 

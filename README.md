@@ -1,3 +1,6 @@
+<style>
+    #centered {text-align:center;}
+</style>
 <p align="center">
   <img src="docs/GullienneLogo.png" width="50%">
 </p>
@@ -48,46 +51,214 @@ W- Wait, what is that? ~
 </td> </tr> </table>
 
 ### Data Types
-|Type|Values|JavaScript|
-|----|------|----------|
-|Joolean `joolean`|`ideal`, `!ideal`|Boolean `true` `false`|
-|Number `number`|`3.97385`, `7895.2734`|Number `99465.213`|
-|String `string`|`` `carrot` ``, `` `bob` ``|String `"phrase"`|
+
+<table>
+<tr> <th>Type</th> <th>Values</th> <th>JavaScript</th> </tr>
+<tr><td>
+
+Joolean `joolean`
+
+</td><td>
+
+`ideal`, `!ideal`
+
+</td><td>
+
+Boolean `true` `false`
+
+</td></tr>
+<tr><td>
+
+Number `number`
+
+</td><td>
+
+`3.97385`, `7895.2734`
+
+</td><td>
+
+Number `99465.213`
+
+</td></tr>
+<tr><td>
+
+String `string`
+
+</td><td>
+
+`` `carrot` ``, `` `bob` ``
+
+</td><td>
+
+String `"phrase"`
+
+</td></tr>
+</table>
 
 ### Data Structures
-|Structure|Syntax|JavaScript|
-|---|---|---|
-|Lists| `[ a, b, c ]` | `[ a , b , c ]` |
-|Maps| `<< a :: x , b :: y >>` | `{ a : x , b : y }` |
-|Set| `< a, b, c >` | `Set()` |
 
-### Operators and Precedence 
-|Operator|Symbol|Operational Types|Precedence|Associativity|
-|--------|------|-----------------|:------:|:----:|
-|Attributor|`.`|Object|1|L to R|
-|List Indexer|`[]`|List|1| ^ |
-|Map Indexer|`{}`|Map|1| ^ |
-|Set Indexer|`<>`|Set|1| ^ |
-|Call|`()`|Functions|1| ^ |
-|Negation|`!`|Joolean|2|R to L|
-|Negation|`-`|Numbers|2| ^ |
-|Exponentiation|`^`|Numbers|2| ^ |
-|Multiplication|`*`|Numbers, List|3| L to R |
-|Division|`/`|Numbers|3| ^ |
-|Remainder|`%`|Numbers|3| ^ |
-|Union|`union`|List, Set, Map|4| ^ |
-|Intersection|`intersect`|List, Set, Map|4| ^ |
-|Addition|`+`|Numbers, List, Set, Map|4| ^ |
-|Subtraction|`-`|Numbers|4| ^ |
-|Less Than|`<`|Numbers|5|None|
-|Less Than or equal|`<=`|Numbers|5| ^ |
-|Greater Than|`>`|Numbers|5| ^ |
-|Greater Than or equal|`>=`|Numbers|5| ^ |
-|Equality|`==`|Joolean, Numbers|6| ^ |
-|Inequality|`!=`|Joolean, Numbers|6| ^ |
-|Logical AND|`&`|Joolean|7| ^ |
-|Logical OR|`\|`|Joolean|8| ^ |
-|Assignment|`@`|Joolean, Numbers, String, List, Map, Set, Object|9|R to L|
+<table>
+<tr> <th>Structure</th> <th>Syntax</th> <th>JavaScript</th> </tr>
+<tr><td>Lists</td><td>
+
+`[ a, b, c ]`
+
+</td><td>
+
+`[ a , b , c ]`
+
+</td></tr>
+<tr><td>Maps</td><td>
+
+`<< a :: x , b :: y >>`
+
+</td><td>
+
+`{ a : x , b : y }`
+
+</td></tr>
+<tr><td>Sets</td>
+<td>
+
+`< a, b, c >`
+
+</td><td>
+
+`Set()`
+
+</td></tr>
+</table>
+
+### Operators and Precedence
+
+<table>
+<tr> <th>Operator</th> <th>Symbol</th> <th>Operational Types</th> <th>Precedence</th> <th>Associativity</th> </tr>
+<tr><td>Attributor</td><td>
+
+`.`
+
+</td><td>Object</td><td id="centered">1</td><td id="centered">L to R</td></tr>
+<tr><td>List Indexer</td><td>
+
+`[]`
+
+</td><td>List</td><td id="centered">1</td><td id="centered">^</td></tr>
+<tr><td>Map Indexer</td><td>
+
+`<<>>`
+
+</td><td>Map</td><td id="centered">1</td><td id="centered">^</td></tr>
+<tr><td>Set Indexer</td><td>
+
+`<>`
+
+</td><td>Set</td><td id="centered">1</td><td id="centered">^</td></tr><tr>
+<td>Call</td><td>
+
+`()`
+
+</td><td>Function</td><td id="centered">1</td><td id="centered">^</td></tr><tr>
+<td>Boolean Negation</td><td>
+
+`!`
+
+</td><td>Joolean</td><td id="centered">2</td><td id="centered">R to L</td></tr><tr>
+<td>Numeric Negation</td><td>
+
+`-`
+
+</td><td>Number</td><td id="centered">2</td><td id="centered">^</td></tr>
+<td>Exponentiation</td><td>
+
+`^`
+
+</td><td>Number</td><td id="centered">2</td><td id="centered">^</td></tr>
+<td>Multiplication</td><td>
+
+`*`
+
+</td><td>Number, List</td><td id="centered">3</td><td id="centered">L to R</td></tr>
+<td>Division</td><td>
+
+`/`
+
+</td><td>Number</td><td id="centered">3</td><td id="centered">^</td></tr>
+<td>Remainder</td><td>
+
+`%`
+
+</td><td>Number</td><td id="centered">3</td><td id="centered">^</td></tr>
+<td>Union</td><td>
+
+`union`
+
+</td><td>List, Set, Map</td><td id="centered">4</td><td id="centered">^</td></tr>
+<td>intersection</td><td>
+
+`intersect`
+
+</td><td>List, Set, Map</td><td id="centered">4</td><td id="centered">^</td></tr>
+<td>Addition</td><td>
+
+`+`
+
+</td><td>Number, List, Set, Map</td><td id="centered">4</td><td id="centered">^</td></tr>
+<td>Subtraction</td><td>
+
+`-`
+
+</td><td>Number</td><td id="centered">4</td><td id="centered">^</td></tr>
+<td>Less Than</td><td>
+
+`<`
+
+</td><td>Number</td><td id="centered">5</td><td id="centered">None</td></tr>
+<td>Less Than or Equal</td><td>
+
+`<=`
+
+</td><td>Number</td><td id="centered">5</td><td id="centered">^</td></tr>
+<td>Less Than or Equal</td><td>
+
+`<=`
+
+</td><td>Number</td><td id="centered">5</td><td id="centered">^</td></tr>
+<td>Greater Than</td><td>
+
+`>`
+
+</td><td>Number</td><td id="centered">5</td><td id="centered">^</td></tr>
+<td>Greater Than or Equal</td><td>
+
+`>=`
+
+</td><td>Number</td><td id="centered">5</td><td id="centered">^</td></tr>
+<td>Equality</td><td>
+
+`==`
+
+</td><td>Joolean, Number, String</td><td id="centered">6</td><td id="centered">^</td></tr>
+<td>Inequality</td><td>
+
+`!=`
+
+</td><td>Joolean, Number, String</td><td id="centered">6</td><td id="centered">^</td></tr>
+<td>Logical AND</td><td>
+
+`&`
+
+</td><td>Joolean</td><td id="centered">7</td><td id="centered">^</td></tr>
+<td>Logical OR</td><td>
+
+`|`
+
+</td><td>Number</td><td id="centered">8</td><td id="centered">^</td></tr>
+<td>Assignment</td><td>
+
+`@`
+
+</td><td>Joolean, Numbers, String, List, Map, Set, Object</td><td id="centered">9</td><td id="centered">R to L</td></tr>
+</table>
 
 ## Examples
 
