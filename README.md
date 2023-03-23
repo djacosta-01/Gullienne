@@ -1,6 +1,3 @@
-<style>
-    #centered {text-align:center;}
-</style>
 <p align="center">
   <img src="docs/GullienneLogo.png" width="50%">
 </p>
