@@ -16,6 +16,21 @@ function checkInFunction(context) {
   )
 }
 
+function checkInLoop(context) {
+  megaCheck(context.isLoop, `You ain't in a loop big dawg`)
+}
+
+function checkIfObj(context) {
+  megaCheck(context.isObj, `Not an obj`)
+}
+
+function checkIsDeclared(context, id) {
+  megaCheck(
+    context.checkExistence(id),
+    `I don’t know who ${id} is, you haven’t introduced us yet.`
+  )
+}
+
 // // change
 // const INT = core.Type.INT
 // const FLOAT = core.Type.FLOAT
@@ -91,6 +106,7 @@ class Context {
   }
 
   ReassignmentStatement(r) {
+    checkIsDeclared(this, r.id)
     this.analyze(r.id)
     this.analyze(r.source)
   }
@@ -102,49 +118,64 @@ class Context {
 
   FunctionDeclaration(f) {
     this.analyze(f.id)
-    this.analyze(f.params)
-    this.analyze(f.funcBlock)
+    let newContext = this.makeChildContext({ isFunction: true })
+    newContext.analyze(f.params)
+    newContext.analyze(f.funcBlock)
   }
 
   FunctionBlock(f) {
     this.analyze(f.base)
+    //Analyzed in newContext in FunctionDeclaration:
+    //Does analyzing these put them into localvars?
     this.analyze(f.statements)
   }
 
   ConditionIf(c) {
+    //Should we add isConditional?
     this.analyze(c.testExp)
-    this.analyze(c.genBlock)
+    //Check if testExp is bool
+    let newContext = this.makeChildContext()
+    newContext.analyze(c.genBlock)
     this.analyze(c.listOfButs)
     this.analyze(c.otherwise)
   }
 
   ConditionElseIf(c) {
     this.analyze(c.testExp)
-    this.analyze(c.genBlock)
+    let newContext = this.makeChildContext()
+    newContext.analyze(c.genBlock)
   }
 
   ConditionElse(c) {
-    this.analyze(c.genBlock)
+    let newContext = this.makeChildContext()
+    newContext.analyze(c.genBlock)
   }
 
   ForLoop(f) {
-    this.analyze(f.id)
-    this.analyze(f.expression)
-    this.analyze(f.genBlock)
+    let newContext = this.makeChildContext({ isLoop: true })
+    newContext.analyze(f.id)
+    newContext.analyze(f.expression)
+    newContext.analyze(f.genBlock)
   }
 
   WhileLoop(w) {
     this.analyze(w.expression)
-    this.analyze(w.genBlock)
+    // check if expression is boolean
+    let newContext = this.makeChildContext({ isLoop: true })
+    newContext.analyze(w.genBlock)
   }
 
   Return(r) {
     this.analyze(r.expression)
   }
 
-  Break(b) {}
+  Break(b) {
+    checkInLoop(this)
+  }
 
-  Continue(c) {}
+  Continue(c) {
+    checkInLoop(this)
+  }
 
   ObjectHeader(o) {
     this.analyze(o.id)
@@ -154,7 +185,8 @@ class Context {
 
   ConstructDeclaration(c) {
     this.analyze(c.params)
-    this.analyze(c.genBlock)
+    let newContext = this.makeChildContext()
+    newContext.analyze(c.genBlock)
   }
 
   ObjectBlock(o) {
