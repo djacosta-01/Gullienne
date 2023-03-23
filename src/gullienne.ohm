@@ -101,7 +101,7 @@ Gullienne {
     object      = "object" ~id
     bayes       = "bayes" ~id
     construct   = "constructor" ~id
-    imagine        = "imagine" ~id
+    imagine     = "imagine" ~id
     my          = "my" ~id
     union       = "union" ~id
     intersect   = "intersect" ~id
