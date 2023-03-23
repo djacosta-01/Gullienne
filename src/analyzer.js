@@ -20,14 +20,14 @@ function checkInLoop(context) {
   megaCheck(context.isLoop, `You ain't in a loop big dawg`)
 }
 
-function checkIfObj(context) {
+function checkIsObj(context) {
   megaCheck(context.isObj, `Not an obj`)
 }
 
-function checkIsDeclared(context, id) {
+function checkIsDeclared(context, id, notDeclared) {
   megaCheck(
-    context.checkExistence(id),
-    `I don’t know who ${id} is, you haven’t introduced us yet.`
+    notDeclared ? !context.checkExistence(id) : context.checkExistence(id),
+    `I don't know who ${id} is, you haven't introduced us yet.`
   )
 }
 
@@ -96,22 +96,28 @@ class Context {
   }
 
   IncDecStatement(i) {
+    //types
     this.analyze(i.id)
+    //check if number
   }
 
   VariableDeclaration(v) {
+    //types
+    checkIsDeclared(this, v.id, true) //Checking if the id is NOT declared
     this.analyze(v.id)
     this.analyze(v.type)
     this.analyze(v.initializer)
   }
 
   ReassignmentStatement(r) {
-    checkIsDeclared(this, r.id)
+    //deals with types
+    checkIsDeclared(this, r.id, false)
     this.analyze(r.id)
     this.analyze(r.source)
   }
 
   ReassignmentMyStatement(r) {
+    //deals with types
     this.analyze(r.id)
     this.analyze(r.source)
   }
@@ -119,7 +125,7 @@ class Context {
   FunctionDeclaration(f) {
     this.analyze(f.id)
     let newContext = this.makeChildContext({ isFunction: true })
-    newContext.analyze(f.params)
+    newContext.analyze(f.params) // types
     newContext.analyze(f.funcBlock)
   }
 
@@ -154,7 +160,7 @@ class Context {
   ForLoop(f) {
     let newContext = this.makeChildContext({ isLoop: true })
     newContext.analyze(f.id)
-    newContext.analyze(f.expression)
+    newContext.analyze(f.expression) // types
     newContext.analyze(f.genBlock)
   }
 
@@ -166,7 +172,8 @@ class Context {
   }
 
   Return(r) {
-    this.analyze(r.expression)
+    checkInFunction(this)
+    this.analyze(r.expression) // types
   }
 
   Break(b) {
@@ -179,13 +186,14 @@ class Context {
 
   ObjectHeader(o) {
     this.analyze(o.id)
-    this.analyze(o.params)
-    this.analyze(o.ObjectBlock)
+    let newContext = this.makeChildContext({ isObj: true })
+    newContext.analyze(o.params) // types
+    newContext.analyze(o.ObjectBlock)
   }
 
   ConstructDeclaration(c) {
-    this.analyze(c.params)
-    let newContext = this.makeChildContext()
+    let newContext = this.makeChildContext({ isFunction: true })
+    newContext.analyze(c.params) // types
     newContext.analyze(c.genBlock)
   }
 
@@ -197,12 +205,14 @@ class Context {
 
   MethodDeclaration(m) {
     this.analyze(m.id)
-    this.analyze(m.params)
-    this.analyze(m.returnType)
-    this.analyze(m.funcBlock)
+    let newContext = this.makeChildContext({ isFunction: true })
+    newContext.analyze(m.params) // types
+    this.analyze(m.returnType) // new context? also types
+    newContext.analyze(m.funcBlock)
   }
 
   Base(b) {
+    // types
     this.analyze(b.id)
     this.analyze(b.expression)
   }
@@ -217,11 +227,12 @@ class Context {
   }
 
   DeclarationParameter(d) {
-    //! check for string here
+    //! check for string here (kwarg/parg delimiter?)
     this.analyze(d.params)
   }
 
   CallArgument(c) {
+    // check parg/kwarg
     this.analyze(c.id)
     this.analyze(c.expression)
   }
@@ -244,22 +255,25 @@ class Context {
   }
 
   BinaryExpression(b) {
+    //operator?
     this.analyze(b.left)
     this.analyze(b.right)
   }
 
   UnaryExpression(u) {
+    //operator?
     this.analyze(u.right)
   }
 
   SubscriptExpression(s) {
+    //subscript paren?
     this.analyze(s.subscriptee)
     this.analyze(s.argument)
   }
 
   Call(c) {
     this.analyze(c.expression)
-    this.analyze(c.argument)
+    this.analyze(c.argument) // type?
   }
 
   FieldExpression(f) {
