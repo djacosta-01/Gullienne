@@ -32,14 +32,18 @@ Below is an in-depth view of Gullienne with a comparison to equivalent code in J
 </tr>
 <tr> <td>
 
-    /* Let's see here...
-    W- Wait, what is that? */
+```js
+/* Let's see here...
+W- Wait, what is that? */
+```
 
 </td>
 <td>
 
+```
     ~ Let's see here...
     W- Wait, what is that? ~
+```
 
 </td> </tr> </table>
 
@@ -339,7 +343,7 @@ while (bob < 5) {
 </td>
 <td>
 
-```
+```java
 bob:number @ 0;
 
 noCap(bob < 5) {
@@ -364,7 +368,7 @@ for (hotChocolates in debt) {
 </td>
 <td>
 
-```
+```swift
 debt:[number] @ [2, 3, 1, 5, 3];
 
 cap(hotChocolates in debt) {
@@ -381,7 +385,7 @@ cap(hotChocolates in debt) {
 <tr>
 <td>
 
-```
+```js
 if (job == true) {
     console.log(“truthy”)
 } else if (job ==  false) {
@@ -394,7 +398,7 @@ if (job == true) {
 </td>
 <td>
 
-```
+```python
 so (job = ideal) {
     overheard(`true`);
 } but (job = !ideal) {
@@ -422,7 +426,7 @@ function jsAddFunction(bob, job) {
 </td>
 <td>
 
-```
+```js
 do:number gluAddFunction(bob:number, job:number) {
 	howItBe bob + job;
 }
