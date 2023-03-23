@@ -21,29 +21,25 @@ Below is an in-depth view of Gullienne with a comparison to equivalent code in J
 <tr>
 <td>
 
-`//Let's break this down.`
+<code>//Let's break this down.</code>
 
 </td>
 <td>
 
-`~Let's break this down.~`
+<code>~Let's break this down.~</code>
 
 </td>
 </tr>
 <tr> <td>
 
-```js
-/* Let's see here...
-W- Wait, what is that? */
-```
+<pre><code>/* Let's see here...
+W- Wait, what is that? */</code></pre>
 
 </td>
 <td>
 
-```
-    ~ Let's see here...
-    W- Wait, what is that? ~
-```
+<pre><code>~ Let's see here...
+W- Wait, what is that? ~</code></pre>
 
 </td> </tr> </table>
 
@@ -53,41 +49,41 @@ W- Wait, what is that? */
 <tr> <th>Type</th> <th>Values</th> <th>JavaScript</th> </tr>
 <tr><td>
 
-Joolean `joolean`
+Joolean <code>joolean</code>
 
 </td><td>
 
-`ideal`, `!ideal`
+<code>ideal</code>, <code>!ideal</code>
 
 </td><td>
 
-Boolean `true` `false`
+Boolean <code>true</code> <code>false</code>
 
 </td></tr>
 <tr><td>
 
-Number `number`
+Number <code>number</code>
 
 </td><td>
 
-`3.97385`, `7895.2734`
+<code>3.97385</code>, <code>7895.2734</code>
 
 </td><td>
 
-Number `99465.213`
+Number <code>99465.213</code>
 
 </td></tr>
 <tr><td>
 
-String `string`
+String <code>string</code>
 
 </td><td>
 
-`` `carrot` ``, `` `bob` ``
+<code>\`carrot\`</code>, <code>\`bob\`</code>
 
 </td><td>
 
-String `"phrase"`
+String <code>"phrase"</code>
 
 </td></tr>
 </table>
@@ -98,30 +94,30 @@ String `"phrase"`
 <tr> <th>Structure</th> <th>Syntax</th> <th>JavaScript</th> </tr>
 <tr><td>Lists</td><td>
 
-`[ a, b, c ]`
+<code>[ a, b, c ]</code>
 
 </td><td>
 
-`[ a , b , c ]`
+<code>[ a , b , c ]</code>
 
 </td></tr>
 <tr><td>Maps</td><td>
 
-`<< a :: x , b :: y >>`
+<code><< a :: x , b :: y >></code>
 
 </td><td>
 
-`{ a : x , b : y }`
+<code>{ a : x , b : y }</code>
 
 </td></tr>
 <tr><td>Sets</td>
 <td>
 
-`< a, b, c >`
+<code>< a, b, c ></code>
 
 </td><td>
 
-`Set()`
+<code>Set()</code>
 
 </td></tr>
 </table>
@@ -132,127 +128,127 @@ String `"phrase"`
 <tr> <th>Operator</th> <th>Symbol</th> <th>Operational Types</th> <th>Precedence</th> <th>Associativity</th> </tr>
 <tr><td>Attributor</td><td>
 
-`.`
+<code>.<code>
 
 </td><td>Object</td><td id="centered">1</td><td id="centered">L to R</td></tr>
 <tr><td>List Indexer</td><td>
 
-`[]`
+<code>[]</code>
 
 </td><td>List</td><td id="centered">1</td><td id="centered">^</td></tr>
 <tr><td>Map Indexer</td><td>
 
-`<<>>`
+<code><<>></code>
 
 </td><td>Map</td><td id="centered">1</td><td id="centered">^</td></tr>
 <tr><td>Set Indexer</td><td>
 
-`<>`
+<code><></code>
 
 </td><td>Set</td><td id="centered">1</td><td id="centered">^</td></tr><tr>
 <td>Call</td><td>
 
-`()`
+<code>()</code>
 
 </td><td>Function</td><td id="centered">1</td><td id="centered">^</td></tr><tr>
 <td>Boolean Negation</td><td>
 
-`!`
+<code>!</code>
 
 </td><td>Joolean</td><td id="centered">2</td><td id="centered">R to L</td></tr>
 <tr><td>Numeric Negation</td><td>
 
-`-`
+<code>-</code>
 
 </td><td>Number</td><td id="centered">2</td><td id="centered">^</td></tr>
 <tr><td>Exponentiation</td><td>
 
-`^`
+<code>^</code>
 
 </td><td>Number</td><td id="centered">2</td><td id="centered">^</td></tr>
 <tr><td>Multiplication</td><td>
 
-`*`
+<code>\*</code>
 
 </td><td>Number, List</td><td id="centered">3</td><td id="centered">L to R</td></tr>
 <tr><td>Division</td><td>
 
-`/`
+<code>/</code>
 
 </td><td>Number</td><td id="centered">3</td><td id="centered">^</td></tr>
 <tr><td>Remainder</td><td>
 
-`%`
+<code>%</code>
 
 </td><td>Number</td><td id="centered">3</td><td id="centered">^</td></tr>
 <tr><td>Union</td><td>
 
-`union`
+<code>union</code>
 
 </td><td>List, Set, Map</td><td id="centered">4</td><td id="centered">^</td></tr>
 <tr><td>intersection</td><td>
 
-`intersect`
+<code>intersect</code>
 
 </td><td>List, Set, Map</td><td id="centered">4</td><td id="centered">^</td></tr>
 <tr><td>Addition</td><td>
 
-`+`
+<code>+</code>
 
 </td><td>Number, List, Set, Map</td><td id="centered">4</td><td id="centered">^</td></tr>
 <tr><td>Subtraction</td><td>
 
-`-`
+<code>-</code>
 
 </td><td>Number</td><td id="centered">4</td><td id="centered">^</td></tr>
 <tr><td>Less Than</td><td>
 
-`<`
+<code><</code>
 
 </td><td>Number</td><td id="centered">5</td><td id="centered">None</td></tr>
 <tr><td>Less Than or Equal</td><td>
 
-`<=`
+<code><=</code>
 
 </td><td>Number</td><td id="centered">5</td><td id="centered">^</td></tr>
 <tr><td>Less Than or Equal</td><td>
 
-`<=`
+<code><=</code>
 
 </td><td>Number</td><td id="centered">5</td><td id="centered">^</td></tr>
 <tr><td>Greater Than</td><td>
 
-`>`
+<code>></code>
 
 </td><td>Number</td><td id="centered">5</td><td id="centered">^</td></tr>
 <tr><td>Greater Than or Equal</td><td>
 
-`>=`
+<code>>=</code>
 
 </td><td>Number</td><td id="centered">5</td><td id="centered">^</td></tr>
 <tr><td>Equality</td><td>
 
-`==`
+<code>==</code>
 
 </td><td>Joolean, Number, String</td><td id="centered">6</td><td id="centered">^</td></tr>
 <tr><td>Inequality</td><td>
 
-`!=`
+<code>!=</code>
 
 </td><td>Joolean, Number, String</td><td id="centered">6</td><td id="centered">^</td></tr>
 <tr><td>Logical AND</td><td>
 
-`&`
+<code>&</code>
 
 </td><td>Joolean</td><td id="centered">7</td><td id="centered">^</td></tr>
 <tr><td>Logical OR</td><td>
 
-`|`
+<code>|</code>
 
 </td><td>Number</td><td id="centered">8</td><td id="centered">^</td></tr>
 <tr><td>Assignment</td><td>
 
-`@`
+<code>@</code>
 
 </td><td>Joolean, Numbers, String, List, Map, Set, Object</td><td id="centered">9</td><td id="centered">R to L</td></tr>
 </table>
@@ -266,12 +262,12 @@ String `"phrase"`
 <tr>
 <td>
 
-`console.log(“You’re farming overheards again!”)`
+<code>console.log(“You’re farming overheards again!”)</code>
 
 </td>
 <td>
 
-`` overheard(`You’re farming overheards again!`); ``
+<code>overheard(\`You’re farming overheards again!\`);</code>
 
 </td> </tr> </table>
 
@@ -282,23 +278,23 @@ String `"phrase"`
 <tr>
 <td>
 
-`let overtime = true`
+<code>let overtime = true</code>
 
 </td>
 <td>
 
-`overtime:joolean @ ideal;`
+<code>overtime:joolean @ ideal;</code>
 
 </td>
 </tr>
 <tr> <td>
 
-`const hoursClocked = 900;`
+<code>const hoursClocked = 900;</code>
 
 </td>
 <td>
 
-`hoursClocked:NUMBER @ 900;`
+<code>hoursClocked:NUMBER @ 900;</code>
 
 </td> </tr> </table>
 
@@ -309,18 +305,14 @@ String `"phrase"`
 <tr>
 <td>
 
-```
-let you = 21
-let aString = String(you)
-```
+<pre><code>let you = 21
+let aString = String(you)</code></pre>
 
 </td>
 <td>
 
-```
-you:number @ 21;
-aString:string @ mangle(you, string);
-```
+<pre><code>you:number @ 21;
+aString:string @ mangle(you, string);</code></pre>
 
 </td> </tr> </table>
 
@@ -331,50 +323,42 @@ aString:string @ mangle(you, string);
 <tr>
 <td>
 
-```
-let bob = 0
+<pre><code>let bob = 0
 
 while (bob < 5) {
     bob++
 	console.log(“Number of squids on floor: “ + bob)
-}
-```
+}</code></pre>
 
 </td>
 <td>
 
-```java
-bob:number @ 0;
+<pre><code>bob:number @ 0;
 
 noCap(bob < 5) {
 	bob++;
-    overheard(`Number of squids on floor: ` + mangle(bob, string));
-}
-```
+    overheard(<code>Number of squids on floor: <code> + mangle(bob, string));
+}</code></pre>
 
 </td>
 </tr>
 <tr>
 <td>
 
-```
-debt = [2, 3, 1, 5, 3]
+<pre><code>debt = [2, 3, 1, 5, 3]
 
 for (hotChocolates in debt) {
 	console.log(“I owe you “ + hotChocolates + " for this.”)
-}
-```
+}</code></pre>
 
 </td>
 <td>
 
-```swift
-debt:[number] @ [2, 3, 1, 5, 3];
+<pre><code>debt:[number] @ [2, 3, 1, 5, 3];
 
 cap(hotChocolates in debt) {
-	overheard(`I owe you ` + hotChocolates + ` for this.`);
-}
-```
+	overheard(<code>I owe you <code> + hotChocolates + <code> for this.<code>);
+}</code></pre>
 
 </td> </tr> </table>
 
@@ -385,28 +369,24 @@ cap(hotChocolates in debt) {
 <tr>
 <td>
 
-```js
-if (job == true) {
+<pre><code>if (job == true) {
     console.log(“truthy”)
 } else if (job ==  false) {
     console.log(“falsy”)
 } else {
     console.log(“How did we get here?”)
-}
-```
+}</code></pre>
 
 </td>
 <td>
 
-```python
-so (job = ideal) {
-    overheard(`true`);
+<pre><code>so (job = ideal) {
+    overheard(<code>true<code>);
 } but (job = !ideal) {
-    overheard(`false`);
+    overheard(<code>false<code>);
 } otherwise {
-    overheard(`How did we get here?`);
-}
-```
+    overheard(<code>How did we get here?<code>);
+}</code></pre>
 
 </td> </tr> </table>
 
@@ -417,19 +397,15 @@ so (job = ideal) {
 <tr>
 <td>
 
-```
-function jsAddFunction(bob, job) {
+<pre><code>function jsAddFunction(bob, job) {
 	return bob + job
-}
-```
+}</code></pre>
 
 </td>
 <td>
 
-```js
-do:number gluAddFunction(bob:number, job:number) {
+<pre><code>do:number gluAddFunction(bob:number, job:number) {
 	howItBe bob + job;
-}
-```
+}</code></pre>
 
 </td> </tr> </table>
