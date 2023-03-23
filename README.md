@@ -2,7 +2,7 @@
   <img src="docs/GullienneLogo.png" width="50%">
 </p>
 
-# Gullienne
+# [Gullienne](https://djacosta-01.github.io/Gullienne/)
 
 The language Gullienne is inspired by our favorite TA Julian and his iconic sayings (Julianisms). We chose this version of Julian’s name to avoid any legal consequences. It compiles into JavaScript(JS) and shares some characteristics from JS, Python, and Swift but definitely not Java. We chose these languages as a basis because we like them, from the argument labels of Swift to making the distinction of mutable and immutable variables from JS. Although we have committed the forbidden crime of using semi-colons, we make up for it with our Joolean ideals and not ideals. We also came up with some new and fresh ideas like binding our variables with “@” instead of the mainstream “=”. You may think that Gullienne would be unreadable, but you would be wrong. As long as you have your overheard channel handy, the understanding will simply come to you just like a polite squid at Roski’s.
 
@@ -32,18 +32,14 @@ Below is an in-depth view of Gullienne with a comparison to equivalent code in J
 </tr>
 <tr> <td>
 
-```
-/* Let's see here...
-W- Wait, what is that? */
-```
+    /* Let's see here...
+    W- Wait, what is that? */
 
 </td>
 <td>
 
-```
-~ Let's see here...
-W- Wait, what is that? ~
-```
+    ~ Let's see here...
+    W- Wait, what is that? ~
 
 </td> </tr> </table>
 
