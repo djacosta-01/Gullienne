@@ -159,98 +159,98 @@ String `"phrase"`
 
 `!`
 
-</td><td>Joolean</td><td id="centered">2</td><td id="centered">R to L</td></tr><tr>
-<td>Numeric Negation</td><td>
+</td><td>Joolean</td><td id="centered">2</td><td id="centered">R to L</td></tr>
+<tr><td>Numeric Negation</td><td>
 
 `-`
 
 </td><td>Number</td><td id="centered">2</td><td id="centered">^</td></tr>
-<td>Exponentiation</td><td>
+<tr><td>Exponentiation</td><td>
 
 `^`
 
 </td><td>Number</td><td id="centered">2</td><td id="centered">^</td></tr>
-<td>Multiplication</td><td>
+<tr><td>Multiplication</td><td>
 
 `*`
 
 </td><td>Number, List</td><td id="centered">3</td><td id="centered">L to R</td></tr>
-<td>Division</td><td>
+<tr><td>Division</td><td>
 
 `/`
 
 </td><td>Number</td><td id="centered">3</td><td id="centered">^</td></tr>
-<td>Remainder</td><td>
+<tr><td>Remainder</td><td>
 
 `%`
 
 </td><td>Number</td><td id="centered">3</td><td id="centered">^</td></tr>
-<td>Union</td><td>
+<tr><td>Union</td><td>
 
 `union`
 
 </td><td>List, Set, Map</td><td id="centered">4</td><td id="centered">^</td></tr>
-<td>intersection</td><td>
+<tr><td>intersection</td><td>
 
 `intersect`
 
 </td><td>List, Set, Map</td><td id="centered">4</td><td id="centered">^</td></tr>
-<td>Addition</td><td>
+<tr><td>Addition</td><td>
 
 `+`
 
 </td><td>Number, List, Set, Map</td><td id="centered">4</td><td id="centered">^</td></tr>
-<td>Subtraction</td><td>
+<tr><td>Subtraction</td><td>
 
 `-`
 
 </td><td>Number</td><td id="centered">4</td><td id="centered">^</td></tr>
-<td>Less Than</td><td>
+<tr><td>Less Than</td><td>
 
 `<`
 
 </td><td>Number</td><td id="centered">5</td><td id="centered">None</td></tr>
-<td>Less Than or Equal</td><td>
+<tr><td>Less Than or Equal</td><td>
 
 `<=`
 
 </td><td>Number</td><td id="centered">5</td><td id="centered">^</td></tr>
-<td>Less Than or Equal</td><td>
+<tr><td>Less Than or Equal</td><td>
 
 `<=`
 
 </td><td>Number</td><td id="centered">5</td><td id="centered">^</td></tr>
-<td>Greater Than</td><td>
+<tr><td>Greater Than</td><td>
 
 `>`
 
 </td><td>Number</td><td id="centered">5</td><td id="centered">^</td></tr>
-<td>Greater Than or Equal</td><td>
+<tr><td>Greater Than or Equal</td><td>
 
 `>=`
 
 </td><td>Number</td><td id="centered">5</td><td id="centered">^</td></tr>
-<td>Equality</td><td>
+<tr><td>Equality</td><td>
 
 `==`
 
 </td><td>Joolean, Number, String</td><td id="centered">6</td><td id="centered">^</td></tr>
-<td>Inequality</td><td>
+<tr><td>Inequality</td><td>
 
 `!=`
 
 </td><td>Joolean, Number, String</td><td id="centered">6</td><td id="centered">^</td></tr>
-<td>Logical AND</td><td>
+<tr><td>Logical AND</td><td>
 
 `&`
 
 </td><td>Joolean</td><td id="centered">7</td><td id="centered">^</td></tr>
-<td>Logical OR</td><td>
+<tr><td>Logical OR</td><td>
 
 `|`
 
 </td><td>Number</td><td id="centered">8</td><td id="centered">^</td></tr>
-<td>Assignment</td><td>
+<tr><td>Assignment</td><td>
 
 `@`
 
