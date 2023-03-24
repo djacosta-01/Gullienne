@@ -31,43 +31,36 @@ function checkIsDeclared(context, id, notDeclared) {
   )
 }
 
-function typeChecker(leftType, rightType, isAssignment) {
+function checkSameType(leftType, rightType, isAssignment) {
   switch (leftType.type.constructor) {
     case core.TypeSum:
-      typeChecker(leftType.type1, rightType)
-      typeChecker(leftType.type2, rightType)
-      break
+      return (
+        checkSameType(leftType.type1, rightType) ||
+        checkSameType(leftType.type2, rightType)
+      )
     case core.TypeList: // something something data structure + recurse
-      break
     case core.TypeSet:
-      break
+      return checkSameType(leftType.type, rightType.type)
     case core.TypeMap:
-      break
+      return (
+        checkSameType(leftType.keyType, rightType.keyType) &&
+        checkSameType(leftType.valueType, rightType.valueType)
+      )
     case core.GodRay.joolean:
-      return leftType.type.constructor === rightType.type.constructor // is this right? - aidan
-      break
     case core.GodRay.string:
-      break
     case core.GodRay.number:
-      break
+      return leftType.type.constructor === rightType.type.constructor
     case core.GodRay.JOOLEAN:
     case core.GodRay.STRING:
     case core.GodRay.NUMBER:
       megaCheck(
-        false,
+        !isAssignment,
         "Did you just try to reassign to a constant variable? Nah that ain't chiefin' out."
       )
       break
     default:
-      megaCheck(false, "DUUUUDE! What even IS this type?!")
+      megaCheck(false, `DuuuuuuUUUUDE! What even IS type ${leftType.type}?!`)
   }
-
-  if (leftType.type.constructor === "string") {
-    //right type not found
-    return leftType.type === rightType.type
-  }
-
-  return typeWalker(leftType, rightType)
 }
 
 // // change
@@ -142,13 +135,14 @@ class Context {
 
   VariableDeclaration(v) {
     if (v.initializer) this.analyze(v.initializer)
-
-    //types
     checkIsDeclared(this, v.id, true) //Checking if the id is NOT declared
     this.analyze(v.id)
-    // isReadOnly = /^[A-Z]+$/.test(v.type)
     this.analyze(v.type)
+
+    if (v.initializer) checkSameType(v.type, v.initializer.type)
+
     v.variable = new core.VariableObj(v.id, v.type)
+    context.addToScope(v.id, v.variable)
   }
 
   ReassignmentStatement(r) {
@@ -158,9 +152,11 @@ class Context {
     //if type not isReadOnly
     this.analyze(r.id)
     this.analyze(r.source)
+    checkSameType(context.getVar(r.id).type, r.source.type)
   }
 
   ReassignmentMyStatement(r) {
+    //this object left as an exercise to the rest of the group
     //deals with types
     this.analyze(r.id)
     //if type not isReadOnly
