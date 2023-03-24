@@ -268,7 +268,7 @@ String <code>"phrase"</code>
 </td>
 <td>
 
-<code>overheard(\`You’re farming overheards again!\`);</code>
+<code>overheard(`You’re farming overheards again!`);</code>
 
 </td> </tr> </table>
 
@@ -321,8 +321,7 @@ aString:string @ mangle(you, string);</code></pre>
 
 <table>
 <tr> <th>JavaScript</th><th>Gullienne</th> </tr>
-<tr>
-<td>
+<tr><td>
 
 <pre><code>let bob = 0
 
@@ -331,20 +330,17 @@ while (bob < 5) {
 	console.log(“Number of squids on floor: “ + bob)
 }</code></pre>
 
-</td>
-<td>
+</td><td>
 
 <pre><code>bob:number @ 0;
 
 noCap(bob < 5) {
 	bob++;
-    overheard(<code>Number of squids on floor: <code> + mangle(bob, string));
+    overheard(`Number of squids on floor:` + mangle(bob, string));
 }</code></pre>
 
-</td>
-</tr>
-<tr>
-<td>
+</td></tr>
+<tr><td>
 
 <pre><code>debt = [2, 3, 1, 5, 3]
 
@@ -358,7 +354,7 @@ for (hotChocolates in debt) {
 <pre><code>debt:[number] @ [2, 3, 1, 5, 3];
 
 cap(hotChocolates in debt) {
-	overheard(<code>I owe you <code> + hotChocolates + <code> for this.<code>);
+	overheard(`I owe you ` + hotChocolates + ` for this.`);
 }</code></pre>
 
 </td> </tr> </table>
@@ -382,11 +378,11 @@ cap(hotChocolates in debt) {
 <td>
 
 <pre><code>so (job = ideal) {
-    overheard(<code>true<code>);
+    overheard(`true`);
 } but (job = !ideal) {
-    overheard(<code>false<code>);
+    overheard(`false`);
 } otherwise {
-    overheard(<code>How did we get here?<code>);
+    overheard(`How did we get here?`);
 }</code></pre>
 
 </td> </tr> </table>
