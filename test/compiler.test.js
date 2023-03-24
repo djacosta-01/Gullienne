@@ -138,7 +138,7 @@ const semanticErrors = [
 ]
 
 describe("The AST generator", () => {
-  console.log(ast(semanticChecks[0][1]))
+  console.log(ast(semanticChecks[1][1]))
   for (const [scenario, source] of semanticChecks) {
     it(`recognizes ${scenario}`, () => {
       assert.ok(ast(source))

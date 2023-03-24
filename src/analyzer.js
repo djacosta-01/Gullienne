@@ -1,3 +1,4 @@
+import { match } from "assert"
 import fs from "fs"
 import * as ohm from "ohm-js"
 import * as core from "./core.js"
@@ -31,20 +32,20 @@ function checkIsDeclared(context, id, notDeclared) {
   )
 }
 
-function checkSameType(leftType, rightType, isAssignment) {
+function matchType(leftType, rightType, isAssignment) {
   switch (leftType.type.constructor) {
     case core.TypeSum:
       return (
-        checkSameType(leftType.type1, rightType) ||
-        checkSameType(leftType.type2, rightType)
+        matchType(leftType.type1, rightType) ||
+        matchType(leftType.type2, rightType)
       )
     case core.TypeList: // something something data structure + recurse
     case core.TypeSet:
-      return checkSameType(leftType.type, rightType.type)
+      return matchType(leftType.type, rightType.type)
     case core.TypeMap:
       return (
-        checkSameType(leftType.keyType, rightType.keyType) &&
-        checkSameType(leftType.valueType, rightType.valueType)
+        matchType(leftType.keyType, rightType.keyType) &&
+        matchType(leftType.valueType, rightType.valueType)
       )
     case core.GodRay.joolean:
     case core.GodRay.string:
@@ -61,6 +62,24 @@ function checkSameType(leftType, rightType, isAssignment) {
     default:
       megaCheck(false, `DuuuuuuUUUUDE! What even IS type ${leftType.type}?!`)
   }
+}
+
+// function checkExpectedType(context, wanted, found, assignment, expected) {
+//   megaCheck(
+//     matchType(wanted, found, assignment),
+//     `What? Wait, that's not ${expected}, the hell are you on right now?`
+//   )
+// }
+
+function checkUniqueParams(params) {
+  megaCheck(
+    Set(
+      params.map((p) =>
+        p.constructor === core.DeclarationParameter ? p.params.id : p.id
+      )
+    ).size === params.length,
+    "Oh my god, you duped a parameter! Blow it up. Any one of 'em."
+  )
 }
 
 // // change
@@ -139,7 +158,7 @@ class Context {
     this.analyze(v.id)
     this.analyze(v.type)
 
-    if (v.initializer) checkSameType(v.type, v.initializer.type)
+    if (v.initializer) matchType(v.type, v.initializer.type)
 
     v.variable = new core.VariableObj(v.id, v.type)
     context.addToScope(v.id, v.variable)
@@ -152,7 +171,7 @@ class Context {
     //if type not isReadOnly
     this.analyze(r.id)
     this.analyze(r.source)
-    checkSameType(context.getVar(r.id).type, r.source.type)
+    matchType(context.getVar(r.id).type, r.source.type)
   }
 
   ReassignmentMyStatement(r) {
@@ -167,6 +186,7 @@ class Context {
     this.analyze(f.id)
     let newContext = this.makeChildContext({ isFunction: true })
     newContext.analyze(f.params) // types
+    if (f.params.length > 0) checkUniqueParams(f.params)
     newContext.analyze(f.funcBlock)
   }
 
@@ -228,6 +248,7 @@ class Context {
     this.analyze(o.id)
     let newContext = this.makeChildContext({ isObj: true })
     newContext.analyze(o.params) // types
+    if (o.params.length > 0) checkUniqueParams(o.params)
     newContext.analyze(o.ObjectBlock)
   }
 
@@ -247,6 +268,7 @@ class Context {
     this.analyze(m.id)
     let newContext = this.makeChildContext({ isFunction: true })
     newContext.analyze(m.params) // types
+    if (m.params.length > 0) checkUniqueParams(m.params)
     this.analyze(m.returnType) // new context? also types
     newContext.analyze(m.funcBlock)
   }
