@@ -12,7 +12,7 @@ function megaCheck(condition, message, entity) {
 function checkInFunction(context) {
   megaCheck(
     context.isFunction,
-    `you ain't in a function big dawg, your a🍑🍑 can't howItBe here`
+    `you ain't in a function big dawg, your a🍑🍑 can't ask howItBe here`
   )
 }
 
@@ -31,8 +31,38 @@ function checkIsDeclared(context, id, notDeclared) {
   )
 }
 
-function typeChecker(leftType, rightType) {
-  if (typeof leftType.type === "string") {
+function typeChecker(leftType, rightType, isAssignment) {
+  switch (leftType.type.constructor) {
+    case core.TypeSum:
+      typeChecker(leftType.type1, rightType)
+      typeChecker(leftType.type2, rightType)
+      break
+    case core.TypeList: // something something data structure + recurse
+      break
+    case core.TypeSet:
+      break
+    case core.TypeMap:
+      break
+    case core.GodRay.joolean:
+      return leftType.type.constructor === rightType.type.constructor // is this right? - aidan
+      break
+    case core.GodRay.string:
+      break
+    case core.GodRay.number:
+      break
+    case core.GodRay.JOOLEAN:
+    case core.GodRay.STRING:
+    case core.GodRay.NUMBER:
+      megaCheck(
+        false,
+        "Did you just try to reassign to a constant variable? Nah that ain't chiefin' out."
+      )
+      break
+    default:
+      megaCheck(false, "DUUUUDE! What even IS this type?!")
+  }
+
+  if (leftType.type.constructor === "string") {
     //right type not found
     return leftType.type === rightType.type
   }
