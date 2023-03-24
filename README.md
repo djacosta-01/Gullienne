@@ -79,7 +79,7 @@ String <code>string</code>
 
 </td><td>
 
-<code>\`carrot\`</code>, <code>\`bob\`</code>
+<code>`carrot`</code>, <code>`bob`</code>
 
 </td><td>
 
@@ -115,7 +115,8 @@ String <code>"phrase"</code>
 
 <code>< a, b, c ></code>
 
-</td><td>
+</td>
+<td>
 
 <code>Set()</code>
 
@@ -128,129 +129,129 @@ String <code>"phrase"</code>
 <tr> <th>Operator</th> <th>Symbol</th> <th>Operational Types</th> <th>Precedence</th> <th>Associativity</th> </tr>
 <tr><td>Attributor</td><td>
 
-<code>.<code>
+<code>.</code>
 
-</td><td>Object</td><td id="centered">1</td><td id="centered">L to R</td></tr>
+</td><td>Object</td><td >1</td><td >L to R</td></tr>
 <tr><td>List Indexer</td><td>
 
 <code>[]</code>
 
-</td><td>List</td><td id="centered">1</td><td id="centered">^</td></tr>
+</td><td>List</td><td >1</td><td >^</td></tr>
 <tr><td>Map Indexer</td><td>
 
 <code><<>></code>
 
-</td><td>Map</td><td id="centered">1</td><td id="centered">^</td></tr>
+</td><td>Map</td><td >1</td><td >^</td></tr>
 <tr><td>Set Indexer</td><td>
 
 <code><></code>
 
-</td><td>Set</td><td id="centered">1</td><td id="centered">^</td></tr><tr>
+</td><td>Set</td><td >1</td><td >^</td></tr><tr>
 <td>Call</td><td>
 
 <code>()</code>
 
-</td><td>Function</td><td id="centered">1</td><td id="centered">^</td></tr><tr>
+</td><td>Function</td><td >1</td><td >^</td></tr><tr>
 <td>Boolean Negation</td><td>
 
 <code>!</code>
 
-</td><td>Joolean</td><td id="centered">2</td><td id="centered">R to L</td></tr>
+</td><td>Joolean</td><td >2</td><td >R to L</td></tr>
 <tr><td>Numeric Negation</td><td>
 
 <code>-</code>
 
-</td><td>Number</td><td id="centered">2</td><td id="centered">^</td></tr>
+</td><td>Number</td><td >2</td><td >^</td></tr>
 <tr><td>Exponentiation</td><td>
 
 <code>^</code>
 
-</td><td>Number</td><td id="centered">2</td><td id="centered">^</td></tr>
+</td><td>Number</td><td >2</td><td >^</td></tr>
 <tr><td>Multiplication</td><td>
 
 <code>\*</code>
 
-</td><td>Number, List</td><td id="centered">3</td><td id="centered">L to R</td></tr>
+</td><td>Number, List</td><td >3</td><td >L to R</td></tr>
 <tr><td>Division</td><td>
 
 <code>/</code>
 
-</td><td>Number</td><td id="centered">3</td><td id="centered">^</td></tr>
+</td><td>Number</td><td >3</td><td >^</td></tr>
 <tr><td>Remainder</td><td>
 
 <code>%</code>
 
-</td><td>Number</td><td id="centered">3</td><td id="centered">^</td></tr>
+</td><td>Number</td><td >3</td><td >^</td></tr>
 <tr><td>Union</td><td>
 
 <code>union</code>
 
-</td><td>List, Set, Map</td><td id="centered">4</td><td id="centered">^</td></tr>
+</td><td>List, Set, Map</td><td >4</td><td >^</td></tr>
 <tr><td>intersection</td><td>
 
 <code>intersect</code>
 
-</td><td>List, Set, Map</td><td id="centered">4</td><td id="centered">^</td></tr>
+</td><td>List, Set, Map</td><td >4</td><td >^</td></tr>
 <tr><td>Addition</td><td>
 
 <code>+</code>
 
-</td><td>Number, List, Set, Map</td><td id="centered">4</td><td id="centered">^</td></tr>
+</td><td>Number, List, Set, Map</td><td >4</td><td >^</td></tr>
 <tr><td>Subtraction</td><td>
 
 <code>-</code>
 
-</td><td>Number</td><td id="centered">4</td><td id="centered">^</td></tr>
+</td><td>Number</td><td >4</td><td >^</td></tr>
 <tr><td>Less Than</td><td>
 
 <code><</code>
 
-</td><td>Number</td><td id="centered">5</td><td id="centered">None</td></tr>
+</td><td>Number</td><td >5</td><td >None</td></tr>
 <tr><td>Less Than or Equal</td><td>
 
 <code><=</code>
 
-</td><td>Number</td><td id="centered">5</td><td id="centered">^</td></tr>
+</td><td>Number</td><td >5</td><td >^</td></tr>
 <tr><td>Less Than or Equal</td><td>
 
 <code><=</code>
 
-</td><td>Number</td><td id="centered">5</td><td id="centered">^</td></tr>
+</td><td>Number</td><td >5</td><td >^</td></tr>
 <tr><td>Greater Than</td><td>
 
 <code>></code>
 
-</td><td>Number</td><td id="centered">5</td><td id="centered">^</td></tr>
+</td><td>Number</td><td >5</td><td >^</td></tr>
 <tr><td>Greater Than or Equal</td><td>
 
 <code>>=</code>
 
-</td><td>Number</td><td id="centered">5</td><td id="centered">^</td></tr>
+</td><td>Number</td><td >5</td><td >^</td></tr>
 <tr><td>Equality</td><td>
 
 <code>==</code>
 
-</td><td>Joolean, Number, String</td><td id="centered">6</td><td id="centered">^</td></tr>
+</td><td>Joolean, Number, String</td><td >6</td><td >^</td></tr>
 <tr><td>Inequality</td><td>
 
 <code>!=</code>
 
-</td><td>Joolean, Number, String</td><td id="centered">6</td><td id="centered">^</td></tr>
+</td><td>Joolean, Number, String</td><td >6</td><td >^</td></tr>
 <tr><td>Logical AND</td><td>
 
 <code>&</code>
 
-</td><td>Joolean</td><td id="centered">7</td><td id="centered">^</td></tr>
+</td><td>Joolean</td><td >7</td><td >^</td></tr>
 <tr><td>Logical OR</td><td>
 
 <code>|</code>
 
-</td><td>Number</td><td id="centered">8</td><td id="centered">^</td></tr>
+</td><td>Number</td><td >8</td><td >^</td></tr>
 <tr><td>Assignment</td><td>
 
 <code>@</code>
 
-</td><td>Joolean, Numbers, String, List, Map, Set, Object</td><td id="centered">9</td><td id="centered">R to L</td></tr>
+</td><td>Joolean, Numbers, String, List, Map, Set, Object</td><td >9</td><td >R to L</td></tr>
 </table>
 
 ## Examples
