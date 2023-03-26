@@ -255,11 +255,11 @@ export class Expression {
 //Supertype
 export class GodRay {
   static joolean = new GodRay("joolean", false)
-  static JOOLEAN = new GodRay("JOOLEAN", true)
+  static JOOLEAN = new GodRay("joolean", true)
   static string = new GodRay("string", false)
-  static STRING = new GodRay("STRING", true)
+  static STRING = new GodRay("string", true)
   static number = new GodRay("number", false)
-  static NUMBER = new GodRay("NUMBER", true)
+  static NUMBER = new GodRay("number", true)
 
   constructor(type, readOnly) {
     Object.assign(this, { type, readOnly })

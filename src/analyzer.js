@@ -33,13 +33,17 @@ function checkIsDeclared(context, id, notDeclared) {
 }
 
 function matchType(leftType, rightType, isAssignment) {
+  //Unhandled case: constant matching variable type
+  //rework to take advantage of type fields: type, readOnly?
+  //Handle objects?
+
   switch (leftType.type.constructor) {
     case core.TypeSum:
       return (
         matchType(leftType.type1, rightType) ||
         matchType(leftType.type2, rightType)
       )
-    case core.TypeList: // something something data structure + recurse
+    case core.TypeList:
     case core.TypeSet:
       return matchType(leftType.type, rightType.type)
     case core.TypeMap:
@@ -58,37 +62,59 @@ function matchType(leftType, rightType, isAssignment) {
         !isAssignment,
         "Did you just try to reassign to a constant variable? Nah that ain't chiefin' out."
       )
+      //   switch(rightType.type.constructor) {
+      //     case core.GodRay.joolean:
+      //         return
+      //     case core.GodRay.string:
+      //     case core.GodRay.number:
+      //   }
       break
     default:
       megaCheck(false, `DuuuuuuUUUUDE! What even IS type ${leftType.type}?!`)
   }
 }
 
-// function checkExpectedType(context, wanted, found, assignment, expected) {
-//   megaCheck(
-//     matchType(wanted, found, assignment),
-//     `What? Wait, that's not ${expected}, the hell are you on right now?`
-//   )
-// }
+function checkExpectedType(wanted, found, assignment, expected) {
+  megaCheck(
+    matchType(wanted, found, assignment),
+    `What? Wait, that's not ${expected}, the hell are you on right now?`
+  )
+}
 
-function checkUniqueParams(params) {
+function expectedJoolean(expression) {
+  checkExpectedType(core.GodRay.joolean, expression.type, false, "joolean")
+}
+
+function expectedIterable(expression) {
+  switch (expression.type) {
+    case core.TypeList:
+    case core.TypeSet:
+    case core.TypeMap:
+    case core.GodRay.string:
+    case core.GodRay.STRING:
+      return
+  }
+
+  megaCheck(
+    false,
+    "You can't iterate over that, bro, it's gotta be a list, set, map, or string. Take your pick."
+  )
+}
+
+function expectedNumber(expression) {
+  checkExpectedType(core.GodRay.number, expression.type, false, "a number")
+}
+
+function checkParams(params) {
   megaCheck(
     Set(
       params.map((p) =>
         p.constructor === core.DeclarationParameter ? p.params.id : p.id
       )
     ).size === params.length,
-    "Oh my god, you duped a parameter! Blow it up. Any one of 'em."
+    "Oh my god, you duped a parameter! Blow it up. Right now."
   )
 }
-
-// // change
-// const INT = core.Type.INT
-// const FLOAT = core.Type.FLOAT
-// const STRING = core.Type.STRING
-// const BOOLEAN = core.Type.BOOLEAN
-// const ANY = core.Type.ANY
-// const VOID = core.Type.VOID
 
 class Context {
   constructor({
@@ -147,9 +173,8 @@ class Context {
   }
 
   IncDecStatement(i) {
-    //types
     this.analyze(i.id)
-    //check if number
+    matchType(context.get(i.id).type)
   }
 
   VariableDeclaration(v) {
@@ -165,32 +190,29 @@ class Context {
   }
 
   ReassignmentStatement(r) {
-    //deals with types
     checkIsDeclared(this, r.id, false)
-
-    //if type not isReadOnly
     this.analyze(r.id)
     this.analyze(r.source)
     matchType(context.getVar(r.id).type, r.source.type)
   }
 
   ReassignmentMyStatement(r) {
-    //this object left as an exercise to the rest of the group
-    //deals with types
+    checkIsDeclared(this, r.id, false)
     this.analyze(r.id)
-    //if type not isReadOnly
     this.analyze(r.source)
+    matchType(context.getVar(r.id).type, r.source.type)
   }
 
   FunctionDeclaration(f) {
     this.analyze(f.id)
     let newContext = this.makeChildContext({ isFunction: true })
     newContext.analyze(f.params) // types
-    if (f.params.length > 0) checkUniqueParams(f.params)
+    if (f.params.length > 1) checkParams(f.params)
     newContext.analyze(f.funcBlock)
   }
 
   FunctionBlock(f) {
+    //Check base types like reassigns
     this.analyze(f.base)
     //Analyzed in newContext in FunctionDeclaration:
     //It does not put them in LocalVars
@@ -199,7 +221,7 @@ class Context {
 
   ConditionIf(c) {
     this.analyze(c.testExp)
-    //Check if testExp is bool
+    expectedJoolean(c.testExp)
     let newContext = this.makeChildContext()
     newContext.analyze(c.genBlock)
     this.analyze(c.listOfButs)
@@ -208,6 +230,7 @@ class Context {
 
   ConditionElseIf(c) {
     this.analyze(c.testExp)
+    expectedJoolean(c.testExp)
     let newContext = this.makeChildContext()
     newContext.analyze(c.genBlock)
   }
@@ -220,13 +243,14 @@ class Context {
   ForLoop(f) {
     let newContext = this.makeChildContext({ isLoop: true })
     newContext.analyze(f.id)
-    newContext.analyze(f.expression) // types
+    newContext.analyze(f.expression)
+    expectedIterable(f.expression)
     newContext.analyze(f.genBlock)
   }
 
   WhileLoop(w) {
     this.analyze(w.expression)
-    // check if expression is boolean
+    expectedJoolean(w.expression)
     let newContext = this.makeChildContext({ isLoop: true })
     newContext.analyze(w.genBlock)
   }
@@ -248,7 +272,7 @@ class Context {
     this.analyze(o.id)
     let newContext = this.makeChildContext({ isObj: true })
     newContext.analyze(o.params) // types
-    if (o.params.length > 0) checkUniqueParams(o.params)
+    if (o.params.length > 0) checkParams(o.params)
     newContext.analyze(o.ObjectBlock)
   }
 
@@ -259,6 +283,7 @@ class Context {
   }
 
   ObjectBlock(o) {
+    //check base types like var reassign
     this.analyze(o.base)
     this.analyze(o.construcDec)
     this.analyze(o.methodDec)
@@ -268,7 +293,7 @@ class Context {
     this.analyze(m.id)
     let newContext = this.makeChildContext({ isFunction: true })
     newContext.analyze(m.params) // types
-    if (m.params.length > 0) checkUniqueParams(m.params)
+    if (m.params.length > 0) checkParams(m.params)
     this.analyze(m.returnType) // new context? also types
     newContext.analyze(m.funcBlock)
   }
