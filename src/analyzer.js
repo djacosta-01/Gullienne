@@ -207,6 +207,16 @@ class Context {
     this.analyze(f.id)
     let newContext = this.makeChildContext({ isFunction: true })
     newContext.analyze(f.params) // types
+    // e and d did this... **PLEASE check this**
+    // ASK a TA
+    // f.params.map((param) => {
+    //   let tempestJunior = new core.VariableDeclaration( // a friendly reminder to rename this please
+    //     param,
+    //     param.type,
+    //     param.source
+    //   )
+    //   matchType(tempestJunior.type, tempestJunior.source.type)
+    // })
     if (f.params.length > 1) checkParams(f.params)
     newContext.analyze(f.funcBlock)
   }
@@ -214,6 +224,7 @@ class Context {
   FunctionBlock(f) {
     //Check base types like reassigns
     this.analyze(f.base)
+    matchType(context.getVar(f.id).type, f.source.type) // this feels wrong...oh, e and d did this
     //Analyzed in newContext in FunctionDeclaration:
     //It does not put them in LocalVars
     this.analyze(f.statements)
@@ -258,6 +269,13 @@ class Context {
   Return(r) {
     checkInFunction(this)
     this.analyze(r.expression) // types
+    // also want to do this method dec return typepepepep
+    // also, should method and funcs even be separated?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+    matchType(
+      // e and d did this...**PLEASE FOR THE LOVE OF EVERYTHING CHECK THIS**
+      this.FunctionDeclaration.returnType.type,
+      r.expression.type
+    )
   }
 
   Break(b) {
@@ -272,6 +290,7 @@ class Context {
     this.analyze(o.id)
     let newContext = this.makeChildContext({ isObj: true })
     newContext.analyze(o.params) // types
+    // we don't know if types need to be checked here
     if (o.params.length > 0) checkParams(o.params)
     newContext.analyze(o.ObjectBlock)
   }
@@ -283,10 +302,11 @@ class Context {
   }
 
   ObjectBlock(o) {
-    //check base types like var reassign
+    // check base types like var reassign
     this.analyze(o.base)
     this.analyze(o.construcDec)
     this.analyze(o.methodDec)
+    matchType(context.getVar(o.base.id).type, o.base.source.type) // e and did this
   }
 
   MethodDeclaration(m) {
@@ -302,6 +322,7 @@ class Context {
     // types
     this.analyze(b.id)
     this.analyze(b.expression)
+    matchType(b.id.type, b.expression.type) // e and did this
   }
 
   GeneralBlock(g) {
@@ -359,6 +380,7 @@ class Context {
   Call(c) {
     this.analyze(c.expression)
     this.analyze(c.argument) // type?
+    matchType(c.argument.type, this.FunctionDeclaration.params.type) // guess who did...YES, e and d did this *Insert right or wrong here*
   }
 
   FieldExpression(f) {
