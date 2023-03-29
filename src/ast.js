@@ -1,5 +1,5 @@
 import fs from "fs"
-import ohm from "ohm-js"
+import * as ohm from "ohm-js"
 import * as core from "./core.js"
 
 const gullienneGrammar = ohm.grammar(fs.readFileSync("src/gullienne.ohm"))

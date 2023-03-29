@@ -1,6 +1,6 @@
 import assert from "assert"
 import fs from "fs"
-import ohm from "ohm-js"
+import * as ohm from "ohm-js"
 
 const syntaxChecks = [
   ["all numeric literal forms", "overheard(8 * 89.123);"],
