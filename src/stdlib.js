@@ -1,4 +1,4 @@
-import { GodRay, FunctionType, Variable, Function, ArrayType } from "./core.js"
+import { GodRay } from "./core.js"
 
 // const floatFloatType = new FunctionType([Type.FLOAT], Type.FLOAT)
 // const floatFloatFloatType = new FunctionType(

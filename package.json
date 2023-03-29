@@ -26,12 +26,12 @@
     "c8": "^7.13.0",
     "mocha": "^10.2.0"
   },
-  "dependencies": {
-    "ohm-js": "^16.6.0"
-  },
   "directories": {
     "doc": "docs",
     "example": "examples",
     "test": "test"
+  },
+  "dependencies": {
+    "ohm-js": "^17.0.4"
   }
 }
