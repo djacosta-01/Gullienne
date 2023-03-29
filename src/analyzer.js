@@ -60,7 +60,7 @@ function matchType(leftType, rightType, isAssignment) {
     case core.GodRay.NUMBER:
       megaCheck(
         !isAssignment,
-        "Did you just try to reassign to a constant variable? Nah that ain't chiefin' out."
+        `Did you just try to reassign to a constant variable? Nah that ain't chiefin' out.`
       )
       //   switch(rightType.type.constructor) {
       //     case core.GodRay.joolean:
@@ -97,7 +97,7 @@ function expectedIterable(expression) {
 
   megaCheck(
     false,
-    "You can't iterate over that, bro, it's gotta be a list, set, map, or string. Take your pick."
+    `You can't iterate over that, bro, it's gotta be a list, set, map, or string. Take your pick.`
   )
 }
 
@@ -290,7 +290,7 @@ class Context {
     this.analyze(o.id)
     let newContext = this.makeChildContext({ isObj: true })
     newContext.analyze(o.params) // types
-    // we don't know if types need to be checked here
+    // we don't know if types need to be checked here -> they don't
     if (o.params.length > 0) checkParams(o.params)
     newContext.analyze(o.ObjectBlock)
   }
@@ -335,12 +335,12 @@ class Context {
   }
 
   DeclarationParameter(d) {
-    // kwarg/parg delimiter?
+    // kwarg/parg delimiter? -> should we not do this in function declaration?
     this.analyze(d.params)
   }
 
   CallArgument(c) {
-    // check parg/kwarg
+    // check parg/kwarg -> already checking in Call
     this.analyze(c.id)
     this.analyze(c.expression)
   }
@@ -375,12 +375,38 @@ class Context {
     //subscript paren?
     this.analyze(s.subscriptee)
     this.analyze(s.argument)
+    //index out of range error
+    if(subscriptee.length - 1 < argument) {
+      `Index out of range`
+    }
   }
 
   Call(c) {
-    this.analyze(c.expression)
-    this.analyze(c.argument) // type?
-    matchType(c.argument.type, this.FunctionDeclaration.params.type) // guess who did...YES, e and d did this *Insert right or wrong here*
+    c.expression = this.analyze(c.expression)
+    c.argument = this.analyze(c.argument)
+    let slashPosition = 0
+    for (let paramIndex = 0; paramIndex < c.expression.params.length; paramIndex++) {
+      if (c.expression.params[paramIndex] === "/") {
+        slashPosition = paramIndex
+        break
+      }
+      matchType(c.argument[paramIndex], c.expression.params[paramIndex])
+    }
+    let kwargParams = (Array.from(c.expression.params)).slice(slashPosition + 1, c.expression.params.length)
+    let kwargs = (Array.from(c.argument)).slice(slashPosition, c.argument.length)
+    kwargParams.forEach((param, index) => { 
+      let arg = kwargs[index]
+      if(param.id === arg.id) {
+        matchType(param.type, arg.type)
+      }
+    })
+    // for (let i = slashPosition + 1; i < c.expression.params.length; i++) {
+    //   for (let j = slashPosition; j < c.argument.length; j++) {
+    //     if(c.expression.params[i].id === c.argument[j].id) {
+    //       matchType(c.expression.params[i].type, c.argument[j].type)
+    //     }
+    //   }
+    // }
   }
 
   FieldExpression(f) {
