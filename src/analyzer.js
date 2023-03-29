@@ -7,7 +7,7 @@ import * as stdlib from "./stdlib.js"
 const grammar = ohm.grammar(fs.readFileSync("src/gullienne.ohm"))
 
 function megaCheck(condition, message, entity) {
-  if (!condition) error(message, entity)
+  if (!condition) core.error(message, entity)
 }
 
 function checkInFunction(context) {
@@ -148,7 +148,7 @@ class Context {
     } else if (parent) {
       return parent.getVar(id)
     }
-    error(`Dawg, ima level wit you, there ain't no delcaration for ${id}`)
+    core.error(`Dawg, ima level wit you, there ain't no delcaration for ${id}`)
   }
 
   makeChildContext(props) {
@@ -161,6 +161,7 @@ class Context {
   }
 
   analyze(node) {
+    console.log(node.constructor.name)
     return this[node.constructor.name](node)
   }
 
@@ -376,8 +377,8 @@ class Context {
     this.analyze(s.subscriptee)
     this.analyze(s.argument)
     //index out of range error
-    if(subscriptee.length - 1 < argument) {
-      `Index out of range`
+    if (subscriptee.length - 1 < argument) {
+      ;`Index out of range`
     }
   }
 
@@ -385,18 +386,25 @@ class Context {
     c.expression = this.analyze(c.expression)
     c.argument = this.analyze(c.argument)
     let slashPosition = 0
-    for (let paramIndex = 0; paramIndex < c.expression.params.length; paramIndex++) {
+    for (
+      let paramIndex = 0;
+      paramIndex < c.expression.params.length;
+      paramIndex++
+    ) {
       if (c.expression.params[paramIndex] === "/") {
         slashPosition = paramIndex
         break
       }
       matchType(c.argument[paramIndex], c.expression.params[paramIndex])
     }
-    let kwargParams = (Array.from(c.expression.params)).slice(slashPosition + 1, c.expression.params.length)
-    let kwargs = (Array.from(c.argument)).slice(slashPosition, c.argument.length)
-    kwargParams.forEach((param, index) => { 
+    let kwargParams = Array.from(c.expression.params).slice(
+      slashPosition + 1,
+      c.expression.params.length
+    )
+    let kwargs = Array.from(c.argument).slice(slashPosition, c.argument.length)
+    kwargParams.forEach((param, index) => {
       let arg = kwargs[index]
-      if(param.id === arg.id) {
+      if (param.id === arg.id) {
         matchType(param.type, arg.type)
       }
     })
@@ -456,6 +464,15 @@ class Context {
   }
   Array(a) {
     a.forEach((item) => this.analyze(item))
+  }
+  Number(n) {
+    return n
+  }
+  String(s) {
+    return s
+  }
+  GodRay(g) {
+    return g
   }
 }
 
