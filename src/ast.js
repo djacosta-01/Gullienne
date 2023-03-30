@@ -82,8 +82,9 @@ const astBuilder = gullienneGrammar.createSemantics().addOperation("ast", {
   ObjectBlock(_lc, base, construcDec, methodDec, _rc) {
     return new core.ObjectBlock(base.ast(), construcDec.ast(), methodDec.ast())
   },
-  MethodDec(_do, _hash, id, _lp, params, _rp, _arrow, returnType, funcBlock) {
+  MethodDec(_do, hash, id, _lp, params, _rp, _arrow, returnType, funcBlock) {
     return new core.MethodDeclaration(
+      hash.ast(),
       id.ast(),
       params.asIteration().ast(),
       returnType.ast(),

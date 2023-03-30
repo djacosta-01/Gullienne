@@ -6,30 +6,6 @@ export class Program {
   }
 }
 
-// export class TypeDeclaration {
-//   // Example: struct S {x: int?, y: [double]}
-//   // change!!
-//   constructor(type) {
-//     this.type = type
-//   }
-// }
-// export class Type {
-//   // Type of all basic type int, float, string, etc. and superclass of others
-//   // change!!
-//   static BOOLEAN = new Type("boolean")
-//   static INT = new Type("int")
-//   static FLOAT = new Type("float")
-//   static STRING = new Type("string")
-//   static VOID = new Type("void")
-//   static ANY = new Type("any")
-//   constructor(description) {
-//     // The description is a convenient way to view the type. For basic
-//     // types or structs, it will just be the names. For arrays, you will
-//     // see "[T]". For optionals, "T?". For functions "(T1,...Tn)->T0".
-//     Object.assign(this, { description })
-//   }
-// }
-
 export class ExpressionStatement {
   constructor(expression) {
     Object.assign(this, { expression })
@@ -75,6 +51,12 @@ export class ReassignmentMyStatement {
 export class FunctionDeclaration {
   constructor(id, params, returnType, funcBlock) {
     Object.assign(this, { id, params, returnType, funcBlock })
+  }
+}
+
+export class FunctionObject {
+  constructor(params, returnType, block) {
+    Object.assign(this, { params, returnType, block })
   }
 }
 
@@ -151,11 +133,22 @@ export class ObjectBlock {
 }
 
 export class MethodDeclaration {
-  constructor(id, params, returnType, funcBlock) {
-    Object.assign(this, { id, params, returnType, funcBlock })
+  constructor(id, isPrivate, params, returnType, funcBlock) {
+    Object.assign(this, { id, isPrivate, params, returnType, funcBlock })
   }
 }
 
+export class MethodBlock {
+  constructor(base, statements) {
+    Object.assign(this, { base, statements })
+  }
+}
+
+export class ObjectObject {
+  constructor(id, fields, constructors, methods) {
+    Object.assign(this, { id, fields, constructors, methods })
+  }
+}
 export class Base {
   constructor(id, expression) {
     Object.assign(this, { id, expression })

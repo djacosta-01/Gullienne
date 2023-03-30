@@ -12,7 +12,7 @@ function megaCheck(condition, message, entity) {
 
 function checkInFunction(context) {
   megaCheck(
-    context.isFunction,
+    context.functions,
     `you ain't in a function big dawg, your a🍑🍑 can't ask howItBe here`
   )
 }
@@ -22,7 +22,7 @@ function checkInLoop(context) {
 }
 
 function checkIsObj(context) {
-  megaCheck(context.isObj, `Not an obj`)
+  megaCheck(context.objects, `Not an obj`)
 }
 
 function checkIsDeclared(context, id, notDeclared) {
@@ -54,21 +54,23 @@ function matchType(leftType, rightType, isAssignment) {
     case core.GodRay.joolean:
     case core.GodRay.string:
     case core.GodRay.number:
-      return leftType.type.constructor === rightType.type.constructor
     case core.GodRay.JOOLEAN:
     case core.GodRay.STRING:
     case core.GodRay.NUMBER:
-      megaCheck(
-        !isAssignment,
-        `Did you just try to reassign to a constant variable? Nah that ain't chiefin' out.`
-      )
-      //   switch(rightType.type.constructor) {
-      //     case core.GodRay.joolean:
-      //         return
-      //     case core.GodRay.string:
-      //     case core.GodRay.number:
-      //   }
-      break
+      if (leftType.readOnly) {
+        megaCheck(
+          !isAssignment,
+          `Did you just try to reassign to a constant variable? Nah that ain't chiefin' out.`
+        )
+      }
+
+      return leftType.type === rightType.type
+    //   switch(rightType.type.constructor) {
+    //     case core.GodRay.joolean:
+    //         return
+    //     case core.GodRay.string:
+    //     case core.GodRay.number:
+    //   }
     default:
       megaCheck(false, `DuuuuuuUUUUDE! What even IS type ${leftType.type}?!`)
   }
@@ -121,15 +123,15 @@ class Context {
     parent = null,
     localVars = new Map(),
     isLoop = false,
-    isFunction = false,
-    isObj = false,
+    functions = new Map(),
+    objects = new Map(),
   }) {
     Object.assign(this, {
       parent,
       localVars,
       isLoop,
-      isFunction,
-      isObj,
+      functions,
+      objects,
     })
   }
 
@@ -137,8 +139,16 @@ class Context {
     return this.localVars.has(id) || this.parent?.checkExistence(id)
   }
 
-  addToScope(id, value) {
+  addVarToScope(id, value) {
     this.localVars.set(id, value)
+  }
+
+  addFuncToScope(id, func) {
+    this.functions.set(id, func)
+  }
+
+  addObjectToScope(id, obj) {
+    this.objects.set(id, obj)
   }
 
   getVar(id) {
@@ -184,10 +194,12 @@ class Context {
     this.analyze(v.id)
     this.analyze(v.type)
 
-    if (v.initializer) matchType(v.type, v.initializer.type)
+    if (v.initializer) {
+      matchType(v.type, v.initializer.type)
+    }
 
     v.variable = new core.VariableObj(v.id, v.type)
-    context.addToScope(v.id, v.variable)
+    context.addVarToScope(v.id, v.variable)
   }
 
   ReassignmentStatement(r) {
@@ -206,20 +218,22 @@ class Context {
 
   FunctionDeclaration(f) {
     this.analyze(f.id)
-    let newContext = this.makeChildContext({ isFunction: true })
+    //let newContext = this.makeChildContext({ functions: true })
+
     newContext.analyze(f.params) // types
     // e and d did this... **PLEASE check this**
     // ASK a TA
-    // f.params.map((param) => {
-    //   let tempestJunior = new core.VariableDeclaration( // a friendly reminder to rename this please
-    //     param,
-    //     param.type,
-    //     param.source
-    //   )
-    //   matchType(tempestJunior.type, tempestJunior.source.type)
-    // })
+    f.params.map((param) => {
+      return new core.RealParameter(param, param.type) // a friendly reminder to rename this please
+    })
     if (f.params.length > 1) checkParams(f.params)
+
+    let newContext = this.makeChildContext()
     newContext.analyze(f.funcBlock)
+    this.addFuncToScope(
+      f.id,
+      new core.FunctionObject(f.params, f.returnType, f.funcBlock)
+    )
   }
 
   FunctionBlock(f) {
@@ -291,14 +305,14 @@ class Context {
     this.analyze(o.id)
     //let newType = core.ObjectType(o.id, o.params, )
     //put it into context
-    let newContext = this.makeChildContext({ isObj: true })
+    let newContext = this.makeChildContext({ objects: true })
     newContext.analyze(o.params)
     if (o.params.length > 0) checkParams(o.params)
     newContext.analyze(o.ObjectBlock)
   }
 
   ConstructDeclaration(c) {
-    let newContext = this.makeChildContext({ isFunction: true })
+    let newContext = this.makeChildContext({ functions: true })
     newContext.analyze(c.params) // types
     newContext.analyze(c.genBlock)
   }
@@ -313,7 +327,7 @@ class Context {
 
   MethodDeclaration(m) {
     this.analyze(m.id)
-    let newContext = this.makeChildContext({ isFunction: true })
+    let newContext = this.makeChildContext({ functions: true })
     newContext.analyze(m.params) // types
     if (m.params.length > 0) checkParams(m.params)
     this.analyze(m.returnType) // new context? also types
@@ -379,7 +393,7 @@ class Context {
     this.analyze(s.argument)
     //index out of range error
     if (subscriptee.length - 1 < argument) {
-      `Index out of range`
+      ;`Index out of range`
     }
   }
 
@@ -406,13 +420,13 @@ class Context {
         matchType(param.type, arg.type)
       }
     })
-  //   for (let i = slashPosition + 1; i < c.expression.params.length; i++) {
-  //     for (let j = slashPosition; j < c.argument.length; j++) {
-  //       if(c.expression.params[i].id === c.argument[j].id) {
-  //         matchType(c.expression.params[i].type, c.argument[j].type)
-  //       }
-  //     }
-  //   }
+    //   for (let i = slashPosition + 1; i < c.expression.params.length; i++) {
+    //     for (let j = slashPosition; j < c.argument.length; j++) {
+    //       if(c.expression.params[i].id === c.argument[j].id) {
+    //         matchType(c.expression.params[i].type, c.argument[j].type)
+    //       }
+    //     }
+    //   }
   }
 
   FieldExpression(f) {
@@ -477,7 +491,7 @@ class Context {
 export default function analyze(node) {
   const initialContext = new Context({})
   for (const [name, type] of Object.entries(stdlib.contents)) {
-    initialContext.addToScope(name, type)
+    initialContext.addVarToScope(name, type)
   }
   initialContext.analyze(node)
   return node
