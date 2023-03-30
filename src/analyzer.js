@@ -289,9 +289,10 @@ class Context {
 
   ObjectHeader(o) {
     this.analyze(o.id)
+    //let newType = core.ObjectType(o.id, o.params, )
+    //put it into context
     let newContext = this.makeChildContext({ isObj: true })
-    newContext.analyze(o.params) // types
-    // we don't know if types need to be checked here -> they don't
+    newContext.analyze(o.params)
     if (o.params.length > 0) checkParams(o.params)
     newContext.analyze(o.ObjectBlock)
   }
@@ -378,7 +379,7 @@ class Context {
     this.analyze(s.argument)
     //index out of range error
     if (subscriptee.length - 1 < argument) {
-      ;`Index out of range`
+      `Index out of range`
     }
   }
 
@@ -397,24 +398,21 @@ class Context {
       }
       matchType(c.argument[paramIndex], c.expression.params[paramIndex])
     }
-    let kwargParams = Array.from(c.expression.params).slice(
-      slashPosition + 1,
-      c.expression.params.length
-    )
-    let kwargs = Array.from(c.argument).slice(slashPosition, c.argument.length)
+    let kwargParams = c.expression.params.slice(slashPosition + 1)
+    let kwargs = c.argument.slice(slashPosition)
     kwargParams.forEach((param, index) => {
       let arg = kwargs[index]
       if (param.id === arg.id) {
         matchType(param.type, arg.type)
       }
     })
-    // for (let i = slashPosition + 1; i < c.expression.params.length; i++) {
-    //   for (let j = slashPosition; j < c.argument.length; j++) {
-    //     if(c.expression.params[i].id === c.argument[j].id) {
-    //       matchType(c.expression.params[i].type, c.argument[j].type)
-    //     }
-    //   }
-    // }
+  //   for (let i = slashPosition + 1; i < c.expression.params.length; i++) {
+  //     for (let j = slashPosition; j < c.argument.length; j++) {
+  //       if(c.expression.params[i].id === c.argument[j].id) {
+  //         matchType(c.expression.params[i].type, c.argument[j].type)
+  //       }
+  //     }
+  //   }
   }
 
   FieldExpression(f) {

@@ -54,6 +54,12 @@ export class VariableObj {
   }
 }
 
+export class ObjectType {
+  constructor(id, fields, methods, constructs) {
+    Object.assign(this, { id, fields, methods, constructs })
+  }
+}
+
 export class ReassignmentStatement {
   constructor(id, source) {
     Object.assign(this, { id, source })
