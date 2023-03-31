@@ -79,7 +79,7 @@ String <code>string</code>
 
 </td><td>
 
-<code>`carrot`</code>, <code>`bob`</code>
+<code>\`carrot\`</code>, <code>\`bob\`</code>
 
 </td><td>
 
@@ -268,7 +268,7 @@ String <code>"phrase"</code>
 </td>
 <td>
 
-<code>overheard(`You’re farming overheards again!`);</code>
+<code>overheard(\`You’re farming overheards again!\`);</code>
 
 </td> </tr> </table>
 
@@ -401,7 +401,7 @@ cap(hotChocolates in debt) {
 </td>
 <td>
 
-<pre><code>do:number gluAddFunction(bob:number, job:number) {
+<pre><code>do gluAddFunction(bob:number, job:number) -> number {
 	howItBe bob + job;
 }</code></pre>
 
