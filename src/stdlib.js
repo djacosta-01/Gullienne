@@ -22,7 +22,7 @@ export const contents = Object.freeze({
   //   sin: new Function("sin", floatFloatType),
   //   cos: new Function("cos", floatFloatType),
   //   exp: 
-  new Function("exp", floatFloatType),
+  // new Function("exp", floatFloatType),
   //   ln: new Function("ln", floatFloatType),
   //   hypot: new Function("hypot", floatFloatFloatType),
   //   bytes: new Function("bytes", stringToIntsType),
