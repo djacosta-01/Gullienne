@@ -102,6 +102,12 @@ export class ReturnStatement {
   }
 }
 
+export class EmptyReturnStatement {
+  constructor() {
+    Object.assign(this, {})
+  }
+}
+
 export class BreakStatement {
   constructor() {
     Object.assign(this, {})
@@ -259,6 +265,7 @@ export class GodRay {
   static STRING = new GodRay("string", true)
   static number = new GodRay("number", false)
   static NUMBER = new GodRay("number", true)
+  static void = new GodRay("void", true)
 
   constructor(type, readOnly) {
     Object.assign(this, { type, readOnly })

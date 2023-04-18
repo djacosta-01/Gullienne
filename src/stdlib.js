@@ -17,11 +17,12 @@ export const contents = Object.freeze({
   STRING: GodRay.STRING,
   number: GodRay.number,
   NUMBER: GodRay.NUMBER,
+  void: GodRay.void,
   //   π: new Variable("π", true, Type.FLOAT),
   //   print: new Function("print", new FunctionType([Type.ANY], Type.VOID)),
   //   sin: new Function("sin", floatFloatType),
   //   cos: new Function("cos", floatFloatType),
-  //   exp: 
+  //   exp:
   // new Function("exp", floatFloatType),
   //   ln: new Function("ln", floatFloatType),
   //   hypot: new Function("hypot", floatFloatFloatType),

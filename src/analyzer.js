@@ -17,6 +17,10 @@ function checkInFunction(context) {
   )
 }
 
+// function checkInVoidFunction(context) {
+//   megaCheck(context.functions.returnType == "void")
+// }
+
 function checkInLoop(context) {
   megaCheck(context.isLoop, `You ain't in a loop big dawg`)
 }
@@ -37,7 +41,7 @@ function matchType(leftType, rightType, isAssignment) {
   //rework to take advantage of type fields: type, readOnly?
   //Handle objects?
 
-  switch (leftType.type.constructor) {
+  switch (leftType.constructor) {
     case core.TypeSum:
       return (
         matchType(leftType.type1, rightType) ||
@@ -64,13 +68,15 @@ function matchType(leftType, rightType, isAssignment) {
         )
       }
 
-      return leftType.type === rightType.type
-    //   switch(rightType.type.constructor) {
-    //     case core.GodRay.joolean:
-    //         return
-    //     case core.GodRay.string:
-    //     case core.GodRay.number:
-    //   }
+      // return leftType.type === rightType.constructor
+      switch (leftType.type) {
+        case core.GodRay.joolean:
+          return Boolean === rightType.constructor
+        case core.GodRay.string:
+          return String === rightType.constructor
+        case core.GodRay.number:
+          return Number === rightType.constructor
+      }
     default:
       megaCheck(false, `DuuuuuuUUUUDE! What even IS type ${leftType.type}?!`)
   }
@@ -176,7 +182,9 @@ class Context {
   }
 
   Program(p) {
+    console.log("before: ", p)
     this.analyze(p.statements)
+    console.log("after: ", p)
   }
 
   ExpressionStatement(e) {
@@ -189,24 +197,25 @@ class Context {
   }
 
   VariableDeclaration(v) {
+    console.log(v)
     if (v.initializer) this.analyze(v.initializer)
     checkIsDeclared(this, v.id, true) //Checking if the id is NOT declared
     this.analyze(v.id)
     this.analyze(v.type)
 
     if (v.initializer) {
-      matchType(v.type, v.initializer.type)
+      // matchType(v.type, v.initializer.type)
     }
 
     v.variable = new core.VariableObj(v.id, v.type)
-    context.addVarToScope(v.id, v.variable)
+    this.addVarToScope(v.id, v.variable)
   }
 
   ReassignmentStatement(r) {
     checkIsDeclared(this, r.id, false)
     this.analyze(r.id)
     this.analyze(r.source)
-    matchType(context.getVar(r.id).type, r.source.type)
+    // matchType(this.getVar(r.id).type, r.source.type)
   }
 
   ReassignmentMyStatement(r) {
@@ -281,7 +290,7 @@ class Context {
     newContext.analyze(w.genBlock)
   }
 
-  Return(r) {
+  ReturnStatement(r) {
     checkInFunction(this)
     this.analyze(r.expression) // types
     // also want to do this method dec return typepepepep
@@ -292,6 +301,8 @@ class Context {
       r.expression.type
     )
   }
+
+  EmptyReturnStatement(r) {}
 
   Break(b) {
     checkInLoop(this)
@@ -384,6 +395,7 @@ class Context {
   }
 
   UnaryExpression(u) {
+    console.log(u)
     this.analyze(u.right)
   }
 
@@ -477,6 +489,9 @@ class Context {
   Array(a) {
     a.forEach((item) => this.analyze(item))
   }
+  Boolean(b) {
+    return b
+  }
   Number(n) {
     return n
   }
@@ -494,5 +509,6 @@ export default function analyze(node) {
     initialContext.addVarToScope(name, type)
   }
   initialContext.analyze(node)
+  console.log(`NODE: ${node}`)
   return node
 }
