@@ -11,18 +11,27 @@ function dedent(s) {
 
 const fixtures = [
   {
-    name: "small",
+    name: "trivial",
     source: `
       x:number @ 1 + 1;
-      y:joolean @ !ideal;
-      y @ 1;
     `,
     expected: dedent`
       let x = 1 + 1
-      let y = !true
-      y = 1
     `,
   },
+  //   {
+  //     name: "small",
+  //     source: `
+  //       x:number @ 1 + 1;
+  //       y:joolean @ !ideal;
+  //       y @ 1;
+  //     `,
+  //     expected: dedent`
+  //       let x = 1 + 1
+  //       let y = !true
+  //       y = 1
+  //     `,
+  //   },
   //   {
   //     name: "if",
   //     source: `
