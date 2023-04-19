@@ -13,10 +13,10 @@ const fixtures = [
   {
     name: "trivial",
     source: `
-      x:number @ 1 + 1;
+      x:[number] @ [1];
     `,
     expected: dedent`
-      let x = 1 + 1
+      let x = [1]
     `,
   },
   //   {
