@@ -1,0 +1,26 @@
+do jjj(bob:number|string, job:number|string) -> number {
+    bobNum:NUMBER @ mangle(bob, number);
+    jobNum:NUMBER @ mangle(job, number);
+    greater:number;
+    lesser:number;
+
+    ~ Determine which input is greater. ~
+    so (bobNum = jobNum) {
+        return bobNum;
+    } but (bobNum > jobNum) {
+        greater @ bobNum;
+        lesser @ jobNum;
+    } otherwise {
+        greater @ jobNum;
+        lesser @ bobNum;
+    }
+
+    ~ Apply Euclid's algorithm ~
+    noCap(lesser = 0) {
+        gcd @ lesser;
+        lesser @ greater % gcd;
+        greater @ gcd;
+    }
+
+	howItBe gcd;
+}
