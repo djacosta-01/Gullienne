@@ -41,7 +41,7 @@ function matchType(leftType, rightType, isAssignment) {
   //rework to take advantage of type fields: type, readOnly?
   //Handle objects?
 
-  switch (leftType.constructor) {
+  switch (leftType.type) {
     case core.TypeSum:
       return (
         matchType(leftType.type1, rightType) ||
@@ -71,14 +71,17 @@ function matchType(leftType, rightType, isAssignment) {
       // return leftType.type === rightType.constructor
       switch (leftType.type) {
         case core.GodRay.joolean:
-          return Boolean === rightType.constructor
+          return Boolean === rightType
         case core.GodRay.string:
-          return String === rightType.constructor
+          return String === rightType
         case core.GodRay.number:
-          return Number === rightType.constructor
+          return Number === rightType
       }
     default:
-      megaCheck(false, `DuuuuuuUUUUDE! What even IS type ${leftType.type}?!`)
+      megaCheck(
+        false,
+        `DuuuuuuUUUUDE! What even IS type ${JSON.stringify(leftType.type)}?!`
+      )
   }
 }
 
@@ -201,10 +204,12 @@ class Context {
     if (v.initializer) this.analyze(v.initializer)
     checkIsDeclared(this, v.id, true) //Checking if the id is NOT declared
     this.analyze(v.id)
+    console.log("Before analyzing, v.type is", v.type)
     this.analyze(v.type)
+    console.log("After analyzing, v.type is", v.type)
 
     if (v.initializer) {
-      // matchType(v.type, v.initializer.type)
+      matchType(v.type, v.initializer.type)
     }
 
     v.variable = new core.VariableObj(v.id, v.type)

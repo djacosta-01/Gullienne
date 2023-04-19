@@ -43,7 +43,7 @@ export default function generate(program) {
 
     VariableDeclaration(v) {
       console.log(v)
-      let expressionString = gen(v.initializer[0])
+      let expressionString = gen(v.initializer)
       console.log(expressionString)
       output.push(
         `${v.isConst ? "const" : "let"} ${v.id} = ${expressionString}`

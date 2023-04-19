@@ -18,7 +18,6 @@ const astBuilder = gullienneGrammar.createSemantics().addOperation("ast", {
     return new core.IncDecStatement(id.ast(), operator.sourceString)
   },
   VarDec(id, _colon, type, _at, initializer, _semi) {
-    console.log(initializer)
     return new core.VariableDeclaration(id.ast(), type.ast(), initializer.ast())
   },
   Reassign(id, _at, source, _semi) {

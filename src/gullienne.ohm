@@ -14,7 +14,7 @@ Gullienne {
                 | (Exp2_objMethod | Exp2_functCall) ";" --standalone
                 | id ("++" | "--") ";" --incDec
     
-    VarDec      = id ":" Type ("@" ExpFull)? ";"
+    VarDec      = id ":" Type "@" ExpFull ";"
     Reassign    = id "@" ExpFull ";"
     ReassignMy  = my "." id "@" ExpFull ";"
     FunctDec    = do id "(" ListOf<DecParam, ","> ")" "->" Type FuncBlock
