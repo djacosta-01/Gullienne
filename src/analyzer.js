@@ -220,7 +220,7 @@ class Context {
     checkIsDeclared(this, r.id, false)
     this.analyze(r.id)
     this.analyze(r.source)
-    // matchType(this.getVar(r.id).type, r.source.type)
+    matchType(this.getVar(r.id).type, r.source.type)
   }
 
   ReassignmentMyStatement(r) {
