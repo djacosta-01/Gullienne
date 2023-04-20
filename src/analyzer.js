@@ -185,9 +185,9 @@ class Context {
   }
 
   Program(p) {
-    console.log("before: ", p)
+    // console.log("before: ", p)
     this.analyze(p.statements)
-    console.log("after: ", p)
+    // console.log("after: ", p)
   }
 
   ExpressionStatement(e) {
@@ -204,9 +204,9 @@ class Context {
     if (v.initializer) this.analyze(v.initializer)
     checkIsDeclared(this, v.id, true) //Checking if the id is NOT declared
     this.analyze(v.id)
-    console.log("Before analyzing, v.type is", v.type)
+    console.log("---------Before analyzing, v.type is", v.type.constructor)
     this.analyze(v.type)
-    console.log("After analyzing, v.type is", v.type)
+    console.log("---------After analyzing, v.type is", v.type)
 
     if (v.initializer) {
       matchType(v.type, v.initializer.type)
@@ -379,6 +379,7 @@ class Context {
 
   ListLiteral(l) {
     this.analyze(l.expression)
+    l.type = l.expression.type
   }
 
   SetLiteral(s) {
@@ -480,6 +481,7 @@ class Context {
 
   TypeList(t) {
     //Mark this as a list of
+    // console.log("!!!!!!!!!!!!!!! x[1,2,3] is being analyzed here")
     this.analyze(t.type)
   }
 
@@ -492,7 +494,11 @@ class Context {
     this.analyze(t.valueType)
   }
   Array(a) {
-    a.forEach((item) => this.analyze(item))
+    // THIS IS FOR SUM TYPES
+    let typesFound = new Set()
+    // let types = new core.TypeList(a.map((item)) => )
+    a.type = types
+    return a
   }
   Boolean(b) {
     return b
@@ -514,6 +520,6 @@ export default function analyze(node) {
     initialContext.addVarToScope(name, type)
   }
   initialContext.analyze(node)
-  console.log(`NODE: ${node}`)
+  console.log(`------->In ANALYZER NODE: ${node}`)
   return node
 }

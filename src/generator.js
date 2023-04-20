@@ -26,7 +26,7 @@ export default function generate(program) {
   const generators = {
     // everything needed to initialize the file
     Program(p) {
-      console.log("in generator: ", p)
+      console.log("--------> IN GENERATOR: \n", p)
 
       gen(p.statements)
       // console.log("in generator: ", p)
@@ -221,7 +221,7 @@ export default function generate(program) {
     },
 
     TypeList(t) {
-      //
+      t.map(gen)
     },
 
     TypeSet(t) {
@@ -232,7 +232,7 @@ export default function generate(program) {
       //
     },
     Array(a) {
-      a.map(gen)
+      return a
     },
     Boolean(b) {
       return b
