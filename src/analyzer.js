@@ -3,6 +3,8 @@ import fs from "fs"
 import * as ohm from "ohm-js"
 import * as core from "./core.js"
 import * as stdlib from "./stdlib.js"
+import { typeInferenceAst } from "./ast.js"
+import { stringify } from "querystring"
 
 const grammar = ohm.grammar(fs.readFileSync("src/gullienne.ohm"))
 const typeInference = ohm.grammar(fs.readFileSync("src/types.ohm"))
@@ -42,26 +44,30 @@ function matchType(leftType, rightType, isAssignment) {
   //rework to take advantage of type fields: type, readOnly?
   //Handle objects?
 
-  switch (leftType.type) {
-    case core.TypeSum:
+  console.log("L Type: ", leftType.name)
+  console.log("R Type: ", rightType.name)
+  switch (leftType.name) {
+    case core.Type.name:
+      return matchType(leftType.type, rightType.type)
+    case core.TypeSum.name:
       return (
         matchType(leftType.type1, rightType) ||
         matchType(leftType.type2, rightType)
       )
-    case core.TypeList:
-    case core.TypeSet:
+    case core.TypeList.name:
+    case core.TypeSet.name:
       return matchType(leftType.type, rightType.type)
-    case core.TypeMap:
+    case core.TypeMap.name:
       return (
         matchType(leftType.keyType, rightType.keyType) &&
         matchType(leftType.valueType, rightType.valueType)
       )
-    case core.GodRay.joolean:
-    case core.GodRay.string:
-    case core.GodRay.number:
-    case core.GodRay.JOOLEAN:
-    case core.GodRay.STRING:
-    case core.GodRay.NUMBER:
+    case core.GodRay.joolean.typeName:
+    case core.GodRay.string.typeName:
+    case core.GodRay.number.typeName:
+    case core.GodRay.JOOLEAN.typeName:
+    case core.GodRay.STRING.typeName:
+    case core.GodRay.NUMBER.typeName:
       if (leftType.readOnly) {
         megaCheck(
           !isAssignment,
@@ -69,15 +75,15 @@ function matchType(leftType, rightType, isAssignment) {
         )
       }
 
-      // return leftType.type === rightType.constructor
-      switch (leftType.type) {
-        case core.GodRay.joolean:
-          return Boolean === rightType
-        case core.GodRay.string:
-          return String === rightType
-        case core.GodRay.number:
-          return Number === rightType
-      }
+      return leftType.typeName === rightType.typeName
+    // switch (leftType.name) {
+    //   case core.GodRay.joolean:
+    //     return Boolean === rightType
+    //   case core.GodRay.string:
+    //     return String === rightType
+    //   case core.GodRay.number:
+    //     return Number === rightType
+    // }
     default:
       megaCheck(
         false,
@@ -165,8 +171,8 @@ class Context {
     let varInContext = this.localVars.get(id)
     if (varInContext) {
       return varInContext
-    } else if (parent) {
-      return parent.getVar(id)
+    } else if (this.parent) {
+      return this.parent.getVar(id)
     }
     core.error(`Dawg, ima level wit you, there ain't no delcaration for ${id}`)
   }
@@ -203,8 +209,8 @@ class Context {
   VariableDeclaration(v) {
     console.log(v)
     if (v.initializer) this.analyze(v.initializer)
-    checkIsDeclared(this, v.id, true) //Checking if the id is NOT declared
-    this.analyze(v.id)
+    // this.analyze(v.id)
+    checkIsDeclared(this, v.id.lexeme, true) //Checking if the id is NOT declared
     console.log("---------Before analyzing, v.type is", v.type.constructor)
     this.analyze(v.type)
     console.log("---------After analyzing, v.type is", v.type)
@@ -379,8 +385,15 @@ class Context {
   }
 
   ListLiteral(l) {
+    console.log("-------->BEFORE analYZED: ", l)
     this.analyze(l.expression)
-    l.type = l.expression.type
+    console.log("=========>AFTER ANALyzed: ", l)
+    // Somebody tell the JS developer to make a .unique method...
+    l.type = typeInferenceAst(
+      `[${[...new Set(l.expression.map((item) => item.type.typeName))].join(
+        "|"
+      )}]`
+    )
   }
 
   SetLiteral(s) {
@@ -495,14 +508,7 @@ class Context {
     this.analyze(t.valueType)
   }
   Array(a) {
-    // THIS IS FOR SUM TYPES
-    console.log(a)
-    a.map((i) => i.constructor)
-    // let typeString = a.map((item) => typeof item).join("|")
-    // let typesFound = new Set()
-    // // let types = new core.TypeList(a.map((item)) => )
-    // a.type = types
-    return a
+    a.forEach((item) => this.analyze(item))
   }
   Boolean(b) {
     return b
@@ -515,6 +521,19 @@ class Context {
   }
   GodRay(g) {
     return g
+  }
+  TOALken(r) {
+    // For ids being used, not defined
+    console.log("YEAAA, WOOOWW TOOOOOOOAAAAAAALLLLLLL: ", r)
+    if (r.gType === "id") {
+      r.value = this.getVar(r.lexeme)
+      r.gType = r.value.type
+    }
+    if (r.gType === "number")
+      [r.value, r.type] = [Number(r.lexeme), core.GodRay.number]
+    if (r.gType === "string") [r.value, r.type] = [r.lexeme, core.GodRay.string]
+    if (r.gType === "joolean")
+      [r.value, r.type] = [r.lexeme === "ideal", core.GodRay.joolean]
   }
 }
 

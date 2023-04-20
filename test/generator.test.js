@@ -13,10 +13,10 @@ const fixtures = [
   {
     name: "trivial",
     source: `
-      x:[number] @ [1,2,3];
+      x:[number | joolean | string] @ [2,ideal, \`balls\`];
     `,
     expected: dedent`
-      let x = [1,2,3]
+      let x = [1,true,"balls"]
     `,
   },
   //   {

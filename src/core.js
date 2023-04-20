@@ -1,8 +1,13 @@
 import util from "util"
 
+export class TOALken {
+  constructor(gType, lexeme) {
+    Object.assign(this, { gType, lexeme })
+  }
+}
 export class Program {
   constructor(statements) {
-    this.statements = statements
+    Object.assign(this, { statements })
   }
 }
 
@@ -267,38 +272,38 @@ export class GodRay {
   static NUMBER = new GodRay("number", true)
   static void = new GodRay("void", true)
 
-  constructor(type, readOnly) {
-    Object.assign(this, { type, readOnly })
+  constructor(typeName, readOnly) {
+    Object.assign(this, { typeName, readOnly })
   }
 }
 
 export class Type {
   constructor(type) {
-    Object.assign(this, { type })
+    Object.assign(this, { type, name: "Type" })
   }
 }
 
 export class TypeSum {
   constructor(type1, type2) {
-    Object.assign(this, { type1, type2 })
+    Object.assign(this, { type1, type2, name: "TypeSum" })
   }
 }
 
 export class TypeList {
   constructor(type) {
-    Object.assign(this, { type })
+    Object.assign(this, { type, name: "TypeList" })
   }
 }
 
 export class TypeSet {
   constructor(type) {
-    Object.assign(this, { type })
+    Object.assign(this, { type, name: "TypeSet" })
   }
 }
 
 export class TypeMap {
   constructor(keyType, valueType) {
-    Object.assign(this, { keyType, valueType })
+    Object.assign(this, { keyType, valueType, name: "TypeMap" })
   }
 }
 

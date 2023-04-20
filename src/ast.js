@@ -5,26 +5,32 @@ import * as core from "./core.js"
 const gullienneGrammar = ohm.grammar(fs.readFileSync("src/gullienne.ohm"))
 const typeInference = ohm.grammar(fs.readFileSync("src/types.ohm"))
 
-const typeInferenceBuulder = typeInference
+const typeInferenceBuilder = typeInference
   .createSemantics()
   .addOperation("types", {
     Type(type) {
-      return new core.Type(type.ast())
+      return new core.Type(type.types())
     },
     Type_sumType(type1, _or, type2) {
-      return new core.TypeSum(type1.ast(), type2.ast())
+      return new core.TypeSum(type1.types(), type2.types())
     },
     Type_listType(_lb, type, _rb) {
-      return new core.TypeList(type.ast())
+      return new core.TypeList(type.types())
     },
     Type_setType(_lab, type, _rab) {
-      return new core.TypeSet(type.ast())
+      return new core.TypeSet(type.types())
     },
     Type_mapType(_ldab, keyType, _dc, valueType, _rdab) {
-      return new core.TypeMap(keyType.ast(), valueType.ast())
+      return new core.TypeMap(keyType.types(), valueType.types())
     },
     Type_custom(letters) {
       return this.sourceString
+    },
+    _terminal() {
+      return this.sourceString
+    },
+    _iter(...children) {
+      return children.map((child) => child.types())
     },
   })
 
@@ -235,16 +241,16 @@ const astBuilder = gullienneGrammar.createSemantics().addOperation("ast", {
     return new core.Expression(expression.ast())
   },
   id(letter, rest) {
-    return this.sourceString
+    return new core.TOALken("id", this.sourceString)
   },
   numeral(_leading, _dot, _fractional) {
-    return Number(this.sourceString)
+    return new core.TOALken("number", this.sourceString)
   },
   strlit(_lbt, chars, _rbt) {
-    return this.sourceString
+    return new core.TOALken("string", this.sourceString)
   },
   joolean(_ideal) {
-    return true
+    return new core.TOALken("joolean", this.sourceString)
   },
   Type(type) {
     return new core.Type(type.ast())
@@ -272,6 +278,13 @@ const astBuilder = gullienneGrammar.createSemantics().addOperation("ast", {
   },
 })
 
+export function typeInferenceAst(sourceCode) {
+  const match = typeInference.match(sourceCode)
+  if (!match.succeeded()) {
+    core.error(match.message)
+  }
+  return typeInferenceBuilder(match).types()
+}
 export default function ast(sourceCode) {
   const match = gullienneGrammar.match(sourceCode)
   if (!match.succeeded()) {
