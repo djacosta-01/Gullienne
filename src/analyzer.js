@@ -50,10 +50,18 @@ function matchType(leftType, rightType, isAssignment) {
     case core.Type.name:
       return matchType(leftType.type, rightType.type)
     case core.TypeSum.name:
-      return (
-        matchType(leftType.type1, rightType) ||
-        matchType(leftType.type2, rightType)
-      )
+      let checkSingle = (rightSide) =>
+        rightSide instanceof core.Type
+          ? leftType.typeList
+              .map((leftSide) =>
+                leftSide instanceof core.Type
+                  ? matchType(leftSide, rightSide)
+                  : false
+              )
+              .contains(true)
+          : leftType.typeList.includes(rightSide)
+
+      return rightType.typeList.map(checkSingle).every((existence) => existence)
     case core.TypeList.name:
     case core.TypeSet.name:
       return matchType(leftType.type, rightType.type)
@@ -187,7 +195,7 @@ class Context {
   }
 
   analyze(node) {
-    console.log(node.constructor.name)
+    //console.log(node.constructor.name)
     return this[node.constructor.name](node)
   }
 
@@ -207,17 +215,18 @@ class Context {
   }
 
   VariableDeclaration(v) {
-    console.log(v)
-    if (v.initializer) this.analyze(v.initializer)
+    //console.log(v)
+    //if (v.initializer)
+    this.analyze(v.initializer)
     // this.analyze(v.id)
     checkIsDeclared(this, v.id.lexeme, true) //Checking if the id is NOT declared
-    console.log("---------Before analyzing, v.type is", v.type.constructor)
+    //console.log("---------Before analyzing, v.type is", v.type.constructor)
     this.analyze(v.type)
-    console.log("---------After analyzing, v.type is", v.type)
+    //console.log("---------After analyzing, v.type is", v.type)
 
-    if (v.initializer) {
-      matchType(v.type, v.initializer.type)
-    }
+    //if (v.initializer) {
+    matchType(v.type, v.initializer.type)
+    //}
 
     v.variable = new core.VariableObj(v.id, v.type)
     this.addVarToScope(v.id, v.variable)
@@ -385,9 +394,9 @@ class Context {
   }
 
   ListLiteral(l) {
-    console.log("-------->BEFORE analYZED: ", l)
+    //console.log("-------->BEFORE analYZED: ", l)
     this.analyze(l.expression)
-    console.log("=========>AFTER ANALyzed: ", l)
+    //console.log("=========>AFTER ANALyzed: ", l)
     // Somebody tell the JS developer to make a .unique method...
     l.type = typeInferenceAst(
       `[${[...new Set(l.expression.map((item) => item.type.typeName))].join(
@@ -415,7 +424,7 @@ class Context {
   }
 
   UnaryExpression(u) {
-    console.log(u)
+    //console.log(u)
     this.analyze(u.right)
   }
 
@@ -489,8 +498,7 @@ class Context {
   }
 
   TypeSum(t) {
-    this.analyze(t.type1)
-    this.analyze(t.type2)
+    this.analyze(t.typeList)
   }
 
   TypeList(t) {
@@ -524,16 +532,17 @@ class Context {
   }
   TOALken(r) {
     // For ids being used, not defined
-    console.log("YEAAA, WOOOWW TOOOOOOOAAAAAAALLLLLLL: ", r)
+    //console.log("YEAAA, WOOOWW TOOOOOOOAAAAAAALLLLLLL: ", r)
     if (r.gType === "id") {
       r.value = this.getVar(r.lexeme)
       r.gType = r.value.type
     }
     if (r.gType === "number")
-      [r.value, r.type] = [Number(r.lexeme), core.GodRay.number]
-    if (r.gType === "string") [r.value, r.type] = [r.lexeme, core.GodRay.string]
-    if (r.gType === "joolean")
-      [r.value, r.type] = [r.lexeme === "ideal", core.GodRay.joolean]
+      [r.value, r.type] = [Number(r.lexeme), typeInferenceAst("number")]
+    if (r.gType === "string");
+    ;[r.value, r.type] = [r.lexeme, typeInferenceAst("string")]
+    if (r.gType === "joolean");
+    ;[r.value, r.type] = [r.lexeme === "ideal", typeInferenceAst("joolean")]
   }
 }
 
@@ -543,6 +552,6 @@ export default function analyze(node) {
     initialContext.addVarToScope(name, type)
   }
   initialContext.analyze(node)
-  console.log(`------->In ANALYZER NODE: ${node}`)
+  //console.log(`------->In ANALYZER NODE: ${node}`)
   return node
 }

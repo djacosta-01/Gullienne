@@ -284,8 +284,8 @@ export class Type {
 }
 
 export class TypeSum {
-  constructor(type1, type2) {
-    Object.assign(this, { type1, type2, name: "TypeSum" })
+  constructor(typeList) {
+    Object.assign(this, { typeList, name: "TypeSum" })
   }
 }
 

@@ -1,9 +1,10 @@
 Types {
-    Type    = Type "|" Type --sumType
-            | "[" Type "]" --listType
-            | "<" Type ">" --setType
-            | "<<" Type "::" Type ">>" --mapType
-            | "number" | "joolean" | "string"
-            | "NUMBER" | "JOOLEAN" | "STRING"
-            | letter+ --custom
+    Type        = ListType | SetType | MapType | SumType
+    
+    ListType    = "[" Type "]"
+    SetType     = "<" Type ">"
+    MapType     = "<<" Type "::" Type ">>"
+    SumType     = NonemptyListOf<("number" | "joolean" | "string"
+                | "NUMBER" | "JOOLEAN" | "STRING" | letter+
+                | ListType | SetType | MapType), "|">
 }

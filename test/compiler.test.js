@@ -6,7 +6,7 @@ import { error } from "../src/core.js"
 const semanticChecks = [
   [
     "sum types",
-    `x : number | string | joolean | [number | string | joolean] | <number | string | joolean> | <<number | string | joolean::number | string | joolean>>;`,
+    `x : number | string | joolean | [number | string | joolean] | <number | string | joolean> | <<number | string | joolean::number | string | joolean>> @ [0];`,
   ],
   [
     "objects",
@@ -138,7 +138,7 @@ const semanticErrors = [
 ]
 
 describe("The AST generator", () => {
-  console.log(ast(semanticChecks[0][1]))
+  //console.log(ast(semanticChecks[0][1]))
   for (const [scenario, source] of semanticChecks) {
     it(`recognizes ${scenario}`, () => {
       assert.ok(ast(source))

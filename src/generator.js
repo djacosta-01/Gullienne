@@ -16,7 +16,7 @@ export default function generate(program) {
   })(new Map())
 
   function gen(node) {
-    console.log("NOOOOOODE", node)
+    //console.log("NOOOOOODE", node)
     return generators[node.constructor.name](node)
   }
 
@@ -26,7 +26,7 @@ export default function generate(program) {
   const generators = {
     // everything needed to initialize the file
     Program(p) {
-      console.log("--------> IN GENERATOR: \n", p)
+      //console.log("--------> IN GENERATOR: \n", p)
 
       gen(p.statements)
       // console.log("in generator: ", p)
@@ -42,9 +42,9 @@ export default function generate(program) {
     },
 
     VariableDeclaration(v) {
-      console.log(v)
+      //console.log(v)
       let expressionString = gen(v.initializer)
-      console.log(expressionString)
+      //console.log(expressionString)
       output.push(
         `${v.isConst ? "const" : "let"} ${v.id} = ${expressionString}`
       )
@@ -169,7 +169,7 @@ export default function generate(program) {
     },
 
     BinaryExpression(b) {
-      console.log(b)
+      //console.log(b)
       const op = { "=": "===", "!=": "!==" }[b.op] ?? b.op
       return `${gen(b.left)} ${op} ${gen(b.right)}`
     },

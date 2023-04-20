@@ -11,20 +11,19 @@ const typeInferenceBuilder = typeInference
     Type(type) {
       return new core.Type(type.types())
     },
-    Type_sumType(type1, _or, type2) {
-      return new core.TypeSum(type1.types(), type2.types())
+    SumType(typeList) {
+      let newTypeSumObject = typeList.asIteration().types()
+      newTypeSumObject.sort()
+      return new core.TypeSum(newTypeSumObject)
     },
-    Type_listType(_lb, type, _rb) {
+    ListType(_lb, type, _rb) {
       return new core.TypeList(type.types())
     },
-    Type_setType(_lab, type, _rab) {
+    SetType(_lab, type, _rab) {
       return new core.TypeSet(type.types())
     },
-    Type_mapType(_ldab, keyType, _dc, valueType, _rdab) {
+    MapType(_ldab, keyType, _dc, valueType, _rdab) {
       return new core.TypeMap(keyType.types(), valueType.types())
-    },
-    Type_custom(letters) {
-      return this.sourceString
     },
     _terminal() {
       return this.sourceString
@@ -255,20 +254,19 @@ const astBuilder = gullienneGrammar.createSemantics().addOperation("ast", {
   Type(type) {
     return new core.Type(type.ast())
   },
-  Type_sumType(type1, _or, type2) {
-    return new core.TypeSum(type1.ast(), type2.ast())
+  SumType(typeList) {
+    let newTypeSumObject = typeList.asIteration().ast()
+    newTypeSumObject.sort()
+    return new core.TypeSum(newTypeSumObject)
   },
-  Type_listType(_lb, type, _rb) {
+  ListType(_lb, type, _rb) {
     return new core.TypeList(type.ast())
   },
-  Type_setType(_lab, type, _rab) {
+  SetType(_lab, type, _rab) {
     return new core.TypeSet(type.ast())
   },
-  Type_mapType(_ldab, keyType, _dc, valueType, _rdab) {
+  MapType(_ldab, keyType, _dc, valueType, _rdab) {
     return new core.TypeMap(keyType.ast(), valueType.ast())
-  },
-  Type_custom(letters) {
-    return this.sourceString
   },
   _terminal() {
     return this.sourceString
