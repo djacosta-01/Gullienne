@@ -17,7 +17,7 @@ Gullienne {
     VarDec      = id ":" Type "@" ExpFull ";"
     Reassign    = id "@" ExpFull ";"
     ReassignMy  = my "." id "@" ExpFull ";"
-    FunctDec    = do id "(" ListOf<DecParam, ","> ")" "->" Type FuncBlock
+    FunctDec    = do id "(" ListOf<DecParam, ","> ")" "->" (Type | nothing) FuncBlock
     FuncBlock   = "{" Base* Statement* "}"
     If          = so "(" ExpFull ")" GenBlock ElseIf* Else?
     ElseIf      = but "(" ExpFull ")" GenBlock
@@ -86,7 +86,7 @@ Gullienne {
     keyword     = do | so | but | otherwise | cap | noCap
                 | frogOut | frogIn | howItBe | ideal
                 | object | bayes | construct | imagine | my
-                | union | intersect
+                | union | intersect | nothing
         
     do          = "do" ~id
     so          = "so" ~id
@@ -105,6 +105,7 @@ Gullienne {
     my          = "my" ~id
     union       = "union" ~id
     intersect   = "intersect" ~id
+    nothing     = "nothing" ~id
     
     comment     = "~" (~"~" any)* "~"
     numeral     = digit+ ("." digit+)?

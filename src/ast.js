@@ -3,6 +3,30 @@ import * as ohm from "ohm-js"
 import * as core from "./core.js"
 
 const gullienneGrammar = ohm.grammar(fs.readFileSync("src/gullienne.ohm"))
+const typeInference = ohm.grammar(fs.readFileSync("src/types.ohm"))
+
+const typeInferenceBuulder = typeInference
+  .createSemantics()
+  .addOperation("types", {
+    Type(type) {
+      return new core.Type(type.ast())
+    },
+    Type_sumType(type1, _or, type2) {
+      return new core.TypeSum(type1.ast(), type2.ast())
+    },
+    Type_listType(_lb, type, _rb) {
+      return new core.TypeList(type.ast())
+    },
+    Type_setType(_lab, type, _rab) {
+      return new core.TypeSet(type.ast())
+    },
+    Type_mapType(_ldab, keyType, _dc, valueType, _rdab) {
+      return new core.TypeMap(keyType.ast(), valueType.ast())
+    },
+    Type_custom(letters) {
+      return this.sourceString
+    },
+  })
 
 const astBuilder = gullienneGrammar.createSemantics().addOperation("ast", {
   Program(body) {

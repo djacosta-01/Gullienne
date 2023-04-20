@@ -5,6 +5,7 @@ import * as core from "./core.js"
 import * as stdlib from "./stdlib.js"
 
 const grammar = ohm.grammar(fs.readFileSync("src/gullienne.ohm"))
+const typeInference = ohm.grammar(fs.readFileSync("src/types.ohm"))
 
 function megaCheck(condition, message, entity) {
   if (!condition) core.error(message, entity)
@@ -495,9 +496,12 @@ class Context {
   }
   Array(a) {
     // THIS IS FOR SUM TYPES
-    let typesFound = new Set()
-    // let types = new core.TypeList(a.map((item)) => )
-    a.type = types
+    console.log(a)
+    a.map((i) => i.constructor)
+    // let typeString = a.map((item) => typeof item).join("|")
+    // let typesFound = new Set()
+    // // let types = new core.TypeList(a.map((item)) => )
+    // a.type = types
     return a
   }
   Boolean(b) {

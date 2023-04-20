@@ -1,0 +1,9 @@
+Types {
+    Type    = Type "|" Type --sumType
+            | "[" Type "]" --listType
+            | "<" Type ">" --setType
+            | "<<" Type "::" Type ">>" --mapType
+            | "number" | "joolean" | "string"
+            | "NUMBER" | "JOOLEAN" | "STRING"
+            | letter+ --custom
+}
