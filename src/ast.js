@@ -87,7 +87,7 @@ const astBuilder = gullienneGrammar.createSemantics().addOperation("ast", {
     return new core.WhileLoop(expression.ast(), genBlock.ast())
   },
   Return(_howItBe, expression, _semi) {
-    if (expression) {
+    if (!expression) {
       return new core.EmptyReturnStatement()
     }
     return new core.ReturnStatement(expression.ast())
