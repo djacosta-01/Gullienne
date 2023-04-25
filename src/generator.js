@@ -61,35 +61,31 @@ export default function generate(program) {
     },
 
     FunctionDeclaration(f) {
-      output.push(`function ${gen(f.id)}(${gen(f.params).join(", ")}) {`)
+      output.push(`do ${gen(f.id)}(${gen(f.params).join(", ")}) {`)
       gen(f.funcBlock)
       output.push(`}`)
     },
 
     FunctionBlock(f) {
-      // TO BE CONTINUED
+      // base??
+      gen(f.statements)
     },
 
     ConditionIf(c) {
-      // missing Else If????
       output.push(`if (${gen(c.testExp)}) {`)
       gen(c.listOfButs)
-      if (c.otherwise instanceof IfStatement) {
-        output.push("} else")
-        gen(s.otherwise)
-      } else {
-        output.push("} else {")
-        gen(s.otherwise)
-        output.push("}")
-      }
     },
 
     ConditionElseIf(c) {
-      //
+      output.push(`} else if (${gen(c.testExp)}) {`)
+      gen(c.but)
+      output.push("}")
     },
 
     ConditionElse(c) {
-      //
+      output.push("} else {")
+      gen(c.otherwise)
+      output.push("}")
     },
 
     ForLoop(f) {
@@ -117,55 +113,70 @@ export default function generate(program) {
     },
 
     ObjectHeader(o) {
-      //
+      output.push(`class ${gen(o.id)} {`)
+      output.push(`constructor ( ${gen(o.params)} ) {\n ${o.params.map((x) => {
+        `this.${gen(x.id)} = ${x.id}`
+      } )} `.reduce((accumulator, current) => accumulator + current), "")
+      gen(o.ObjectBlock)
+      output.push(`}`)
     },
 
     ConstructDeclaration(c) {
-      //
+      output.push(`constructor ( ${gen(c.params)} ) {`)
+      gen(c.genBlock)
+      output.push(`}`)
     },
 
     ObjectBlock(o) {
-      //
+      //base??
+      gen(o.construcDec)
+      gen(o.methodDec)
     },
 
     MethodDeclaration(m) {
-      //
+      if (isPrivate) {
+        output.push(`# ${gen(m.id)}`)
+      } else {
+        output.output(`${gen(m.id)}`)
+      }
+      output.push(`( ${gen(m.params)} ) {`)
+      gen(m.funcBlock)
     },
 
     Base(b) {
-      //
+      //not yet?
     },
 
     GeneralBlock(g) {
-      //
+      gen(g.statements)
     },
 
     RealParameter(r) {
-      //
+      output.push(`${gen(r.id)} : ${gen(r.type)}`)
     },
 
     DeclarationParameter(d) {
-      //
+      output.push(d.params)
     },
 
     CallArgument(c) {
-      //
+      output.push(`${gen(c.id)} . ${gen(c.expression)}`)
     },
 
     ListLiteral(l) {
-      //
+      output.push(`[ ${gen(l.expression)} ]`)
     },
 
     SetLiteral(s) {
-      //
+      //TO DO w Julian
     },
 
     MapLiteral(m) {
-      //
+      output.push(`{ ${gen(m.keyValue)} }`)
     },
 
     KeyValue(k) {
-      //
+      //TO DO w Julian
     },
 
     BinaryExpression(b) {
@@ -197,31 +208,32 @@ export default function generate(program) {
     },
 
     FieldExpression(f) {
-      //
+      output.push(`${gen(f.expression)} . ${gen(f.id)}`)
     },
 
     MethodExpression(m) {
-      //
+      output.push(`${gen(m.expression)} . ${gen(m.id)} ( ${gen(m.argument)} )`)
     },
 
     MakeExpression(m) {
-      //
+      output.push(`${gen(m.type)} ( ${gen(m.argument)} )`)
     },
 
     Expression(e) {
-      //
+      gen(e.expression)
     },
 
     Type(t) {
-      //
+      Console.log(`Shouldn't be in here ${t.constructor}`)
+      return
     },
 
     TypeSum(t) {
-      //
+      return
     },
 
     TypeList(t) {
-      t.map(gen)
+      return
     },
 
     TypeSet(t) {
