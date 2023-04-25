@@ -1,6 +1,6 @@
 import assert from "assert"
 import util from "util"
-import ast from "../src/ast.js"
+import ast, { typeInferenceAst } from "../src/ast.js"
 import { error } from "../src/core.js"
 
 const semanticChecks = [
@@ -121,6 +121,28 @@ cap(hotChocolates in debt) {
   overheard(y<x[0]>);
   so (z<<1>>) {overheard(\`true\`);}`,
   ],
+  ["list declaration", `x:[number | joolean] @ [2, 3, ideal];`],
+  [
+    "return with expression",
+    `do x() -> number {
+      howItBe 5;
+    }`,
+  ],
+  [
+    "return without expression",
+    `    
+    do y() -> joolean {
+      howItBe;
+    }`,
+  ],
+]
+
+const typeCheck = [
+  ["list types", `[number | joolean]`],
+  [
+    "bigass type",
+    `number | string | joolean | [number | string | joolean] | <number | string | joolean> | <<number | string | joolean::number | string | joolean>>`,
+  ],
 ]
 
 const semanticErrors = [
@@ -137,16 +159,28 @@ const semanticErrors = [
   ["an expression starting with a *", "x:number @ * 71;"],
 ]
 
+const typeErrors = [["type error", `number | 1`]]
+
 describe("The AST generator", () => {
-  //console.log(ast(semanticChecks[0][1]))
+  console.log(ast(semanticChecks[10][1]))
   for (const [scenario, source] of semanticChecks) {
     it(`recognizes ${scenario}`, () => {
       assert.ok(ast(source))
     })
   }
+  for (const [scenario, source] of typeCheck) {
+    it(`recognizes ${scenario}`, () => {
+      assert.ok(typeInferenceAst(source))
+    })
+  }
   for (const [scenario, source, errorMessagePattern] of semanticErrors) {
     it(`throws on ${scenario}`, () => {
       assert.throws(() => ast(source), errorMessagePattern)
+    })
+  }
+  for (const [scenario, source, errorMessagePattern] of typeErrors) {
+    it(`throws on ${scenario}`, () => {
+      assert.throws(() => typeInferenceAst(source), errorMessagePattern)
     })
   }
 })

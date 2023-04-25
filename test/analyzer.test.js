@@ -14,7 +14,7 @@ const semanticErrors = [
     /I don't know who x is, you haven't introduced us yet./,
   ],
   [
-    "constants cannot be reassigned",
+    "constants reassignment",
     `x:NUMBER @ 5;
     x @ 2 ;`,
     /Did you just try to reassign to a constant variable\? Nah that ain't chiefin' out./,
@@ -34,6 +34,7 @@ describe("The analyzer", () => {
   }
   for (const [scenario, source, errorMessagePattern] of semanticErrors) {
     it(`throws on ${scenario}`, () => {
+      //   analyze(ast(source))
       assert.throws(() => analyze(ast(source)), errorMessagePattern)
     })
   }
