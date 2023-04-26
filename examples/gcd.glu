@@ -15,12 +15,14 @@ do jjj(bob:number|string, job:number|string) -> number {
         lesser @ bobNum;
     }
 
+    gcd:number;
+
     ~ Apply Euclid's algorithm ~
-    noCap(lesser = 0) {
+    noCap(lesser > 0) {
         gcd @ lesser;
         lesser @ greater % gcd;
         greater @ gcd;
     }
 
-	howItBe gcd;
+    howItBe gcd;
 }
