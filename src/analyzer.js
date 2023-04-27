@@ -1,13 +1,13 @@
-import { match } from "assert"
-import fs from "fs"
-import * as ohm from "ohm-js"
-import * as core from "./core.js"
-import * as stdlib from "./stdlib.js"
-import { typeInferenceAst } from "./ast.js"
-import { stringify } from "querystring"
+import { match } from 'assert'
+import fs from 'fs'
+import * as ohm from 'ohm-js'
+import * as core from './core.js'
+import * as stdlib from './stdlib.js'
+import { typeInferenceAst } from './ast.js'
+import { stringify } from 'querystring'
 
-const grammar = ohm.grammar(fs.readFileSync("src/gullienne.ohm"))
-const typeInference = ohm.grammar(fs.readFileSync("src/types.ohm"))
+const grammar = ohm.grammar(fs.readFileSync('src/gullienne.ohm'))
+const typeInference = ohm.grammar(fs.readFileSync('src/types.ohm'))
 
 function megaCheck(condition, message, entity) {
   if (!condition) core.error(message, entity)
@@ -20,10 +20,6 @@ function checkInFunction(context) {
   )
 }
 
-// function checkInVoidFunction(context) {
-//   megaCheck(context.functions.returnType == "void")
-// }
-
 function checkInLoop(context) {
   megaCheck(context.isLoop, `You ain't in a loop big dawg`)
 }
@@ -33,6 +29,7 @@ function checkIsObj(context) {
 }
 
 function checkIsDeclared(context, id, notDeclared) {
+  // console.log('CONTEXT ', context)
   megaCheck(
     notDeclared ? !context.checkExistence(id) : context.checkExistence(id),
     `I don't know who ${id} is, you haven't introduced us yet.`
@@ -44,24 +41,24 @@ function matchType(leftType, rightType, isAssignment) {
   //rework to take advantage of type fields: type, readOnly?
   //Handle objects?
 
-  console.log("L Type: ", leftType.name)
-  console.log("R Type: ", rightType.name)
+  console.log('L Type: ', leftType)
+  console.log('R Type: ', rightType)
   switch (leftType.name) {
     case core.Type.name:
       return matchType(leftType.type, rightType.type)
     case core.TypeSum.name:
-      let checkSingle = (rightSide) =>
+      /* Checking if it is an actual sum type or a
+         single type wrapped as a sum type */
+      let checkSingle = rightSide =>
         rightSide instanceof core.Type
           ? leftType.typeList
-              .map((leftSide) =>
-                leftSide instanceof core.Type
-                  ? matchType(leftSide, rightSide)
-                  : false
+              .map(leftSide =>
+                leftSide instanceof core.Type ? matchType(leftSide, rightSide) : false
               )
               .contains(true)
           : leftType.typeList.includes(rightSide)
 
-      return rightType.typeList.map(checkSingle).every((existence) => existence)
+      return rightType.typeList.map(checkSingle).every(existence => existence)
     case core.TypeList.name:
     case core.TypeSet.name:
       return matchType(leftType.type, rightType.type)
@@ -93,10 +90,7 @@ function matchType(leftType, rightType, isAssignment) {
     //     return Number === rightType
     // }
     default:
-      megaCheck(
-        false,
-        `DuuuuuuUUUUDE! What even IS type ${JSON.stringify(leftType.type)}?!`
-      )
+      megaCheck(false, `DuuuuuuUUUUDE! What even IS type ${JSON.stringify(leftType.type)}?!`)
   }
 }
 
@@ -108,7 +102,7 @@ function checkExpectedType(wanted, found, assignment, expected) {
 }
 
 function expectedJoolean(expression) {
-  checkExpectedType(core.GodRay.joolean, expression.type, false, "joolean")
+  checkExpectedType(core.GodRay.joolean, expression.type, false, 'joolean')
 }
 
 function expectedIterable(expression) {
@@ -128,17 +122,14 @@ function expectedIterable(expression) {
 }
 
 function expectedNumber(expression) {
-  checkExpectedType(core.GodRay.number, expression.type, false, "a number")
+  checkExpectedType(core.GodRay.number, expression.type, false, 'a number')
 }
 
 function checkParams(params) {
   megaCheck(
-    Set(
-      params.map((p) =>
-        p.constructor === core.DeclarationParameter ? p.params.id : p.id
-      )
-    ).size === params.length,
-    "Oh my god, you duped a parameter! Blow it up. Right now."
+    Set(params.map(p => (p.constructor === core.DeclarationParameter ? p.params.id : p.id)))
+      .size === params.length,
+    'Oh my god, you duped a parameter! Blow it up. Right now.'
   )
 }
 
@@ -182,7 +173,7 @@ class Context {
     } else if (this.parent) {
       return this.parent.getVar(id)
     }
-    core.error(`Dawg, ima level wit you, there ain't no delcaration for ${id}`)
+    core.error(`Dawg, ima level wit you, there ain't no declaration for ${id}`)
   }
 
   makeChildContext(props) {
@@ -215,28 +206,32 @@ class Context {
   }
 
   VariableDeclaration(v) {
-    //console.log(v)
-    //if (v.initializer)
+    console.log('VVvVVVVVVVvvVV\n ', v.initializer)
     this.analyze(v.initializer)
+    console.log('AFTERRRRRRRRRR BRRRR ', v.initializer)
+
     // this.analyze(v.id)
     checkIsDeclared(this, v.id.lexeme, true) //Checking if the id is NOT declared
     //console.log("---------Before analyzing, v.type is", v.type.constructor)
     this.analyze(v.type)
     //console.log("---------After analyzing, v.type is", v.type)
 
-    //if (v.initializer) {
     matchType(v.type, v.initializer.type)
-    //}
 
     v.variable = new core.VariableObj(v.id, v.type)
-    this.addVarToScope(v.id, v.variable)
+    this.addVarToScope(v.id.lexeme, v.variable)
   }
 
   ReassignmentStatement(r) {
-    checkIsDeclared(this, r.id, false)
+    // console.log('GRRRRRRRRRR -----> ', r)
+    // console.log('R IDDDDDD ---->: ', r.id)
+    // console.log('R SOURCEEEEE ---->: ', r.source)
+    checkIsDeclared(this, r.id.lexeme, false)
     this.analyze(r.id)
     this.analyze(r.source)
-    matchType(this.getVar(r.id).type, r.source.type)
+    // console.log('DARTH', r.id)
+    // console.log('VADER', r.source)
+    matchType(this.getVar(r.id.lexeme).type, r.source.type)
   }
 
   ReassignmentMyStatement(r) {
@@ -250,20 +245,15 @@ class Context {
     this.analyze(f.id)
     //let newContext = this.makeChildContext({ functions: true })
 
-    newContext.analyze(f.params) // types
-    // e and d did this... **PLEASE check this**
-    // ASK a TA
-    f.params.map((param) => {
-      return new core.RealParameter(param, param.type) // a friendly reminder to rename this please
+    newContext.analyze(f.params)
+    f.params.map(param => {
+      return new core.RealParameter(param, param.type)
     })
     if (f.params.length > 1) checkParams(f.params)
 
     let newContext = this.makeChildContext()
     newContext.analyze(f.funcBlock)
-    this.addFuncToScope(
-      f.id,
-      new core.FunctionObject(f.params, f.returnType, f.funcBlock)
-    )
+    this.addFuncToScope(f.id, new core.FunctionObject(f.params, f.returnType, f.funcBlock))
   }
 
   FunctionBlock(f) {
@@ -383,12 +373,10 @@ class Context {
   }
 
   DeclarationParameter(d) {
-    // kwarg/parg delimiter? -> should we not do this in function declaration?
     this.analyze(d.params)
   }
 
   CallArgument(c) {
-    // check parg/kwarg -> already checking in Call
     this.analyze(c.id)
     this.analyze(c.expression)
   }
@@ -399,9 +387,7 @@ class Context {
     //console.log("=========>AFTER ANALyzed: ", l)
     // Somebody tell the JS developer to make a .unique method...
     l.type = typeInferenceAst(
-      `[${[...new Set(l.expression.map((item) => item.type.typeName))].join(
-        "|"
-      )}]`
+      `[${[...new Set(l.expression.map(item => item.type.typeName))].join('|')}]`
     )
   }
 
@@ -419,9 +405,43 @@ class Context {
   }
 
   BinaryExpression(b) {
+    // console.log('BINARY', b)
     this.analyze(b.left)
     this.analyze(b.right)
+    // console.log('BINARY AFTER', b)
+    if (['&', '|', '^', '<<', '>>'].includes(b.op.lexeme)) {
+      checkInteger(b.left)
+      checkInteger(b.right)
+      b.type = left.type
+    } else if (['+'].includes(b.op.lexeme)) {
+      checkNumericOrString(b.left)
+      checkHaveSameType(b.left, b.right)
+      b.type = b.left.type
+    } else if (['-', '*', '/', '%', '**'].includes(b.op.lexeme)) {
+      checkNumeric(b.left)
+      checkHaveSameType(b.left, b.right)
+      b.type = b.left.type
+    } else if (['<', '<=', '>', '>='].includes(b.op.lexeme)) {
+      checkNumericOrString(b.left)
+      checkHaveSameType(b.left, b.right)
+      b.type = Type.BOOLEAN
+    } else if (['==', '!='].includes(b.op.lexeme)) {
+      checkHaveSameType(b.left, b.right)
+      b.type = Type.BOOLEAN
+    } else if (['&&', '||'].includes(b.op.lexeme)) {
+      checkBoolean(b.left)
+      checkBoolean(b.right)
+      b.type = Type.BOOLEAN
+    } else if (['??'].includes(b.op.lexeme)) {
+      checkIsAnOptional(b.left)
+      checkAssignable(b.right, { toType: b.left.type.baseType })
+      b.type = b.left.type
+    }
   }
+
+  //   function checkInteger(e) {
+  //   checkType(e, [Type.INT], "an integer")
+  // }
 
   UnaryExpression(u) {
     //console.log(u)
@@ -434,7 +454,7 @@ class Context {
     this.analyze(s.argument)
     //index out of range error
     if (subscriptee.length - 1 < argument) {
-      ;`Index out of range`
+      core.error(`Index out of range`)
     }
   }
 
@@ -442,12 +462,8 @@ class Context {
     c.expression = this.analyze(c.expression)
     c.argument = this.analyze(c.argument)
     let slashPosition = 0
-    for (
-      let paramIndex = 0;
-      paramIndex < c.expression.params.length;
-      paramIndex++
-    ) {
-      if (c.expression.params[paramIndex] === "/") {
+    for (let paramIndex = 0; paramIndex < c.expression.params.length; paramIndex++) {
+      if (c.expression.params[paramIndex] === '/') {
         slashPosition = paramIndex
         break
       }
@@ -461,13 +477,6 @@ class Context {
         matchType(param.type, arg.type)
       }
     })
-    //   for (let i = slashPosition + 1; i < c.expression.params.length; i++) {
-    //     for (let j = slashPosition; j < c.argument.length; j++) {
-    //       if(c.expression.params[i].id === c.argument[j].id) {
-    //         matchType(c.expression.params[i].type, c.argument[j].type)
-    //       }
-    //     }
-    //   }
   }
 
   FieldExpression(f) {
@@ -491,7 +500,7 @@ class Context {
   }
 
   Type(t) {
-    if (typeof t.type === "string") {
+    if (typeof t.type === 'string') {
       t.type = this.getVar(t.type)
     }
     this.analyze(t.type)
@@ -516,9 +525,10 @@ class Context {
     this.analyze(t.valueType)
   }
   Array(a) {
-    a.forEach((item) => this.analyze(item))
+    a.forEach(item => this.analyze(item))
   }
   Boolean(b) {
+    console.log('BBBBBBBBBBBBB', b)
     return b
   }
   Number(n) {
@@ -532,17 +542,21 @@ class Context {
   }
   TOALken(r) {
     // For ids being used, not defined
-    //console.log("YEAAA, WOOOWW TOOOOOOOAAAAAAALLLLLLL: ", r)
-    if (r.gType === "id") {
+    if (r.gType === 'id') {
       r.value = this.getVar(r.lexeme)
       r.gType = r.value.type
     }
-    if (r.gType === "number")
-      [r.value, r.type] = [Number(r.lexeme), typeInferenceAst("number")]
-    if (r.gType === "string");
-    ;[r.value, r.type] = [r.lexeme, typeInferenceAst("string")]
-    if (r.gType === "joolean");
-    ;[r.value, r.type] = [r.lexeme === "ideal", typeInferenceAst("joolean")]
+    if (r.gType === 'number') {
+      ;[r.value, r.type] = [Number(r.lexeme), typeInferenceAst('number')]
+    }
+    if (r.gType === 'string') {
+      // console.log('BOOOOOOOOOOOOMMMMM', r)
+      ;[r.value, r.type] = [r.lexeme.replaceAll('`', '"'), typeInferenceAst('string')]
+      console.log('BOOOOOOOOOOOOMMMMM', r)
+    }
+    if (r.gType === 'joolean') {
+      ;[r.value, r.type] = [r.lexeme === 'ideal', typeInferenceAst('joolean')]
+    }
   }
 }
 
@@ -555,3 +569,4 @@ export default function analyze(node) {
   //console.log(`------->In ANALYZER NODE: ${node}`)
   return node
 }
+
