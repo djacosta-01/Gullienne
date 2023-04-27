@@ -1,34 +1,32 @@
 export default function generate(program) {
   const output = []
 
-  const targetName = ((mapping) => {
-    return (entity) => {
+  const targetName = (mapping => {
+    return entity => {
       if (!mapping.has(entity)) {
         mapping.set(entity, mapping.size + 1)
       }
       return `${
-        entity?.source?._contents ??
-        entity?.id ??
-        entity.name ??
-        entity.description
+        entity?.source?._contents ?? entity?.id ?? entity.name ?? entity.description
       }_${mapping.get(entity)}`
     }
   })(new Map())
 
   function gen(node) {
-    //console.log("NOOOOOODE", node)
+    // console.log('NOOOOOODE', node)
     return generators[node.constructor.name](node)
   }
 
-  const opMap = new Map([["@", "="]])
-  let constructorFunction = false
+  // const opMap = new Map([["@", "="]])
+  // let constructorFunction = false
 
   const generators = {
     // everything needed to initialize the file
     Program(p) {
-      //console.log("--------> IN GENERATOR: \n", p)
-
-      gen(p.statements)
+      console.log('--------> IN GENERATOR: \n', p)
+      // console.log('P STATEMENTS: ', p.statements.constructor)
+      // gen(p.statements)
+      p.statements.map(gen)
       // console.log("in generator: ", p)
     },
 
@@ -37,31 +35,34 @@ export default function generate(program) {
     },
 
     IncDecStatement(i) {
-      this.analyze(i.id)
-      matchType(context.get(i.id).type)
+      this.analyze(i.id.lexeme)
+      matchType(context.get(i.id.lexeme).type)
     },
 
     VariableDeclaration(v) {
-      //console.log(v)
+      // console.log("VVVVVVVVVVVVV", v)
+      // console.log("IUIIDDDDDDD: ", v.id)
       let expressionString = gen(v.initializer)
-      //console.log(expressionString)
-      output.push(
-        `${v.isConst ? "const" : "let"} ${v.id} = ${expressionString}`
-      )
+      console.log('---------->', expressionString)
+      output.push(`${v.isConst ? 'const' : 'let'} ${v.id.lexeme} = ${expressionString.value}`)
     },
 
     ReassignmentStatement(r) {
+      // console.log('RE MY ASS', r)
       const source = gen(r.source)
-      output.push(`${r.id} = ${source}`)
+      console.log('SOURCEEEE', source)
+      output.push(`${r.id.lexeme} = ${source.value}`)
     },
 
     ReassignmentMyStatement(r) {
+      console.log(' -------> RE MY ASS', r)
       const source = gen(r.source)
-      output.push(`this.${r.fieldId} = ${source}`)
+
+      output.push(`this.${r.fieldId.lexeme} = ${source.value}`)
     },
 
     FunctionDeclaration(f) {
-      output.push(`do ${gen(f.id)}(${gen(f.params).join(", ")}) {`)
+      output.push(`do ${gen(f.id.lexeme)}(${gen(f.params).join(', ')}) {`)
       gen(f.funcBlock)
       output.push(`}`)
     },
@@ -79,25 +80,25 @@ export default function generate(program) {
     ConditionElseIf(c) {
       output.push(`} else if (${gen(c.testExp)}) {`)
       gen(c.but)
-      output.push("}")
+      output.push('}')
     },
 
     ConditionElse(c) {
-      output.push("} else {")
+      output.push('} else {')
       gen(c.otherwise)
-      output.push("}")
+      output.push('}')
     },
 
     ForLoop(f) {
-      output.push(`for (let ${gen(f.id)} of ${gen(f.expression)}) {`)
+      output.push(`for (let ${gen(f.id.lexeme)} of ${gen(f.expression)}) {`)
       gen(f.genBlock)
-      output.push("}")
+      output.push('}')
     },
 
     WhileLoop(w) {
       output.push(`while (${gen(w.expression)}) {`)
       gen(w.genBlock)
-      output.push("}")
+      output.push('}')
     },
 
     Return(r) {
@@ -105,18 +106,21 @@ export default function generate(program) {
     },
 
     Break(b) {
-      output.push("break;")
+      output.push('break;')
     },
 
     Continue(c) {
-      output.push("continue;")
+      output.push('continue;')
     },
 
     ObjectHeader(o) {
-      output.push(`class ${gen(o.id)} {`)
-      output.push(`constructor ( ${gen(o.params)} ) {\n ${o.params.map((x) => {
-        `this.${gen(x.id)} = ${x.id}`
-      } )} `.reduce((accumulator, current) => accumulator + current), "")
+      output.push(`class ${gen(o.id.lexeme)} {`)
+      output.push(
+        `constructor ( ${gen(o.params)} ) {\n ${o.params.map(x => {
+          ;`this.${gen(x.id.lexeme)} = ${x.id.lexeme}`
+        })} `.reduce((accumulator, current) => accumulator + current),
+        ''
+      )
       gen(o.ObjectBlock)
       output.push(`}`)
     },
@@ -135,9 +139,9 @@ export default function generate(program) {
 
     MethodDeclaration(m) {
       if (isPrivate) {
-        output.push(`# ${gen(m.id)}`)
+        output.push(`# ${gen(m.id.lexeme)}`)
       } else {
-        output.output(`${gen(m.id)}`)
+        output.output(`${gen(m.id.lexeme)}`)
       }
       output.push(`( ${gen(m.params)} ) {`)
       gen(m.funcBlock)
@@ -152,7 +156,7 @@ export default function generate(program) {
     },
 
     RealParameter(r) {
-      output.push(`${gen(r.id)} : ${gen(r.type)}`)
+      output.push(`${gen(r.id.lexeme)} : ${gen(r.type)}`)
     },
 
     DeclarationParameter(d) {
@@ -160,7 +164,7 @@ export default function generate(program) {
     },
 
     CallArgument(c) {
-      output.push(`${gen(c.id)} . ${gen(c.expression)}`)
+      output.push(`${gen(c.id.lexeme)} . ${gen(c.expression)}`)
     },
 
     ListLiteral(l) {
@@ -180,8 +184,8 @@ export default function generate(program) {
     },
 
     BinaryExpression(b) {
-      //console.log(b)
-      const op = { "=": "===", "!=": "!==" }[b.op] ?? b.op
+      console.log('GEN BINARY', b)
+      const op = { '=': '===', '!=': '!==' }[b.op] ?? b.op
       return `${gen(b.left)} ${op} ${gen(b.right)}`
     },
 
@@ -196,23 +200,21 @@ export default function generate(program) {
 
     Call(c) {
       if (standardFunctions.has(c.expression)) {
-        output.push(
-          standardFunctions.get(c.expression)(gen(c.argument).join(", "))
-        )
+        output.push(standardFunctions.get(c.expression)(gen(c.argument).join(', ')))
         return []
       }
       let objectString = gen(c.expression) ? gen(c.expression) : output.pop()
       if (c.expression instanceof PrototypeObj)
-        output.push(`new ${objectString}(${gen(c.argument).join(", ")})`)
-      else output.push(`${objectString}(${gen(c.argument).join(", ")})`)
+        output.push(`new ${objectString}(${gen(c.argument).join(', ')})`)
+      else output.push(`${objectString}(${gen(c.argument).join(', ')})`)
     },
 
     FieldExpression(f) {
-      output.push(`${gen(f.expression)} . ${gen(f.id)}`)
+      output.push(`${gen(f.expression)} . ${gen(f.id.lexeme)}`)
     },
 
     MethodExpression(m) {
-      output.push(`${gen(m.expression)} . ${gen(m.id)} ( ${gen(m.argument)} )`)
+      output.push(`${gen(m.expression)} . ${gen(m.id.lexeme)} ( ${gen(m.argument)} )`)
     },
 
     MakeExpression(m) {
@@ -229,19 +231,23 @@ export default function generate(program) {
     },
 
     TypeSum(t) {
+      Console.log(`Shouldn't be in here ${t.constructor}`)
       return
     },
 
     TypeList(t) {
+      Console.log(`Shouldn't be in here ${t.constructor}`)
       return
     },
 
     TypeSet(t) {
-      //
+      Console.log(`Shouldn't be in here ${t.constructor}`)
+      return
     },
 
     TypeMap(t) {
-      //
+      Console.log(`Shouldn't be in here ${t.constructor}`)
+      return
     },
     Array(a) {
       return a
@@ -258,8 +264,11 @@ export default function generate(program) {
     GodRay(g) {
       return g
     },
+    TOALken(r) {
+      return r
+    },
   }
 
   gen(program)
-  return output.join("\n")
+  return output.join('\n')
 }
