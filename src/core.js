@@ -309,7 +309,11 @@ export class TypeMap {
 
 export function error(message, entity) {
   if (entity) {
-    throw new Error(`${entity.source.getLineAndColumnMessage()}${message}`)
+    let prefix = ""
+    if (entity.source && entity.source.getLineAndColumnMessage) {
+      prefix = entity.source.getLineAndColumnMessage()
+    }
+    throw new Error(`${prefix}${message}`)
   }
   throw new Error(message)
 }

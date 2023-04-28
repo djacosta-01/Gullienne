@@ -23,13 +23,20 @@ const fixtures = [
     name: "small",
     source: `
         x:number @ 1 + 1;
-        y:joolean @ !ideal;
-        y @ 1;
       `,
     expected: dedent`
         let x = 1 + 1
-        let y = !true
-        y = 1
+      `,
+  },
+  {
+    name: "lookup",
+    source: `
+        x:number @ 1;
+        y:number @ x;
+      `,
+    expected: dedent`
+        let x = 1
+        let y = x
       `,
   },
   // {

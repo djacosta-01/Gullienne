@@ -106,6 +106,14 @@ function checkExpectedType(wanted, found, assignment, expected) {
   )
 }
 
+function checkIsNumberOrString(expression) {
+  megaCheck(
+    expression.gType === "number" || expression.gType === "string",
+    `You can only add numbers and strings, bro.`,
+    expression
+  )
+}
+
 function expectedJoolean(expression) {
   checkExpectedType(core.GodRay.joolean, expression.type, false, "joolean")
 }
@@ -224,7 +232,7 @@ class Context {
     this.analyze(v.type)
     //console.log("---------After analyzing, v.type is", v.type)
 
-    matchType(v.type, v.initializer.type)
+    matchType(v.type, v.initializer.type ?? v.initializer.value.type)
 
     v.variable = new core.VariableObj(v.id, v.type)
     this.addVarToScope(v.id.lexeme, v.variable)
@@ -422,14 +430,9 @@ class Context {
     this.analyze(b.left)
     this.analyze(b.right)
     // console.log('BINARY AFTER', b)
-    if (["+"].includes(b.op.lexeme)) {
-      if (
-        checkExpectedType(core.GodRay.number, b.left, false, "number") ||
-        checkExpectedType(core.GodRay.string, b.left, false, "string")
-      ) {
-        return true
-      }
-      matchType(b.left, b.right, false)
+    if (["+"].includes(b.op)) {
+      checkIsNumberOrString(b.left)
+      matchType(b.left.type, b.right.type, false)
       b.type = b.left.type
     } else if (["-", "*", "/", "%", "**"].includes(b.op.lexeme)) {
       expectedNumber(b.left)
