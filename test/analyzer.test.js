@@ -4,7 +4,10 @@ import analyze from "../src/analyzer.js"
 import * as core from "../src/core.js"
 
 // Programs that are semantically correct
-const semanticChecks = [["variable declarations", "x:number @ 5;"]]
+const semanticChecks = [
+  ["variable declarations", "x:number @ 5;"],
+  ["can use existing variable", "x:number @ 5;y:number @ x;"],
+]
 
 // Programs that are syntactically correct but have semantic errors
 const semanticErrors = [
