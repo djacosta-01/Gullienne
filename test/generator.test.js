@@ -133,13 +133,31 @@ const fixtures = [
   //       let x = 3 > 2
   //     `,
   // },
+  // {
+  //   name: "equals",
+  //   source: `
+  //       x:joolean @ 2 = 2;
+  //     `,
+  //   expected: dedent`
+  //       let x = 2 === 2
+  //     `,
+  // },
   {
-    name: "equals",
+    name: "unaryOp1",
     source: `
-        x:joolean @ 2 = 2;
+        x:joolean @ -2;
       `,
     expected: dedent`
-        let x = 2 === 2
+        let x = -2
+      `,
+  },
+  {
+    name: "unaryOp2",
+    source: `
+        x:joolean @ !ideal;
+      `,
+    expected: dedent`
+        let x = false
       `,
   },
   // {
