@@ -83,14 +83,6 @@ function matchType(leftType, rightType, isAssignment) {
       }
 
       return leftType.typeName === rightType.typeName
-    // switch (leftType.name) {
-    //   case core.GodRay.joolean:
-    //     return Boolean === rightType
-    //   case core.GodRay.string:
-    //     return String === rightType
-    //   case core.GodRay.number:
-    //     return Number === rightType
-    // }
     default:
       megaCheck(
         false,
@@ -107,6 +99,7 @@ function checkExpectedType(wanted, found, assignment, expected) {
 }
 
 function checkIsNumberOrString(expression) {
+  //console.log("WHAT IS HAPPNIN: ", expression.typeList.constructor)
   megaCheck(
     expression.gType === "number" || expression.gType === "string",
     `You can only add numbers and strings, bro.`,
@@ -115,7 +108,11 @@ function checkIsNumberOrString(expression) {
 }
 
 function expectedJoolean(expression) {
-  checkExpectedType(core.GodRay.joolean, expression.type, false, "joolean")
+  megaCheck(
+    expression.gType === "joolean",
+    `You can only have jooleans here.`,
+    expression
+  )
 }
 
 function expectedIterable(expression) {
@@ -135,7 +132,11 @@ function expectedIterable(expression) {
 }
 
 function expectedNumber(expression) {
-  checkExpectedType(core.GodRay.number, expression.type, false, "a number")
+  megaCheck(
+    expression.gType === "number",
+    `Dawg you can't have anything other than a number here.`,
+    expression
+  )
 }
 
 function checkParams(params) {
@@ -222,9 +223,9 @@ class Context {
   }
 
   VariableDeclaration(v) {
-    console.log("VVvVVVVVVVvvVV\n ", v.initializer)
+    // console.log("VVvVVVVVVVvvVV\n ", v.initializer)
     this.analyze(v.initializer)
-    console.log("AFTERRRRRRRRRR BRRRR ", v.initializer)
+    // console.log("AFTERRRRRRRRRR BRRRR ", v.initializer)
 
     // this.analyze(v.id)
     checkIsDeclared(this, v.id.lexeme, true) //Checking if the id is NOT declared
@@ -429,31 +430,27 @@ class Context {
     // console.log('BINARY', b)
     this.analyze(b.left)
     this.analyze(b.right)
-    // console.log('BINARY AFTER', b)
+    // console.log("BINARY LEFT", b.left)
+    // console.log("BINARY RIGHT", b.right)
     if (["+"].includes(b.op)) {
       checkIsNumberOrString(b.left)
       matchType(b.left.type, b.right.type, false)
       b.type = b.left.type
-    } else if (["-", "*", "/", "%", "**"].includes(b.op.lexeme)) {
+    } else if (["-", "*", "/", "%", "^"].includes(b.op)) {
       expectedNumber(b.left)
+      matchType(b.left.type, b.right.type, false)
+      b.type = b.left.type
+    } else if (["<", "<=", ">", ">="].includes(b.op)) {
+      checkIsNumberOrString(b.left)
+      matchType(b.left.type, b.right.type, false)
+      b.type = b.left.type
+    } else if (["=", "!="].includes(b.op)) {
       matchType(b.left, b.right, false)
       b.type = b.left.type
-    } else if (["<", "<=", ">", ">="].includes(b.op.lexeme)) {
-      if (
-        checkExpectedType(core.GodRay.number, b.left, false, "number") ||
-        checkExpectedType(core.GodRay.string, b.left, false, "string")
-      ) {
-        return true
-      }
-      matchType(b.left, b.right, false)
-      b.type = Type.BOOLEAN
-    } else if (["=", "!="].includes(b.op.lexeme)) {
-      matchType(b.left, b.right, false)
-      b.type = Type.BOOLEAN
-    } else if (["&", "|"].includes(b.op.lexeme)) {
+    } else if (["&", "|"].includes(b.op)) {
       expectedJoolean(b.left)
       expectedJoolean(b.right)
-      b.type = Type.BOOLEAN
+      b.type = b.left.type
     }
   }
 
