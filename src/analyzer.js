@@ -455,8 +455,15 @@ class Context {
   }
 
   UnaryExpression(u) {
-    //console.log(u)
+    console.log(u.right)
     this.analyze(u.right)
+    if (u.op === "-") {
+      expectedNumber(u.right)
+      u.type = u.right.type
+    } else {
+      expectedJoolean(u.right)
+      u.type = u.right.type
+    }
   }
 
   SubscriptExpression(s) {
