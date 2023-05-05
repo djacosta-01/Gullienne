@@ -41,8 +41,11 @@ export default function generate(program) {
     },
 
     IncDecStatement(i) {
-      this.analyze(i.id.lexeme)
-      matchType(context.get(i.id.lexeme).type)
+      if (i.operator === "++") {
+        output.push(`${gen(s.variable)}++`)
+      } else {
+        output.push(`${gen(s.variable)}--`)
+      }
     },
 
     VariableDeclaration(v) {
