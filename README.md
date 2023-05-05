@@ -4,15 +4,18 @@
 
 # [Gullienne](https://djacosta-01.github.io/Gullienne/)
 
+<blockquote><i><b>Today I'm mangling you into a string. That's just how it be.</b></i> - Julian Gonzalez, LMU class of 2023</blockquote>
 The language Gullienne is inspired by our favorite TA Julian and his iconic sayings (Julianisms). We chose this version of Julian’s name to avoid any legal consequences. It compiles into JavaScript(JS) and shares some characteristics from JS, Python, and Swift but definitely not Java. We chose these languages as a basis because we like them, from the argument labels of Swift to making the distinction of mutable and immutable variables from JS. Although we have committed the forbidden crime of using semi-colons, we make up for it with our Joolean ideals and not ideals. We also came up with some new and fresh ideas like binding our variables with “@” instead of the mainstream “=”. You may think that Gullienne would be unreadable, but you would be wrong. As long as you have your overheard channel handy, the understanding will simply come to you just like a polite squid at Roski’s.
 
 ## Language Overview
 
-- Uses Static, Strong and Manifest typing
-- Object Oriented
+- Static, Strong and Manifest Typing
+- Sum Types for variables and data structures
+- A "bayesd" system for defaults to avoid the billion-dollar mistake (unimplemented)
+- Jobject Joriented (unimplemented)
 - A fun language inspired by "Julianisms"
 
-Below is an in-depth view of Gullienne with a comparison to equivalent code in JavaScript.
+Below is an in-depth view of Gullienne with a comparison to equivalent code in JavaScript. _Please note that not all features describe have been implemented._
 
 ### Comments
 
@@ -229,7 +232,7 @@ String <code>"phrase"</code>
 </td><td>Number</td><td >5</td><td >^</td></tr>
 <tr><td>Equality</td><td>
 
-<code>==</code>
+<code>=</code>
 
 </td><td>Joolean, Number, String</td><td >6</td><td >^</td></tr>
 <tr><td>Inequality</td><td>
@@ -290,7 +293,7 @@ String <code>"phrase"</code>
 </tr>
 <tr> <td>
 
-<code>const hoursClocked = 900;</code>
+<code>const hoursClocked = 900</code>
 
 </td>
 <td>
@@ -335,7 +338,7 @@ while (bob < 5) {
 <pre><code>bob:number @ 0;
 
 noCap(bob < 5) {
-	bob++;
+	bob @ bob + 1;
     overheard(`Number of squids on floor:` + mangle(bob, string));
 }</code></pre>
 
