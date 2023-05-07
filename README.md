@@ -409,3 +409,20 @@ cap(hotChocolates in debt) {
 }</code></pre>
 
 </td> </tr> </table>
+
+# Authors
+
+## Primary Contributors
+
+- [Aidan Dionisio](https://github.com/GamerNerd-i)
+- [Diego Acosta](https://github.com/djacosta-01)
+- [Eylul Akgul](https://github.com/eakgul9)
+- [Alex Abrams](https://github.com/Evelyn-0)
+- [Niccolo Menotti](https://github.com/NMenotti)
+- [Katie Lee](https://github.com/geewilikuhrs)
+
+## Advisors
+
+- [Ray Toal](https://github.com/rtoal) (Professor)
+- [Julian Gonzalez](https://github.com/Jgonz156) (Teacher's Assistant)
+- [Kira Toal](https://github.com/kirakira0) (Teacher's Assistant)

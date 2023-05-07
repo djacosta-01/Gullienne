@@ -13,6 +13,10 @@ function megaCheck(condition, message, entity) {
   if (!condition) core.error(message, entity)
 }
 
+function unimplementedError(featureName) {
+  megaCheck(false, `I have some bad news... ${featureName} are unimplemented.`)
+}
+
 function checkInFunction(context) {
   megaCheck(
     context.functions,
@@ -214,6 +218,7 @@ class Context {
   }
 
   ExpressionStatement(e) {
+    unimplementedError("expression statements")
     this.analyze(e.expression)
   }
 
@@ -259,6 +264,7 @@ class Context {
   }
 
   FunctionDeclaration(f) {
+    unimplementedError("function declarations")
     this.analyze(f.id)
     //let newContext = this.makeChildContext({ functions: true })
 
@@ -277,6 +283,7 @@ class Context {
   }
 
   FunctionBlock(f) {
+    unimplementedError("function blocks")
     //Check base types like reassigns
     this.analyze(f.base)
     matchType(context.getVar(f.id).type, f.source.type) // this feels wrong...oh, e and d did this
@@ -286,6 +293,7 @@ class Context {
   }
 
   ConditionIf(c) {
+    unimplementedError("if (so) statements")
     this.analyze(c.testExp)
     expectedJoolean(c.testExp)
     let newContext = this.makeChildContext()
@@ -295,6 +303,7 @@ class Context {
   }
 
   ConditionElseIf(c) {
+    unimplementedError("else if (but) statements")
     this.analyze(c.testExp)
     expectedJoolean(c.testExp)
     let newContext = this.makeChildContext()
@@ -302,11 +311,13 @@ class Context {
   }
 
   ConditionElse(c) {
+    unimplementedError("else (otherwise) statements")
     let newContext = this.makeChildContext()
     newContext.analyze(c.genBlock)
   }
 
   ForLoop(f) {
+    unimplementedError("for (cap) loops")
     let newContext = this.makeChildContext({ isLoop: true })
     newContext.analyze(f.id)
     newContext.analyze(f.expression)
@@ -315,6 +326,7 @@ class Context {
   }
 
   WhileLoop(w) {
+    unimplementedError("while (noCap) loops")
     this.analyze(w.expression)
     expectedJoolean(w.expression)
     let newContext = this.makeChildContext({ isLoop: true })
@@ -322,6 +334,7 @@ class Context {
   }
 
   ReturnStatement(r) {
+    unimplementedError("return (howItBe) statements")
     checkInFunction(this)
     this.analyze(r.expression) // types
     // also want to do this method dec return typepepepep
@@ -336,14 +349,17 @@ class Context {
   EmptyReturnStatement(r) {}
 
   Break(b) {
+    unimplementedError("break (frogOut) statements")
     checkInLoop(this)
   }
 
   Continue(c) {
+    unimplementedError("continue (frogIn) statements")
     checkInLoop(this)
   }
 
   ObjectHeader(o) {
+    unimplementedError("objects")
     this.analyze(o.id)
     //let newType = core.ObjectType(o.id, o.params, )
     //put it into context
@@ -354,12 +370,14 @@ class Context {
   }
 
   ConstructDeclaration(c) {
+    unimplementedError("object constructors")
     let newContext = this.makeChildContext({ functions: true })
     newContext.analyze(c.params) // types
     newContext.analyze(c.genBlock)
   }
 
   ObjectBlock(o) {
+    unimplementedError("object blocks")
     // check base types like var reassign
     this.analyze(o.base)
     this.analyze(o.construcDec)
@@ -368,6 +386,7 @@ class Context {
   }
 
   MethodDeclaration(m) {
+    unimplementedError("methods")
     this.analyze(m.id)
     let newContext = this.makeChildContext({ functions: true })
     newContext.analyze(m.params) // types
@@ -378,25 +397,30 @@ class Context {
 
   Base(b) {
     // types
+    unimplementedError("default (bayes) declarations")
     this.analyze(b.id)
     this.analyze(b.expression)
     matchType(b.id.type, b.expression.type) // e and did this
   }
 
   GeneralBlock(g) {
+    unimplementedError("general code blocks")
     this.analyze(g.statements)
   }
 
   RealParameter(r) {
+    unimplementedError("parameters")
     this.analyze(r.id)
     this.analyze(r.type)
   }
 
   DeclarationParameter(d) {
+    unimplementedError("parameters")
     this.analyze(d.params)
   }
 
   CallArgument(c) {
+    unimplementedError("function calls")
     this.analyze(c.id)
     this.analyze(c.expression)
   }
@@ -414,14 +438,17 @@ class Context {
   }
 
   SetLiteral(s) {
+    unimplementedError("sets")
     this.analyze(s.expression)
   }
 
   MapLiteral(m) {
+    unimplementedError("maps")
     this.analyze(m.keyValue)
   }
 
   KeyValue(k) {
+    unimplementedError("key-value pairs")
     this.analyze(k.expression1)
     this.analyze(k.expression2)
   }
@@ -467,6 +494,7 @@ class Context {
   }
 
   SubscriptExpression(s) {
+    unimplementedError("subscripting")
     //subscript paren?
     this.analyze(s.subscriptee)
     this.analyze(s.argument)
@@ -477,6 +505,7 @@ class Context {
   }
 
   Call(c) {
+    unimplementedError("function calls")
     c.expression = this.analyze(c.expression)
     c.argument = this.analyze(c.argument)
     let slashPosition = 0
@@ -502,17 +531,20 @@ class Context {
   }
 
   FieldExpression(f) {
+    unimplementedError("object fields")
     this.analyze(f.expression)
     this.analyze(f.id)
   }
 
   MethodExpression(m) {
+    unimplementedError("object methods")
     this.analyze(m.expression)
     this.analyze(m.id)
     this.analyze(m.argument)
   }
 
   MakeExpression(m) {
+    unimplementedError("object constructors")
     this.analyze(m.type)
     this.analyze(m.argument)
   }
