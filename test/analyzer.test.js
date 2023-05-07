@@ -66,7 +66,7 @@ const semanticErrors = [
   [
     "constants reassignment",
     `x:NUMBER @ 5;
-    x @ 2 ;`,
+      x @ 2 ;`,
     /Did you just try to reassign to a constant variable\? Nah that ain't chiefin' out./,
   ],
   [

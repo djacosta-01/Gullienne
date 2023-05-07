@@ -44,9 +44,9 @@ function matchType(leftType, rightType, isAssignment) {
   //Unhandled case: constant matching variable type
   //rework to take advantage of type fields: type, readOnly?
   //Handle objects?
-
-  console.log("L Type: ", leftType)
-  console.log("R Type: ", rightType)
+  //   console.log("\nmatchType Called")
+  //   console.log("L Type: ", leftType)
+  //   console.log("R Type: ", rightType)
   switch (leftType.name) {
     case core.Type.name:
       return matchType(leftType.type, rightType.type)
@@ -105,7 +105,7 @@ function checkExpectedType(wanted, found, assignment, expected) {
 function checkIsNumberOrString(expression) {
   //console.log("WHAT IS HAPPNIN: ", expression.typeList.constructor)
   megaCheck(
-    expression.gType === "number" || expression.gType === "string",
+    matchType(typeInferenceAst("string|number"), expression.type, false),
     `You can only add numbers and strings, bro.`,
     expression
   )
@@ -113,7 +113,7 @@ function checkIsNumberOrString(expression) {
 
 function expectedJoolean(expression) {
   megaCheck(
-    expression.gType === "joolean",
+    matchType(typeInferenceAst("joolean"), expression.type, false),
     `You can only have jooleans here.`,
     expression
   )
@@ -137,7 +137,7 @@ function expectedIterable(expression) {
 
 function expectedNumber(expression) {
   megaCheck(
-    expression.gType === "number",
+    matchType(typeInferenceAst("number"), expression.type, false),
     `Dawg you can't have anything other than a number here.`,
     expression
   )
@@ -238,7 +238,7 @@ class Context {
     this.analyze(v.type)
     //console.log("---------After analyzing, v.type is", v.type)
 
-    matchType(v.type, v.initializer.type ?? v.initializer.value.type)
+    matchType(v.type, v.initializer.type ?? v.initializer.value.type, true)
 
     v.variable = new core.VariableObj(v.id, v.type)
     this.addVarToScope(v.id.lexeme, v.variable)
@@ -251,9 +251,16 @@ class Context {
     checkIsDeclared(this, r.id.lexeme, false)
     this.analyze(r.id)
     this.analyze(r.source)
-    // console.log('DARTH', r.id)
-    // console.log('VADER', r.source)
-    matchType(this.getVar(r.id.lexeme).type, r.source.type)
+
+    console.log("R id", r.id)
+    console.log("R Source", r.source)
+    checkExpectedType(
+      this.getVar(r.id.lexeme).type,
+      r.source.type,
+      true,
+      "a test"
+    )
+    // matchType(this.getVar(r.id.lexeme).type, r.source.type, true)
   }
 
   ReassignmentMyStatement(r) {
@@ -426,14 +433,12 @@ class Context {
   }
 
   ListLiteral(l) {
-    //console.log("-------->BEFORE analYZED: ", l)
+    // console.log("-------->BEFORE analYZED: ", l)
     this.analyze(l.expression)
-    //console.log("=========>AFTER ANALyzed: ", l)
+    // console.log("=========>AFTER ANALyzed: ", l)
     // Somebody tell the JS developer to make a .unique method...
     l.type = typeInferenceAst(
-      `[${[...new Set(l.expression.map((item) => item.type.typeName))].join(
-        "|"
-      )}]`
+      `[${[...new Set(l.expression.map((item) => item.gType))].join("|")}]`
     )
   }
 
@@ -460,7 +465,9 @@ class Context {
     // console.log("BINARY LEFT", b.left)
     // console.log("BINARY RIGHT", b.right)
     if (["+"].includes(b.op)) {
+      //   console.log("checking isNumberOrString")
       checkIsNumberOrString(b.left)
+      //   console.log("matching left and right types")
       matchType(b.left.type, b.right.type, false)
       b.type = b.left.type
     } else if (["-", "*", "/", "%", "^"].includes(b.op)) {
@@ -482,14 +489,16 @@ class Context {
   }
 
   UnaryExpression(u) {
-    console.log(u.right)
+    // console.log(u.right)
     this.analyze(u.right)
     if (u.op === "-") {
       expectedNumber(u.right)
       u.type = u.right.type
+      u.gType = "number"
     } else {
       expectedJoolean(u.right)
       u.type = u.right.type
+      u.gType = "joolean"
     }
   }
 
@@ -582,7 +591,7 @@ class Context {
     a.forEach((item) => this.analyze(item))
   }
   Boolean(b) {
-    console.log("BBBBBBBBBBBBB", b)
+    // console.log("BBBBBBBBBBBBB", b)
     return b
   }
   Number(n) {
@@ -598,7 +607,7 @@ class Context {
     // For ids being used, not defined
     if (r.gType === "id") {
       r.value = this.getVar(r.lexeme)
-      r.gType = r.value.type
+      r.type = r.value.type
     }
     if (r.gType === "number") {
       ;[r.value, r.type] = [Number(r.lexeme), typeInferenceAst("number")]
@@ -609,7 +618,7 @@ class Context {
         r.lexeme.replaceAll("`", '"'),
         typeInferenceAst("string"),
       ]
-      console.log("BOOOOOOOOOOOOMMMMM", r)
+      //   console.log("BOOOOOOOOOOOOMMMMM", r)
     }
     if (r.gType === "joolean") {
       ;[r.value, r.type] = [r.lexeme === "ideal", typeInferenceAst("joolean")]

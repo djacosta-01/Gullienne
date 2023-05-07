@@ -29,7 +29,7 @@ export default function generate(program) {
   const generators = {
     // everything needed to initialize the file
     Program(p) {
-      console.log("--------> IN GENERATOR: \n", p)
+      //   console.log("--------> IN GENERATOR: \n", p)
       // console.log('P STATEMENTS: ', p.statements.constructor)
       // gen(p.statements)
       p.statements.map(gen)
@@ -50,7 +50,7 @@ export default function generate(program) {
 
     VariableDeclaration(v) {
       let expressionString = gen(v.initializer)
-      console.log("********", util.inspect(v.initializer))
+      //   console.log("********", util.inspect(v.initializer))
       output.push(
         `${v.isConst ? "const" : "let"} ${v.id.lexeme} = ${expressionString}`
       )
@@ -59,12 +59,12 @@ export default function generate(program) {
     ReassignmentStatement(r) {
       // console.log('RE MY ASS', r)
       const source = gen(r.source)
-      console.log("SOURCEEEE", source)
+      //   console.log("SOURCEEEE", source)
       output.push(`${r.id.lexeme} = ${source}`)
     },
 
     ReassignmentMyStatement(r) {
-      console.log(" -------> RE MY ASS", r)
+      //   console.log(" -------> RE MY ASS", r)
       const source = gen(r.source)
 
       output.push(`this.${r.fieldId.lexeme} = ${source}`)
@@ -193,7 +193,7 @@ export default function generate(program) {
     },
 
     BinaryExpression(b) {
-      console.log("GEN BINARY", b)
+      //   console.log("GEN BINARY", b)
       const op = { "=": "===", "!=": "!==", "^": "**" }[b.op] ?? b.op
       return `${gen(b.left)} ${op} ${gen(b.right)}`
     },

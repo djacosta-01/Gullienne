@@ -121,7 +121,7 @@ cap(hotChocolates in debt) {
   ],
   [
     "return without expression",
-    `    
+    `
     do y() -> joolean {
       howItBe;
     }`,
