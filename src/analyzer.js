@@ -1,10 +1,10 @@
-import { match } from "assert"
+// import { match } from "assert"
 import fs from "fs"
 import * as ohm from "ohm-js"
 import * as core from "./core.js"
 import * as stdlib from "./stdlib.js"
 import { typeInferenceAst } from "./ast.js"
-import { stringify } from "querystring"
+// import { stringify } from "querystring"
 
 const grammar = ohm.grammar(fs.readFileSync("src/gullienne.ohm"))
 const typeInference = ohm.grammar(fs.readFileSync("src/types.ohm"))
@@ -252,13 +252,12 @@ class Context {
     this.analyze(r.id)
     this.analyze(r.source)
 
-    console.log("R id", r.id)
-    console.log("R Source", r.source)
+    // console.log("R", r)
     checkExpectedType(
       this.getVar(r.id.lexeme).type,
       r.source.type,
       true,
-      "a test"
+      "the right type"
     )
     // matchType(this.getVar(r.id.lexeme).type, r.source.type, true)
   }
@@ -289,15 +288,15 @@ class Context {
     )
   }
 
-  FunctionBlock(f) {
-    unimplementedError("function blocks")
-    //Check base types like reassigns
-    this.analyze(f.base)
-    matchType(context.getVar(f.id).type, f.source.type) // this feels wrong...oh, e and d did this
-    //Analyzed in newContext in FunctionDeclaration:
-    //It does not put them in LocalVars
-    this.analyze(f.statements)
-  }
+  //   FunctionBlock(f) {
+  //     unimplementedError("function blocks")
+  //     //Check base types like reassigns
+  //     this.analyze(f.base)
+  //     matchType(context.getVar(f.id).type, f.source.type) // this feels wrong...oh, e and d did this
+  //     //Analyzed in newContext in FunctionDeclaration:
+  //     //It does not put them in LocalVars
+  //     this.analyze(f.statements)
+  //   }
 
   ConditionIf(c) {
     unimplementedError("if (so) statements")
@@ -309,19 +308,19 @@ class Context {
     this.analyze(c.otherwise)
   }
 
-  ConditionElseIf(c) {
-    unimplementedError("else if (but) statements")
-    this.analyze(c.testExp)
-    expectedJoolean(c.testExp)
-    let newContext = this.makeChildContext()
-    newContext.analyze(c.genBlock)
-  }
+  //   ConditionElseIf(c) {
+  //     unimplementedError("else if (but) statements")
+  //     this.analyze(c.testExp)
+  //     expectedJoolean(c.testExp)
+  //     let newContext = this.makeChildContext()
+  //     newContext.analyze(c.genBlock)
+  //   }
 
-  ConditionElse(c) {
-    unimplementedError("else (otherwise) statements")
-    let newContext = this.makeChildContext()
-    newContext.analyze(c.genBlock)
-  }
+  //   ConditionElse(c) {
+  //     unimplementedError("else (otherwise) statements")
+  //     let newContext = this.makeChildContext()
+  //     newContext.analyze(c.genBlock)
+  //   }
 
   ForLoop(f) {
     unimplementedError("for (cap) loops")
@@ -340,30 +339,30 @@ class Context {
     newContext.analyze(w.genBlock)
   }
 
-  ReturnStatement(r) {
-    unimplementedError("return (howItBe) statements")
-    checkInFunction(this)
-    this.analyze(r.expression) // types
-    // also want to do this method dec return typepepepep
-    // also, should method and funcs even be separated?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
-    matchType(
-      // e and d did this...**PLEASE FOR THE LOVE OF EVERYTHING CHECK THIS**
-      this.FunctionDeclaration.returnType.type,
-      r.expression.type
-    )
-  }
+  //   ReturnStatement(r) {
+  //     unimplementedError("return (howItBe) statements")
+  //     checkInFunction(this)
+  //     this.analyze(r.expression) // types
+  //     // also want to do this method dec return typepepepep
+  //     // also, should method and funcs even be separated?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+  //     matchType(
+  //       // e and d did this...**PLEASE FOR THE LOVE OF EVERYTHING CHECK THIS**
+  //       this.FunctionDeclaration.returnType.type,
+  //       r.expression.type
+  //     )
+  //   }
 
-  EmptyReturnStatement(r) {}
+  //   EmptyReturnStatement(r) {}
 
-  Break(b) {
-    unimplementedError("break (frogOut) statements")
-    checkInLoop(this)
-  }
+  //   Break(b) {
+  //     unimplementedError("break (frogOut) statements")
+  //     checkInLoop(this)
+  //   }
 
-  Continue(c) {
-    unimplementedError("continue (frogIn) statements")
-    checkInLoop(this)
-  }
+  //   Continue(c) {
+  //     unimplementedError("continue (frogIn) statements")
+  //     checkInLoop(this)
+  //   }
 
   ObjectHeader(o) {
     unimplementedError("objects")
@@ -376,61 +375,61 @@ class Context {
     newContext.analyze(o.ObjectBlock)
   }
 
-  ConstructDeclaration(c) {
-    unimplementedError("object constructors")
-    let newContext = this.makeChildContext({ functions: true })
-    newContext.analyze(c.params) // types
-    newContext.analyze(c.genBlock)
-  }
+  //   ConstructDeclaration(c) {
+  //     unimplementedError("object constructors")
+  //     let newContext = this.makeChildContext({ functions: true })
+  //     newContext.analyze(c.params) // types
+  //     newContext.analyze(c.genBlock)
+  //   }
 
-  ObjectBlock(o) {
-    unimplementedError("object blocks")
-    // check base types like var reassign
-    this.analyze(o.base)
-    this.analyze(o.construcDec)
-    this.analyze(o.methodDec)
-    matchType(context.getVar(o.base.id).type, o.base.source.type) // e and did this
-  }
+  //   ObjectBlock(o) {
+  //     unimplementedError("object blocks")
+  //     // check base types like var reassign
+  //     this.analyze(o.base)
+  //     this.analyze(o.construcDec)
+  //     this.analyze(o.methodDec)
+  //     matchType(context.getVar(o.base.id).type, o.base.source.type) // e and did this
+  //   }
 
-  MethodDeclaration(m) {
-    unimplementedError("methods")
-    this.analyze(m.id)
-    let newContext = this.makeChildContext({ functions: true })
-    newContext.analyze(m.params) // types
-    if (m.params.length > 0) checkParams(m.params)
-    this.analyze(m.returnType) // new context? also types
-    newContext.analyze(m.funcBlock)
-  }
+  //   MethodDeclaration(m) {
+  //     unimplementedError("methods")
+  //     this.analyze(m.id)
+  //     let newContext = this.makeChildContext({ functions: true })
+  //     newContext.analyze(m.params) // types
+  //     if (m.params.length > 0) checkParams(m.params)
+  //     this.analyze(m.returnType) // new context? also types
+  //     newContext.analyze(m.funcBlock)
+  //   }
 
-  Base(b) {
-    // types
-    unimplementedError("default (bayes) declarations")
-    this.analyze(b.id)
-    this.analyze(b.expression)
-    matchType(b.id.type, b.expression.type) // e and did this
-  }
+  //   Base(b) {
+  //     // types
+  //     unimplementedError("default (bayes) declarations")
+  //     this.analyze(b.id)
+  //     this.analyze(b.expression)
+  //     matchType(b.id.type, b.expression.type) // e and did this
+  //   }
 
-  GeneralBlock(g) {
-    unimplementedError("general code blocks")
-    this.analyze(g.statements)
-  }
+  //   GeneralBlock(g) {
+  //     unimplementedError("general code blocks")
+  //     this.analyze(g.statements)
+  //   }
 
-  RealParameter(r) {
-    unimplementedError("parameters")
-    this.analyze(r.id)
-    this.analyze(r.type)
-  }
+  //   RealParameter(r) {
+  //     unimplementedError("parameters")
+  //     this.analyze(r.id)
+  //     this.analyze(r.type)
+  //   }
 
-  DeclarationParameter(d) {
-    unimplementedError("parameters")
-    this.analyze(d.params)
-  }
+  //   DeclarationParameter(d) {
+  //     unimplementedError("parameters")
+  //     this.analyze(d.params)
+  //   }
 
-  CallArgument(c) {
-    unimplementedError("function calls")
-    this.analyze(c.id)
-    this.analyze(c.expression)
-  }
+  //   CallArgument(c) {
+  //     unimplementedError("function calls")
+  //     this.analyze(c.id)
+  //     this.analyze(c.expression)
+  //   }
 
   ListLiteral(l) {
     // console.log("-------->BEFORE analYZED: ", l)
@@ -452,11 +451,11 @@ class Context {
     this.analyze(m.keyValue)
   }
 
-  KeyValue(k) {
-    unimplementedError("key-value pairs")
-    this.analyze(k.expression1)
-    this.analyze(k.expression2)
-  }
+  //   KeyValue(k) {
+  //     unimplementedError("key-value pairs")
+  //     this.analyze(k.expression1)
+  //     this.analyze(k.expression2)
+  //   }
 
   BinaryExpression(b) {
     // console.log('BINARY', b)
@@ -479,7 +478,7 @@ class Context {
       matchType(b.left.type, b.right.type, false)
       b.type = b.left.type
     } else if (["=", "!="].includes(b.op)) {
-      matchType(b.left, b.right, false)
+      matchType(b.left.type, b.right.type, false)
       b.type = b.left.type
     } else if (["&", "|"].includes(b.op)) {
       expectedJoolean(b.left)
@@ -503,14 +502,14 @@ class Context {
   }
 
   SubscriptExpression(s) {
-    unimplementedError("subscripting")
-    //subscript paren?
-    this.analyze(s.subscriptee)
-    this.analyze(s.argument)
-    //index out of range error
-    if (subscriptee.length - 1 < argument) {
-      core.error(`Index out of range`)
-    }
+    unimplementedError("subscripts")
+    // //subscript paren?
+    // this.analyze(s.subscriptee)
+    // this.analyze(s.argument)
+    // //index out of range error
+    // if (subscriptee.length - 1 < argument) {
+    //   core.error(`Index out of range`)
+    // }
   }
 
   Call(c) {
@@ -558,9 +557,9 @@ class Context {
     this.analyze(m.argument)
   }
 
-  Expression(e) {
-    this.analyze(e.expression)
-  }
+  //   Expression(e) {
+  //     this.analyze(e.expression)
+  //   }
 
   Type(t) {
     if (typeof t.type === "string") {
@@ -587,6 +586,7 @@ class Context {
     this.analyze(t.keyType)
     this.analyze(t.valueType)
   }
+
   Array(a) {
     a.forEach((item) => this.analyze(item))
   }

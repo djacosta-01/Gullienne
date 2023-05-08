@@ -36,9 +36,9 @@ export default function generate(program) {
       // console.log("in generator: ", p)
     },
 
-    ExpressionStatement(e) {
-      gen(e.expression)
-    },
+    // ExpressionStatement(e) {
+    //   gen(e.expression)
+    // },
 
     IncDecStatement(i) {
       if (i.operator === "++") {
@@ -63,118 +63,118 @@ export default function generate(program) {
       output.push(`${r.id.lexeme} = ${source}`)
     },
 
-    ReassignmentMyStatement(r) {
-      //   console.log(" -------> RE MY ASS", r)
-      const source = gen(r.source)
+    // ReassignmentMyStatement(r) {
+    //   //   console.log(" -------> RE MY ASS", r)
+    //   const source = gen(r.source)
 
-      output.push(`this.${r.fieldId.lexeme} = ${source}`)
-    },
+    //   output.push(`this.${r.fieldId.lexeme} = ${source}`)
+    // },
 
-    FunctionDeclaration(f) {
-      output.push(`do ${gen(f.id.lexeme)}(${gen(f.params).join(", ")}) {`)
-      gen(f.funcBlock)
-      output.push(`}`)
-    },
+    // FunctionDeclaration(f) {
+    //   output.push(`do ${gen(f.id.lexeme)}(${gen(f.params).join(", ")}) {`)
+    //   gen(f.funcBlock)
+    //   output.push(`}`)
+    // },
 
-    FunctionBlock(f) {
-      // base??
-      gen(f.statements)
-    },
+    // FunctionBlock(f) {
+    //   // base??
+    //   gen(f.statements)
+    // },
 
-    ConditionIf(c) {
-      output.push(`if (${gen(c.testExp)}) {`)
-      gen(c.listOfButs)
-    },
+    // ConditionIf(c) {
+    //   output.push(`if (${gen(c.testExp)}) {`)
+    //   gen(c.listOfButs)
+    // },
 
-    ConditionElseIf(c) {
-      output.push(`} else if (${gen(c.testExp)}) {`)
-      gen(c.but)
-      output.push("}")
-    },
+    // ConditionElseIf(c) {
+    //   output.push(`} else if (${gen(c.testExp)}) {`)
+    //   gen(c.but)
+    //   output.push("}")
+    // },
 
-    ConditionElse(c) {
-      output.push("} else {")
-      gen(c.otherwise)
-      output.push("}")
-    },
+    // ConditionElse(c) {
+    //   output.push("} else {")
+    //   gen(c.otherwise)
+    //   output.push("}")
+    // },
 
-    ForLoop(f) {
-      output.push(`for (let ${gen(f.id.lexeme)} of ${gen(f.expression)}) {`)
-      gen(f.genBlock)
-      output.push("}")
-    },
+    // ForLoop(f) {
+    //   output.push(`for (let ${gen(f.id.lexeme)} of ${gen(f.expression)}) {`)
+    //   gen(f.genBlock)
+    //   output.push("}")
+    // },
 
-    WhileLoop(w) {
-      output.push(`while (${gen(w.expression)}) {`)
-      gen(w.genBlock)
-      output.push("}")
-    },
+    // WhileLoop(w) {
+    //   output.push(`while (${gen(w.expression)}) {`)
+    //   gen(w.genBlock)
+    //   output.push("}")
+    // },
 
-    Return(r) {
-      output.push(`return ${gen(r.expression)};`)
-    },
+    // Return(r) {
+    //   output.push(`return ${gen(r.expression)};`)
+    // },
 
-    Break(b) {
-      output.push("break;")
-    },
+    // Break(b) {
+    //   output.push("break;")
+    // },
 
-    Continue(c) {
-      output.push("continue;")
-    },
+    // Continue(c) {
+    //   output.push("continue;")
+    // },
 
-    ObjectHeader(o) {
-      output.push(`class ${gen(o.id.lexeme)} {`)
-      output.push(
-        `constructor ( ${gen(o.params)} ) {\n ${o.params.map((x) => {
-          ;`this.${gen(x.id.lexeme)} = ${x.id.lexeme}`
-        })} `.reduce((accumulator, current) => accumulator + current),
-        ""
-      )
-      gen(o.ObjectBlock)
-      output.push(`}`)
-    },
+    // ObjectHeader(o) {
+    //   output.push(`class ${gen(o.id.lexeme)} {`)
+    //   output.push(
+    //     `constructor ( ${gen(o.params)} ) {\n ${o.params.map((x) => {
+    //       ;`this.${gen(x.id.lexeme)} = ${x.id.lexeme}`
+    //     })} `.reduce((accumulator, current) => accumulator + current),
+    //     ""
+    //   )
+    //   gen(o.ObjectBlock)
+    //   output.push(`}`)
+    // },
 
-    ConstructDeclaration(c) {
-      output.push(`constructor ( ${gen(c.params)} ) {`)
-      gen(c.genBlock)
-      output.push(`}`)
-    },
+    // ConstructDeclaration(c) {
+    //   output.push(`constructor ( ${gen(c.params)} ) {`)
+    //   gen(c.genBlock)
+    //   output.push(`}`)
+    // },
 
-    ObjectBlock(o) {
-      //base??
-      gen(o.construcDec)
-      gen(o.methodDec)
-    },
+    // ObjectBlock(o) {
+    //   //base??
+    //   gen(o.construcDec)
+    //   gen(o.methodDec)
+    // },
 
-    MethodDeclaration(m) {
-      if (isPrivate) {
-        output.push(`# ${gen(m.id.lexeme)}`)
-      } else {
-        output.output(`${gen(m.id.lexeme)}`)
-      }
-      output.push(`( ${gen(m.params)} ) {`)
-      gen(m.funcBlock)
-    },
+    // MethodDeclaration(m) {
+    //   if (isPrivate) {
+    //     output.push(`# ${gen(m.id.lexeme)}`)
+    //   } else {
+    //     output.output(`${gen(m.id.lexeme)}`)
+    //   }
+    //   output.push(`( ${gen(m.params)} ) {`)
+    //   gen(m.funcBlock)
+    // },
 
-    Base(b) {
-      //not yet?
-    },
+    // Base(b) {
+    //   //not yet?
+    // },
 
-    GeneralBlock(g) {
-      gen(g.statements)
-    },
+    // GeneralBlock(g) {
+    //   gen(g.statements)
+    // },
 
-    RealParameter(r) {
-      output.push(`${gen(r.id.lexeme)} : ${gen(r.type)}`)
-    },
+    // RealParameter(r) {
+    //   output.push(`${gen(r.id.lexeme)} : ${gen(r.type)}`)
+    // },
 
-    DeclarationParameter(d) {
-      output.push(d.params)
-    },
+    // DeclarationParameter(d) {
+    //   output.push(d.params)
+    // },
 
-    CallArgument(c) {
-      output.push(`${gen(c.id.lexeme)} . ${gen(c.expression)}`)
-    },
+    // CallArgument(c) {
+    //   output.push(`${gen(c.id.lexeme)} . ${gen(c.expression)}`)
+    // },
 
     ListLiteral(l) {
       output.push(`[ ${gen(l.expression)} ]`)
@@ -238,45 +238,45 @@ export default function generate(program) {
       gen(e.expression)
     },
 
-    Type(t) {
-      Console.log(`Shouldn't be in here ${t.constructor}`)
-      return
-    },
+    // Type(t) {
+    //   Console.log(`Shouldn't be in here ${t.constructor}`)
+    //   return
+    // },
 
-    TypeSum(t) {
-      Console.log(`Shouldn't be in here ${t.constructor}`)
-      return
-    },
+    // TypeSum(t) {
+    //   Console.log(`Shouldn't be in here ${t.constructor}`)
+    //   return
+    // },
 
-    TypeList(t) {
-      Console.log(`Shouldn't be in here ${t.constructor}`)
-      return
-    },
+    // TypeList(t) {
+    //   Console.log(`Shouldn't be in here ${t.constructor}`)
+    //   return
+    // },
 
-    TypeSet(t) {
-      Console.log(`Shouldn't be in here ${t.constructor}`)
-      return
-    },
+    // TypeSet(t) {
+    //   Console.log(`Shouldn't be in here ${t.constructor}`)
+    //   return
+    // },
 
-    TypeMap(t) {
-      Console.log(`Shouldn't be in here ${t.constructor}`)
-      return
-    },
-    Array(a) {
-      return a
-    },
-    Boolean(b) {
-      return b
-    },
-    Number(n) {
-      return n
-    },
-    String(s) {
-      return s
-    },
-    GodRay(g) {
-      return g
-    },
+    // TypeMap(t) {
+    //   Console.log(`Shouldn't be in here ${t.constructor}`)
+    //   return
+    // },
+    // Array(a) {
+    //   return a
+    // },
+    // Boolean(b) {
+    //   return b
+    // },
+    // Number(n) {
+    //   return n
+    // },
+    // String(s) {
+    //   return s
+    // },
+    // GodRay(g) {
+    //   return g
+    // },
     TOALken(r) {
       return r.value === undefined || r.value instanceof core.VariableObj
         ? r.lexeme

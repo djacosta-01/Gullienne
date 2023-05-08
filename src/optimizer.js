@@ -1,3 +1,3 @@
 export default function optimize() {
-  throw new Error("Not yet implemented")
+  throw new Error("Optimizer not yet implemented")
 }

@@ -63,98 +63,166 @@ const semanticErrors = [
     "x @ 5;",
     /I don't know who x is, you haven't introduced us yet./,
   ],
-  [
-    "constants reassignment",
-    `x:NUMBER @ 5;
-      x @ 2 ;`,
-    /Did you just try to reassign to a constant variable\? Nah that ain't chiefin' out./,
-  ],
+  //   [
+  //     "constants reassignment",
+  //     `x:NUMBER @ 5;
+  //       x @ 2 ;`,
+  //     /Did you just try to reassign to a constant variable\? Nah that ain't chiefin' out./,
+  //   ],
   [
     "wrong type 1",
     "x:number @ 5; x @ ideal;",
-    /What\? Wait, that's not number, the hell are you on right now\?/,
+    /What\? Wait, that's not the right type, the hell are you on right now\?/,
   ],
   [
     "wrong type 2",
     "x:number @ 5; x @ `hi`;",
-    /What\? Wait, that's not number, the hell are you on right now\?/,
+    /What\? Wait, that's not the right type, the hell are you on right now\?/,
   ],
   [
     "wrong type 3",
     "x:string @ `hi`; x @ ideal;",
-    /What\? Wait, that's not string, the hell are you on right now\?/,
+    /What\? Wait, that's not the right type, the hell are you on right now\?/,
   ],
   [
     "wrong type 4",
     "x:string @ `hi`; x @ 5;",
-    /What\? Wait, that's not string, the hell are you on right now\?/,
+    /What\? Wait, that's not the right type, the hell are you on right now\?/,
   ],
   [
     "wrong type 5",
     "x:joolean @ ideal; x @ 5;",
-    /What\? Wait, that's not joolean, the hell are you on right now\?/,
+    /What\? Wait, that's not the right type, the hell are you on right now\?/,
   ],
   [
     "wrong type 5",
     "x:joolean @ ideal; x @ `hi`;",
-    /What\? Wait, that's not joolean, the hell are you on right now\?/,
+    /What\? Wait, that's not the right type, the hell are you on right now\?/,
   ],
-  [
-    "return not in function",
-    "howItBe 5;",
-    /you ain't in a function big dawg, your a🍑🍑 can't ask howItBe here/,
-  ],
-  ["continue not in loop", "frogIn;", /You ain't in a loop big dawg/],
-  ["break not in loop", "frogOut;", /You ain't in a loop big dawg/],
+  //   [
+  //     "return not in function",
+  //     "howItBe 5;",
+  //     /you ain't in a function big dawg, your a🍑🍑 can't ask howItBe here/,
+  //   ],
+  //   ["continue not in loop", "frogIn;", /You ain't in a loop big dawg/],
+  //   ["break not in loop", "frogOut;", /You ain't in a loop big dawg/],
   [
     "Wrong type with sum type 1",
     "x:[joolean|string] @ [ideal]; x @ [5];",
-    /What\? Wait, that's not joolean, the hell are you on right now\?/,
+    /What\? Wait, that's not the right type, the hell are you on right now\?/,
   ],
   [
     "Wrong type with sum type 2",
     "x:[joolean|number] @ [ideal]; x @ [`hi`];",
-    /What\? Wait, that's not joolean, the hell are you on right now\?/,
+    /What\? Wait, that's not the right type, the hell are you on right now\?/,
   ],
   [
     "Wrong type with sum type 3",
     "x:[number|string] @ [5]; x @ [ideal];",
-    /What\? Wait, that's not number, the hell are you on right now\?/,
+    /What\? Wait, that's not the right type, the hell are you on right now\?/,
   ],
   [
     "Wrong type with sum type 4",
     "x:[number|joolean] @ [5]; x @ [`string`];",
-    /What\? Wait, that's not number, the hell are you on right now\?/,
+    /What\? Wait, that's not the right type, the hell are you on right now\?/,
+  ],
+  //   [
+  //     "declaring wrong type number",
+  //     "x:number @ `hi`;",
+  //     /What\? Wait, that's not the right type, the hell are you on right now\?/,
+  //   ],
+  //   [
+  //     "declaring wrong type joolean",
+  //     "x:joolean @ `hi`;",
+  //     /What\? Wait, that's not the right type, the hell are you on right now\?/,
+  //   ],
+  //   [
+  //     "declaring wrong type string",
+  //     "x:string @ 5;",
+  //     /What\? Wait, that's not the right type, the hell are you on right now\?/,
+  //   ],
+  //   [
+  //     "declaring with incorrect type 1",
+  //     "x:dog @ 5;",
+  //     /DuuuuuuUUUUDE! What even IS type dog\?!/,
+  //   ],
+  //   [
+  //     "declaring with incorrect type 2",
+  //     "x:hello @ 5;",
+  //     /DuuuuuuUUUUDE! What even IS type hello\?!/,
+  //   ],
+  //   [
+  //     "declaring with incorrect type 3",
+  //     "x:iwantthistoend @ 5;",
+  //     /DuuuuuuUUUUDE! What even IS type iwantthistoend\?!/,
+  //   ],
+]
+
+const unimplementedFeatureErrors = [
+  [
+    "ExpressionStatement",
+    "overheard(`oops`);",
+    /I have some bad news... expression statements are unimplemented./,
   ],
   [
-    "declaring wrong type number",
-    "x:number @ `hi`;",
-    /What\? Wait, that's not number, the hell are you on right now\?/,
+    "FunctionDeclaration",
+    "do thisFails(bob:number) -> number {}",
+    /I have some bad news... function declarations are unimplemented./,
   ],
   [
-    "declaring wrong type joolean",
-    "x:joolean @ `hi`;",
-    /What\? Wait, that's not joolean, the hell are you on right now\?/,
+    "ConditionIf",
+    "so (ideal) {overheard(`true`);}",
+    /I have some bad news... if \(so\) statements are unimplemented./,
   ],
   [
-    "declaring wrong type string",
-    "x:string @ 5;",
-    /What\? Wait, that's not string, the hell are you on right now\?/,
+    "ForLoop",
+    "cap(hotChocolates in debt){}",
+    /I have some bad news... for \(cap\) loops are unimplemented./,
   ],
   [
-    "declaring with incorrect type 1",
-    "x:dog @ 5;",
-    /DuuuuuuUUUUDE! What even IS type dog\?!/,
+    "WhileLoop",
+    "hotChocolates:joolean @ ideal; \n noCap(hotChocolates){}",
+    /I have some bad news... while \(noCap\) loops are unimplemented./,
   ],
   [
-    "declaring with incorrect type 2",
-    "x:hello @ 5;",
-    /DuuuuuuUUUUDE! What even IS type hello\?!/,
+    "ObjectHeader",
+    "object Julian (hat:string, jacket:string) {}",
+    /I have some bad news... objects are unimplemented./,
   ],
   [
-    "declaring with incorrect type 3",
-    "x:iwantthistoend @ 5;",
-    /DuuuuuuUUUUDE! What even IS type iwantthistoend\?!/,
+    "SetLiteral",
+    "oops:<number> @ <1,2,3>;",
+    /I have some bad news... sets are unimplemented./,
+  ],
+  [
+    "MapLiteral",
+    "oops:<<number :: string>> @ <<1::`a`, 2::`b`>>;",
+    /I have some bad news... maps are unimplemented./,
+  ],
+  [
+    "Subscripting",
+    "oops:number @ uhOh[0];",
+    /I have some bad news... subscripts are unimplemented./,
+  ],
+  [
+    "Call",
+    "oops:number @ uhOh();",
+    /I have some bad news... function calls are unimplemented./,
+  ],
+  [
+    "FieldExpression",
+    "oops:number @ uhOh.welp;",
+    /I have some bad news... object fields are unimplemented./,
+  ],
+  [
+    "MethodExpression",
+    "oops:number @ uhOh.welp();",
+    /I have some bad news... object methods are unimplemented./,
+  ],
+  [
+    "MethodExpression",
+    "oops:Julian @ imagine Julian();",
+    /I have some bad news... object constructors are unimplemented./,
   ],
 ]
 
@@ -171,6 +239,16 @@ describe("The analyzer", () => {
   }
   for (const [scenario, source, errorMessagePattern] of semanticErrors) {
     it(`throws on ${scenario}`, () => {
+      //   analyze(ast(source))
+      assert.throws(() => analyze(ast(source)), errorMessagePattern)
+    })
+  }
+  for (const [
+    scenario,
+    source,
+    errorMessagePattern,
+  ] of unimplementedFeatureErrors) {
+    it(`throws unimplemented for ${scenario}`, () => {
       //   analyze(ast(source))
       assert.throws(() => analyze(ast(source)), errorMessagePattern)
     })

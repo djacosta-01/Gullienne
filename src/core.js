@@ -35,11 +35,11 @@ export class VariableObj {
   }
 }
 
-export class ObjectType {
-  constructor(id, fields, methods, constructs) {
-    Object.assign(this, { id, fields, methods, constructs })
-  }
-}
+// export class ObjectType {
+//   constructor(id, fields, methods, constructs) {
+//     Object.assign(this, { id, fields, methods, constructs })
+//   }
+// }
 
 export class ReassignmentStatement {
   constructor(id, source) {
@@ -59,11 +59,11 @@ export class FunctionDeclaration {
   }
 }
 
-export class FunctionObject {
-  constructor(params, returnType, block) {
-    Object.assign(this, { params, returnType, block })
-  }
-}
+// export class FunctionObject {
+//   constructor(params, returnType, block) {
+//     Object.assign(this, { params, returnType, block })
+//   }
+// }
 
 export class FunctionBlock {
   constructor(base, statements) {
@@ -149,17 +149,17 @@ export class MethodDeclaration {
   }
 }
 
-export class MethodBlock {
-  constructor(base, statements) {
-    Object.assign(this, { base, statements })
-  }
-}
+// export class MethodBlock {
+//   constructor(base, statements) {
+//     Object.assign(this, { base, statements })
+//   }
+// }
 
-export class ObjectObject {
-  constructor(id, fields, constructors, methods) {
-    Object.assign(this, { id, fields, constructors, methods })
-  }
-}
+// export class ObjectObject {
+//   constructor(id, fields, constructors, methods) {
+//     Object.assign(this, { id, fields, constructors, methods })
+//   }
+// }
 export class Base {
   constructor(id, expression) {
     Object.assign(this, { id, expression })
@@ -310,9 +310,9 @@ export class TypeMap {
 export function error(message, entity) {
   if (entity) {
     let prefix = ""
-    if (entity.source && entity.source.getLineAndColumnMessage) {
-      prefix = entity.source.getLineAndColumnMessage()
-    }
+    // if (entity.source && entity.source.getLineAndColumnMessage) {
+    //   prefix = entity.source.getLineAndColumnMessage()
+    // }
     throw new Error(`${prefix}${message}`)
   }
   throw new Error(message)
