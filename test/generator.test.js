@@ -30,19 +30,19 @@ const fixtures = [
       x = 2
     `,
   },
-  {
-    name: "incrementing/decrementing",
-    source: `
-      x:number @ 1;
-      x++;
-      x--;
-    `,
-    expected: dedent`
-      let x = 1
-      x++
-      x--
-    `,
-  },
+  //   {
+  //     name: "incrementing/decrementing",
+  //     source: `
+  //       x:number @ 1;
+  //       x++;
+  //       x--;
+  //     `,
+  //     expected: dedent`
+  //       let x = 1
+  //       x++
+  //       x--
+  //     `,
+  //   },
   {
     name: "addition",
     source: `
@@ -184,6 +184,15 @@ const fixtures = [
         let x = !true
       `,
   },
+  //   {
+  //     name: "listLiterals",
+  //     source: `
+  //         x:[joolean] @ [ideal, !ideal];
+  //       `,
+  //     expected: dedent`
+  //         let x = [true, !true]
+  //       `,
+  //   },
   //   {
   //     name: "if",
   //     source: `

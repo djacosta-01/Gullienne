@@ -19,7 +19,7 @@ export default function generate(program) {
   })(new Map())
 
   function gen(node) {
-    // console.log('NOOOOOODE', node)
+    // console.log("NOOOOOODE", node.constructor)
     return generators[node.constructor.name](node)
   }
 
@@ -40,13 +40,13 @@ export default function generate(program) {
     //   gen(e.expression)
     // },
 
-    IncDecStatement(i) {
-      if (i.operator === "++") {
-        output.push(`${gen(s.variable)}++`)
-      } else {
-        output.push(`${gen(s.variable)}--`)
-      }
-    },
+    // IncDecStatement(i) {
+    //   if (i.operator === "++") {
+    //     output.push(`${gen(s.variable)}++`)
+    //   } else {
+    //     output.push(`${gen(s.variable)}--`)
+    //   }
+    // },
 
     VariableDeclaration(v) {
       let expressionString = gen(v.initializer)
@@ -176,21 +176,21 @@ export default function generate(program) {
     //   output.push(`${gen(c.id.lexeme)} . ${gen(c.expression)}`)
     // },
 
-    ListLiteral(l) {
-      output.push(`[ ${gen(l.expression)} ]`)
-    },
+    // ListLiteral(l) {
+    //   output.push(`[ ${gen(l.expression)} ]`)
+    // },
 
-    SetLiteral(s) {
-      //TO DO w Julian
-    },
+    // SetLiteral(s) {
+    //   //TO DO w Julian
+    // },
 
-    MapLiteral(m) {
-      output.push(`{ ${gen(m.keyValue)} }`)
-    },
+    // MapLiteral(m) {
+    //   output.push(`{ ${gen(m.keyValue)} }`)
+    // },
 
-    KeyValue(k) {
-      //TO DO w Julian
-    },
+    // KeyValue(k) {
+    //   //TO DO w Julian
+    // },
 
     BinaryExpression(b) {
       //   console.log("GEN BINARY", b)
@@ -203,36 +203,36 @@ export default function generate(program) {
       return `${u.op}${right}`
     },
 
-    SubscriptExpression(s) {
-      return `${gen(s.subscriptee)}[${gen(s.argument)}]`
-    },
+    // SubscriptExpression(s) {
+    //   return `${gen(s.subscriptee)}[${gen(s.argument)}]`
+    // },
 
-    Call(c) {
-      if (standardFunctions.has(c.expression)) {
-        output.push(
-          standardFunctions.get(c.expression)(gen(c.argument).join(", "))
-        )
-        return []
-      }
-      let objectString = gen(c.expression) ? gen(c.expression) : output.pop()
-      if (c.expression instanceof PrototypeObj)
-        output.push(`new ${objectString}(${gen(c.argument).join(", ")})`)
-      else output.push(`${objectString}(${gen(c.argument).join(", ")})`)
-    },
+    // Call(c) {
+    //   if (standardFunctions.has(c.expression)) {
+    //     output.push(
+    //       standardFunctions.get(c.expression)(gen(c.argument).join(", "))
+    //     )
+    //     return []
+    //   }
+    //   let objectString = gen(c.expression) ? gen(c.expression) : output.pop()
+    //   if (c.expression instanceof PrototypeObj)
+    //     output.push(`new ${objectString}(${gen(c.argument).join(", ")})`)
+    //   else output.push(`${objectString}(${gen(c.argument).join(", ")})`)
+    // },
 
-    FieldExpression(f) {
-      output.push(`${gen(f.expression)} . ${gen(f.id.lexeme)}`)
-    },
+    // FieldExpression(f) {
+    //   output.push(`${gen(f.expression)} . ${gen(f.id.lexeme)}`)
+    // },
 
-    MethodExpression(m) {
-      output.push(
-        `${gen(m.expression)} . ${gen(m.id.lexeme)} ( ${gen(m.argument)} )`
-      )
-    },
+    // MethodExpression(m) {
+    //   output.push(
+    //     `${gen(m.expression)} . ${gen(m.id.lexeme)} ( ${gen(m.argument)} )`
+    //   )
+    // },
 
-    MakeExpression(m) {
-      output.push(`${gen(m.type)} ( ${gen(m.argument)} )`)
-    },
+    // MakeExpression(m) {
+    //   output.push(`${gen(m.type)} ( ${gen(m.argument)} )`)
+    // },
 
     Expression(e) {
       gen(e.expression)
@@ -262,21 +262,21 @@ export default function generate(program) {
     //   Console.log(`Shouldn't be in here ${t.constructor}`)
     //   return
     // },
-    // Array(a) {
-    //   return a
-    // },
-    // Boolean(b) {
-    //   return b
-    // },
-    // Number(n) {
-    //   return n
-    // },
-    // String(s) {
-    //   return s
-    // },
-    // GodRay(g) {
-    //   return g
-    // },
+    Array(a) {
+      return a
+    },
+    Boolean(b) {
+      return b
+    },
+    Number(n) {
+      return n
+    },
+    String(s) {
+      return s
+    },
+    GodRay(g) {
+      return g
+    },
     TOALken(r) {
       return r.value === undefined || r.value instanceof core.VariableObj
         ? r.lexeme
