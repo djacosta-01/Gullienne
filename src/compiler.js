@@ -8,8 +8,9 @@ export default function compile(source, outputType) {
   if (outputType === "ast") return program
   const analyzed = analyze(program)
   if (outputType === "analyzed") return analyzed
-  const optimized = optimize(analyzed)
-  if (outputType === "optimized") return optimized
+  // const optimized = optimize(analyzed)
+  const optimized = analyzed
+  // if (outputType === "optimized") return optimized
   if (outputType == "js") {
     return generate(optimized)
   }
