@@ -17,20 +17,20 @@ function unimplementedError(featureName) {
   megaCheck(false, `I have some bad news... ${featureName} are unimplemented.`)
 }
 
-function checkInFunction(context) {
-  megaCheck(
-    context.functions,
-    `you ain't in a function big dawg, your a🍑🍑 can't ask howItBe here`
-  )
-}
+// function checkInFunction(context) {
+//   megaCheck(
+//     context.functions,
+//     `you ain't in a function big dawg, your a🍑🍑 can't ask howItBe here`
+//   )
+// }
 
-function checkInLoop(context) {
-  megaCheck(context.isLoop, `You ain't in a loop big dawg`)
-}
+// function checkInLoop(context) {
+//   megaCheck(context.isLoop, `You ain't in a loop big dawg`)
+// }
 
-function checkIsObj(context) {
-  megaCheck(context.objects, `Not an obj`)
-}
+// function checkIsObj(context) {
+//   megaCheck(context.objects, `Not an obj`)
+// }
 
 function checkIsDeclared(context, id, notDeclared) {
   // console.log('CONTEXT ', context)
@@ -54,44 +54,45 @@ function matchType(leftType, rightType, isAssignment) {
       /* Checking if it is an actual sum type or a
          single type wrapped as a sum type */
       let checkSingle = (rightSide) =>
-        rightSide instanceof core.Type
-          ? leftType.typeList
-              .map((leftSide) =>
-                leftSide instanceof core.Type
-                  ? matchType(leftSide, rightSide)
-                  : false
-              )
-              .contains(true)
-          : leftType.typeList.includes(rightSide)
+        // rightSide instanceof core.Type
+        //   ?
+        // leftType.typeList
+        // : // .map((leftSide) =>
+        //   leftSide instanceof core.Type
+        //     ? matchType(leftSide, rightSide)
+        //     : false
+        // )
+        // .contains(true)
+        leftType.typeList.includes(rightSide)
 
       return rightType.typeList.map(checkSingle).every((existence) => existence)
     case core.TypeList.name:
     case core.TypeSet.name:
       return matchType(leftType.type, rightType.type)
-    case core.TypeMap.name:
-      return (
-        matchType(leftType.keyType, rightType.keyType) &&
-        matchType(leftType.valueType, rightType.valueType)
-      )
-    case core.GodRay.joolean.typeName:
-    case core.GodRay.string.typeName:
-    case core.GodRay.number.typeName:
-    case core.GodRay.JOOLEAN.typeName:
-    case core.GodRay.STRING.typeName:
-    case core.GodRay.NUMBER.typeName:
-      if (leftType.readOnly) {
-        megaCheck(
-          !isAssignment,
-          `Did you just try to reassign to a constant variable? Nah that ain't chiefin' out.`
-        )
-      }
+    // case core.TypeMap.name:
+    //   return (
+    //     matchType(leftType.keyType, rightType.keyType) &&
+    //     matchType(leftType.valueType, rightType.valueType)
+    //   )
+    // case core.GodRay.joolean.typeName:
+    // case core.GodRay.string.typeName:
+    // case core.GodRay.number.typeName:
+    // case core.GodRay.JOOLEAN.typeName:
+    // case core.GodRay.STRING.typeName:
+    // case core.GodRay.NUMBER.typeName:
+    //   if (leftType.readOnly) {
+    //     megaCheck(
+    //       !isAssignment,
+    //       `Did you just try to reassign to a constant variable? Nah that ain't chiefin' out.`
+    //     )
+    //   }
 
-      return leftType.typeName === rightType.typeName
-    default:
-      megaCheck(
-        false,
-        `DuuuuuuUUUUDE! What even IS type ${JSON.stringify(leftType.type)}?!`
-      )
+    //   return leftType.typeName === rightType.typeName
+    // default:
+    //   megaCheck(
+    //     false,
+    //     `DuuuuuuUUUUDE! What even IS type ${JSON.stringify(leftType.type)}?!`
+    //   )
   }
 }
 
@@ -119,21 +120,21 @@ function expectedJoolean(expression) {
   )
 }
 
-function expectedIterable(expression) {
-  switch (expression.type) {
-    case core.TypeList:
-    case core.TypeSet:
-    case core.TypeMap:
-    case core.GodRay.string:
-    case core.GodRay.STRING:
-      return
-  }
+// function expectedIterable(expression) {
+//   switch (expression.type) {
+//     case core.TypeList:
+//     case core.TypeSet:
+//     case core.TypeMap:
+//     case core.GodRay.string:
+//     case core.GodRay.STRING:
+//       return
+//   }
 
-  megaCheck(
-    false,
-    `You can't iterate over that, bro, it's gotta be a list, set, map, or string. Take your pick.`
-  )
-}
+//   megaCheck(
+//     false,
+//     `You can't iterate over that, bro, it's gotta be a list, set, map, or string. Take your pick.`
+//   )
+// }
 
 function expectedNumber(expression) {
   megaCheck(
@@ -143,16 +144,16 @@ function expectedNumber(expression) {
   )
 }
 
-function checkParams(params) {
-  megaCheck(
-    Set(
-      params.map((p) =>
-        p.constructor === core.DeclarationParameter ? p.params.id : p.id
-      )
-    ).size === params.length,
-    "Oh my god, you duped a parameter! Blow it up. Right now."
-  )
-}
+// function checkParams(params) {
+//   megaCheck(
+//     Set(
+//       params.map((p) =>
+//         p.constructor === core.DeclarationParameter ? p.params.id : p.id
+//       )
+//     ).size === params.length,
+//     "Oh my god, you duped a parameter! Blow it up. Right now."
+//   )
+// }
 
 class Context {
   constructor({
@@ -172,39 +173,41 @@ class Context {
   }
 
   checkExistence(id) {
-    return this.localVars.has(id) || this.parent?.checkExistence(id)
+    return this.localVars.has(id)
+    // || this.parent?.checkExistence(id)
   }
 
   addVarToScope(id, value) {
     this.localVars.set(id, value)
   }
 
-  addFuncToScope(id, func) {
-    this.functions.set(id, func)
-  }
+  // addFuncToScope(id, func) {
+  //   this.functions.set(id, func)
+  // }
 
-  addObjectToScope(id, obj) {
-    this.objects.set(id, obj)
-  }
+  // addObjectToScope(id, obj) {
+  //   this.objects.set(id, obj)
+  // }
 
   getVar(id) {
     let varInContext = this.localVars.get(id)
     if (varInContext) {
       return varInContext
-    } else if (this.parent) {
-      return this.parent.getVar(id)
     }
-    core.error(`Dawg, ima level wit you, there ain't no declaration for ${id}`)
+    // else if (this.parent) {
+    //   return this.parent.getVar(id)
+    // }
+    // core.error(`Dawg, ima level wit you, there ain't no declaration for ${id}`)
   }
 
-  makeChildContext(props) {
-    return new Context({
-      ...this,
-      ...props,
-      parent: this,
-      localVars: new Map(),
-    })
-  }
+  // makeChildContext(props) {
+  //   return new Context({
+  //     ...this,
+  //     ...props,
+  //     parent: this,
+  //     localVars: new Map(),
+  //   })
+  // }
 
   analyze(node) {
     //console.log(node.constructor.name)
@@ -222,10 +225,10 @@ class Context {
     this.analyze(e.expression)
   }
 
-  IncDecStatement(i) {
-    this.analyze(i.id)
-    matchType(context.get(i.id).type)
-  }
+  // IncDecStatement(i) {
+  //   this.analyze(i.id)
+  //   matchType(context.get(i.id).type)
+  // }
 
   VariableDeclaration(v) {
     // console.log("VVvVVVVVVVvvVV\n ", v.initializer)
@@ -238,7 +241,7 @@ class Context {
     this.analyze(v.type)
     //console.log("---------After analyzing, v.type is", v.type)
 
-    matchType(v.type, v.initializer.type ?? v.initializer.value.type, true)
+    // matchType(v.type, v.initializer.type ?? v.initializer.value.type, true)
 
     v.variable = new core.VariableObj(v.id, v.type)
     this.addVarToScope(v.id.lexeme, v.variable)
@@ -262,12 +265,12 @@ class Context {
     // matchType(this.getVar(r.id.lexeme).type, r.source.type, true)
   }
 
-  ReassignmentMyStatement(r) {
-    checkIsDeclared(this, r.id, false)
-    this.analyze(r.id)
-    this.analyze(r.source)
-    matchType(context.getVar(r.id).type, r.source.type)
-  }
+  // ReassignmentMyStatement(r) {
+  //   checkIsDeclared(this, r.id, false)
+  //   this.analyze(r.id)
+  //   this.analyze(r.source)
+  //   matchType(context.getVar(r.id).type, r.source.type)
+  // }
 
   FunctionDeclaration(f) {
     unimplementedError("function declarations")
@@ -275,17 +278,17 @@ class Context {
     //let newContext = this.makeChildContext({ functions: true })
 
     newContext.analyze(f.params)
-    f.params.map((param) => {
-      return new core.RealParameter(param, param.type)
-    })
-    if (f.params.length > 1) checkParams(f.params)
+    // f.params.map((param) => {
+    //   return new core.RealParameter(param, param.type)
+    // })
+    // if (f.params.length > 1) checkParams(f.params)
 
-    let newContext = this.makeChildContext()
-    newContext.analyze(f.funcBlock)
-    this.addFuncToScope(
-      f.id,
-      new core.FunctionObject(f.params, f.returnType, f.funcBlock)
-    )
+    // let newContext = this.makeChildContext()
+    // newContext.analyze(f.funcBlock)
+    // this.addFuncToScope(
+    //   f.id,
+    //   new core.FunctionObject(f.params, f.returnType, f.funcBlock)
+    // )
   }
 
   //   FunctionBlock(f) {
@@ -371,8 +374,8 @@ class Context {
     //put it into context
     let newContext = this.makeChildContext({ objects: true })
     newContext.analyze(o.params)
-    if (o.params.length > 0) checkParams(o.params)
-    newContext.analyze(o.ObjectBlock)
+    // if (o.params.length > 0) checkParams(o.params)
+    // newContext.analyze(o.ObjectBlock)
   }
 
   //   ConstructDeclaration(c) {
@@ -480,11 +483,12 @@ class Context {
     } else if (["=", "!="].includes(b.op)) {
       matchType(b.left.type, b.right.type, false)
       b.type = b.left.type
-    } else if (["&", "|"].includes(b.op)) {
-      expectedJoolean(b.left)
-      expectedJoolean(b.right)
-      b.type = b.left.type
     }
+    // else if (["&", "|"].includes(b.op)) {
+    //   expectedJoolean(b.left)
+    //   expectedJoolean(b.right)
+    //   b.type = b.left.type
+    // }
   }
 
   UnaryExpression(u) {
@@ -514,28 +518,28 @@ class Context {
 
   Call(c) {
     unimplementedError("function calls")
-    c.expression = this.analyze(c.expression)
-    c.argument = this.analyze(c.argument)
-    let slashPosition = 0
-    for (
-      let paramIndex = 0;
-      paramIndex < c.expression.params.length;
-      paramIndex++
-    ) {
-      if (c.expression.params[paramIndex] === "/") {
-        slashPosition = paramIndex
-        break
-      }
-      matchType(c.argument[paramIndex], c.expression.params[paramIndex])
-    }
-    let kwargParams = c.expression.params.slice(slashPosition + 1)
-    let kwargs = c.argument.slice(slashPosition)
-    kwargParams.forEach((param, index) => {
-      let arg = kwargs[index]
-      if (param.id === arg.id) {
-        matchType(param.type, arg.type)
-      }
-    })
+    // c.expression = this.analyze(c.expression)
+    // c.argument = this.analyze(c.argument)
+    // let slashPosition = 0
+    // for (
+    //   let paramIndex = 0;
+    //   paramIndex < c.expression.params.length;
+    //   paramIndex++
+    // ) {
+    //   if (c.expression.params[paramIndex] === "/") {
+    //     slashPosition = paramIndex
+    //     break
+    //   }
+    //   matchType(c.argument[paramIndex], c.expression.params[paramIndex])
+    // }
+    // let kwargParams = c.expression.params.slice(slashPosition + 1)
+    // let kwargs = c.argument.slice(slashPosition)
+    // kwargParams.forEach((param, index) => {
+    //   let arg = kwargs[index]
+    //   if (param.id === arg.id) {
+    //     matchType(param.type, arg.type)
+    //   }
+    // })
   }
 
   FieldExpression(f) {
@@ -562,9 +566,9 @@ class Context {
   //   }
 
   Type(t) {
-    if (typeof t.type === "string") {
-      t.type = this.getVar(t.type)
-    }
+    // if (typeof t.type === "string") {
+    //   t.type = this.getVar(t.type)
+    // }
     this.analyze(t.type)
   }
 
@@ -578,31 +582,31 @@ class Context {
     this.analyze(t.type)
   }
 
-  TypeSet(t) {
-    this.analyze(t.type)
-  }
+  // TypeSet(t) {
+  //   this.analyze(t.type)
+  // }
 
-  TypeMap(t) {
-    this.analyze(t.keyType)
-    this.analyze(t.valueType)
-  }
+  // TypeMap(t) {
+  //   this.analyze(t.keyType)
+  //   this.analyze(t.valueType)
+  // }
 
   Array(a) {
     a.forEach((item) => this.analyze(item))
   }
-  Boolean(b) {
-    // console.log("BBBBBBBBBBBBB", b)
-    return b
-  }
-  Number(n) {
-    return n
-  }
+  // Boolean(b) {
+  //   // console.log("BBBBBBBBBBBBB", b)
+  //   return b
+  // }
+  // Number(n) {
+  //   return n
+  // }
   String(s) {
     return s
   }
-  GodRay(g) {
-    return g
-  }
+  // GodRay(g) {
+  //   return g
+  // }
   TOALken(r) {
     // For ids being used, not defined
     if (r.gType === "id") {

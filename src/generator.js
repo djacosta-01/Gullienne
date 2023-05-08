@@ -4,19 +4,19 @@ import * as core from "./core.js"
 export default function generate(program) {
   const output = []
 
-  const targetName = ((mapping) => {
-    return (entity) => {
-      if (!mapping.has(entity)) {
-        mapping.set(entity, mapping.size + 1)
-      }
-      return `${
-        entity?.source?._contents ??
-        entity?.id ??
-        entity.name ??
-        entity.description
-      }_${mapping.get(entity)}`
-    }
-  })(new Map())
+  // const targetName = ((mapping) => {
+  //   return (entity) => {
+  //     if (!mapping.has(entity)) {
+  //       mapping.set(entity, mapping.size + 1)
+  //     }
+  //     return `${
+  //       entity?.source?._contents ??
+  //       entity?.id ??
+  //       entity.name ??
+  //       entity.description
+  //     }_${mapping.get(entity)}`
+  //   }
+  // })(new Map())
 
   function gen(node) {
     // console.log("NOOOOOODE", node.constructor)
@@ -51,9 +51,11 @@ export default function generate(program) {
     VariableDeclaration(v) {
       let expressionString = gen(v.initializer)
       //   console.log("********", util.inspect(v.initializer))
-      output.push(
-        `${v.isConst ? "const" : "let"} ${v.id.lexeme} = ${expressionString}`
-      )
+      //constants not recognized yet
+      // output.push(
+      //   `${v.isConst ? "const" : "let"} ${v.id.lexeme} = ${expressionString}`
+      // )
+      output.push(`let ${v.id.lexeme} = ${expressionString}`)
     },
 
     ReassignmentStatement(r) {
@@ -234,9 +236,9 @@ export default function generate(program) {
     //   output.push(`${gen(m.type)} ( ${gen(m.argument)} )`)
     // },
 
-    Expression(e) {
-      gen(e.expression)
-    },
+    // Expression(e) {
+    //   gen(e.expression)
+    // },
 
     // Type(t) {
     //   Console.log(`Shouldn't be in here ${t.constructor}`)
@@ -262,21 +264,21 @@ export default function generate(program) {
     //   Console.log(`Shouldn't be in here ${t.constructor}`)
     //   return
     // },
-    Array(a) {
-      return a
-    },
-    Boolean(b) {
-      return b
-    },
-    Number(n) {
-      return n
-    },
-    String(s) {
-      return s
-    },
-    GodRay(g) {
-      return g
-    },
+    // Array(a) {
+    //   return a
+    // },
+    // Boolean(b) {
+    //   return b
+    // },
+    // Number(n) {
+    //   return n
+    // },
+    // String(s) {
+    //   return s
+    // },
+    // GodRay(g) {
+    //   return g
+    // },
     TOALken(r) {
       return r.value === undefined || r.value instanceof core.VariableObj
         ? r.lexeme
